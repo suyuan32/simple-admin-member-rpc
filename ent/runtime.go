@@ -5,7 +5,7 @@ package ent
 import (
 	"time"
 
-	"github.com/gofrs/uuid"
+	uuid "github.com/gofrs/uuid/v5"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/member"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/memberrank"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/schema"

@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/gofrs/uuid"
+	uuid "github.com/gofrs/uuid/v5"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/migrate"
 
 	"github.com/suyuan32/simple-admin-member-rpc/ent/member"

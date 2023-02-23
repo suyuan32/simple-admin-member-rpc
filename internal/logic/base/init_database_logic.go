@@ -2,6 +2,7 @@ package base
 
 import (
 	"context"
+	"strings"
 
 	"entgo.io/ent/dialect/sql/schema"
 	"github.com/suyuan32/simple-admin-core/pkg/enum"
@@ -36,6 +37,9 @@ func NewInitDatabaseLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Init
 func (l *InitDatabaseLogic) InitDatabase(in *mms.Empty) (*mms.BaseResp, error) {
 	err := l.insertApiData()
 	if err != nil {
+		if strings.Contains(err.Error(), "common.createFailed") {
+			return nil, statuserr.NewInvalidArgumentError(i18n.AlreadyInit)
+		}
 		return nil, statuserr.NewInternalError(err.Error())
 	}
 
@@ -47,6 +51,16 @@ func (l *InitDatabaseLogic) InitDatabase(in *mms.Empty) (*mms.BaseResp, error) {
 	if err := l.svcCtx.DB.Schema.Create(l.ctx, schema.WithForeignKeys(false)); err != nil {
 		logx.Errorw(logmsg.DatabaseError, logx.Field("detail", err.Error()))
 		return nil, errorx.NewCodeError(enum.Internal, err.Error())
+	}
+
+	err = l.insertMemberData()
+	if err != nil {
+		return nil, statuserr.NewInternalError(err.Error())
+	}
+
+	err = l.insertMemberRankData()
+	if err != nil {
+		return nil, statuserr.NewInternalError(err.Error())
 	}
 
 	return &mms.BaseResp{
@@ -172,12 +186,12 @@ func (l *InitDatabaseLogic) insertApiData() (err error) {
 }
 
 func (l *InitDatabaseLogic) insertMenuData() error {
-	_, err := l.svcCtx.CoreRpc.CreateMenu(l.ctx, &core.MenuInfo{
+	menuData, err := l.svcCtx.CoreRpc.CreateMenu(l.ctx, &core.MenuInfo{
 		Id:        0,
 		CreatedAt: 0,
 		UpdatedAt: 0,
 		Level:     2,
-		ParentId:  16,
+		ParentId:  enum.DefaultParentId,
 		Path:      "",
 		Name:      "MemberManagementDirectory",
 		Redirect:  "",
@@ -199,6 +213,72 @@ func (l *InitDatabaseLogic) insertMenuData() error {
 			RealPath:           "",
 		},
 		MenuType: 0,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	_, err = l.svcCtx.CoreRpc.CreateMenu(l.ctx, &core.MenuInfo{
+		Id:        0,
+		CreatedAt: 0,
+		UpdatedAt: 0,
+		Level:     2,
+		ParentId:  menuData.Id,
+		Path:      "/member",
+		Name:      "MemberManagement",
+		Redirect:  "",
+		Component: "/mms/member/index",
+		Sort:      1,
+		Disabled:  false,
+		Meta: &core.Meta{
+			Title:              "route.memberManagement",
+			Icon:               "ic:round-person-outline",
+			HideMenu:           false,
+			HideBreadcrumb:     false,
+			IgnoreKeepAlive:    false,
+			HideTab:            false,
+			FrameSrc:           "",
+			CarryParam:         false,
+			HideChildrenInMenu: false,
+			Affix:              false,
+			DynamicLevel:       0,
+			RealPath:           "",
+		},
+		MenuType: 1,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	_, err = l.svcCtx.CoreRpc.CreateMenu(l.ctx, &core.MenuInfo{
+		Id:        0,
+		CreatedAt: 0,
+		UpdatedAt: 0,
+		Level:     2,
+		ParentId:  menuData.Id,
+		Path:      "/member_rank",
+		Name:      "MemberRankManagement",
+		Redirect:  "",
+		Component: "/mms/memberRank/index",
+		Sort:      2,
+		Disabled:  false,
+		Meta: &core.Meta{
+			Title:              "route.memberRankManagement",
+			Icon:               "ic:round-person-outline",
+			HideMenu:           false,
+			HideBreadcrumb:     false,
+			IgnoreKeepAlive:    false,
+			HideTab:            false,
+			FrameSrc:           "",
+			CarryParam:         false,
+			HideChildrenInMenu: false,
+			Affix:              false,
+			DynamicLevel:       0,
+			RealPath:           "",
+		},
+		MenuType: 1,
 	})
 
 	if err != nil {

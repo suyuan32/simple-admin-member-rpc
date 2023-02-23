@@ -54,6 +54,6 @@ func (Member) Indexes() []ent.Index {
 
 func (Member) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "core_mms_members"}, // mms means member management service
+		entsql.Annotation{Table: "mms_members"}, // mms means member management service
 	}
 }

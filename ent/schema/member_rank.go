@@ -41,6 +41,6 @@ func (MemberRank) Indexes() []ent.Index {
 
 func (MemberRank) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "core_mms_rank"},
+		entsql.Annotation{Table: "mms_rank"},
 	}
 }
