@@ -36,12 +36,12 @@ const (
 	// EdgeRanks holds the string denoting the ranks edge name in mutations.
 	EdgeRanks = "ranks"
 	// Table holds the table name of the member in the database.
-	Table = "core_mms_members"
+	Table = "mms_members"
 	// RanksTable is the table that holds the ranks relation/edge.
-	RanksTable = "core_mms_members"
+	RanksTable = "mms_members"
 	// RanksInverseTable is the table name for the MemberRank entity.
 	// It exists in this package in order to avoid circular dependency with the "memberrank" package.
-	RanksInverseTable = "core_mms_rank"
+	RanksInverseTable = "mms_ranks"
 	// RanksColumn is the table column denoting the ranks relation/edge.
 	RanksColumn = "rank_id"
 )

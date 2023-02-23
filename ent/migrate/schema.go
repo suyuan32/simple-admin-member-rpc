@@ -9,8 +9,8 @@ import (
 )
 
 var (
-	// CoreMmsMembersColumns holds the columns for the "core_mms_members" table.
-	CoreMmsMembersColumns = []*schema.Column{
+	// MmsMembersColumns holds the columns for the "mms_members" table.
+	MmsMembersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
@@ -23,16 +23,16 @@ var (
 		{Name: "avatar", Type: field.TypeString, Nullable: true, Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
 		{Name: "rank_id", Type: field.TypeUint64, Nullable: true, Default: 2},
 	}
-	// CoreMmsMembersTable holds the schema information for the "core_mms_members" table.
-	CoreMmsMembersTable = &schema.Table{
-		Name:       "core_mms_members",
-		Columns:    CoreMmsMembersColumns,
-		PrimaryKey: []*schema.Column{CoreMmsMembersColumns[0]},
+	// MmsMembersTable holds the schema information for the "mms_members" table.
+	MmsMembersTable = &schema.Table{
+		Name:       "mms_members",
+		Columns:    MmsMembersColumns,
+		PrimaryKey: []*schema.Column{MmsMembersColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "core_mms_members_core_mms_rank_ranks",
-				Columns:    []*schema.Column{CoreMmsMembersColumns[10]},
-				RefColumns: []*schema.Column{CoreMmsRankColumns[0]},
+				Symbol:     "mms_members_mms_ranks_ranks",
+				Columns:    []*schema.Column{MmsMembersColumns[10]},
+				RefColumns: []*schema.Column{MmsRanksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -40,12 +40,12 @@ var (
 			{
 				Name:    "member_username_email",
 				Unique:  true,
-				Columns: []*schema.Column{CoreMmsMembersColumns[4], CoreMmsMembersColumns[8]},
+				Columns: []*schema.Column{MmsMembersColumns[4], MmsMembersColumns[8]},
 			},
 		},
 	}
-	// CoreMmsRankColumns holds the columns for the "core_mms_rank" table.
-	CoreMmsRankColumns = []*schema.Column{
+	// MmsRanksColumns holds the columns for the "mms_ranks" table.
+	MmsRanksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUint64, Increment: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
@@ -54,25 +54,25 @@ var (
 		{Name: "description", Type: field.TypeString},
 		{Name: "remark", Type: field.TypeString},
 	}
-	// CoreMmsRankTable holds the schema information for the "core_mms_rank" table.
-	CoreMmsRankTable = &schema.Table{
-		Name:       "core_mms_rank",
-		Columns:    CoreMmsRankColumns,
-		PrimaryKey: []*schema.Column{CoreMmsRankColumns[0]},
+	// MmsRanksTable holds the schema information for the "mms_ranks" table.
+	MmsRanksTable = &schema.Table{
+		Name:       "mms_ranks",
+		Columns:    MmsRanksColumns,
+		PrimaryKey: []*schema.Column{MmsRanksColumns[0]},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		CoreMmsMembersTable,
-		CoreMmsRankTable,
+		MmsMembersTable,
+		MmsRanksTable,
 	}
 )
 
 func init() {
-	CoreMmsMembersTable.ForeignKeys[0].RefTable = CoreMmsRankTable
-	CoreMmsMembersTable.Annotation = &entsql.Annotation{
-		Table: "core_mms_members",
+	MmsMembersTable.ForeignKeys[0].RefTable = MmsRanksTable
+	MmsMembersTable.Annotation = &entsql.Annotation{
+		Table: "mms_members",
 	}
-	CoreMmsRankTable.Annotation = &entsql.Annotation{
-		Table: "core_mms_rank",
+	MmsRanksTable.Annotation = &entsql.Annotation{
+		Table: "mms_ranks",
 	}
 }
