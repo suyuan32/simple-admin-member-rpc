@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+package mms;
+option go_package="./mms";
+
+message IDsReq {
+  repeated uint64 ids = 1;
+}
+
+message UUIDsReq {
+  repeated string ids = 1;
+}
+
+message BaseUUIDResp {
+  string id = 1;
+  string msg = 2;
+}
+
+message MemberInfo {
+  string id = 1;
+  int64 created_at = 2;
+  int64 updated_at = 3;
+  uint32 status = 4;
+  string username = 5;
+  string password = 6;
+  string nickname = 7;
+  uint64 rank_id = 8;
+  string mobile = 9;
+  string email = 10;
+  string avatar = 11;
+}
+
+message MemberListResp {
+  uint64 total = 1;
+  repeated MemberInfo data = 2;
+}
+
+message MemberRankListResp {
+  uint64 total = 1;
+  repeated MemberRankInfo data = 2;
+}
+
+message UUIDReq {
+  string id = 1;
+}
+
+message BaseIDResp {
+  uint64 id = 1;
+  string msg = 2;
+}
+
+message MemberRankInfo {
+  uint64 id = 1;
+  int64 created_at = 2;
+  int64 updated_at = 3;
+  string name = 4;
+  string description = 5;
+  string remark = 6;
+  string code = 7;
+}
+
+//  base message
+message Empty {}
+
+message IDReq {
+  uint64 id = 1;
+}
+
+message MemberListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+  string username = 3;
+  string nickname = 4;
+  string mobile = 5;
+  string email = 6;
+  uint64 rank_id = 7;
+}
+
+message MemberRegisterReq {
+  string username = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message UsernameReq {
+  string username = 1;
+}
+
+message BaseResp {
+  string msg = 1;
+}
+
+message PageInfoReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+}
+
+message MemberLoginResp {
+  string id = 1;
+  string nickname = 2;
+  string avatar = 3;
+  uint64 rank_id = 4;
+}
+
+message MemberRankListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+  string name = 3;
+  string description = 4;
+  string remark = 5;
+}
+
+service Mms {
+  //  group: base
+  rpc initDatabase(Empty) returns (BaseResp);
+  //  Member management
+  //  group: member
+  rpc createMember(MemberInfo) returns (BaseUUIDResp);
+  //  group: member
+  rpc updateMember(MemberInfo) returns (BaseResp);
+  //  group: member
+  rpc getMemberList(MemberListReq) returns (MemberListResp);
+  //  group: member
+  rpc deleteMember(UUIDsReq) returns (BaseResp);
+  //  group: member
+  rpc getMemberById(UUIDReq) returns (MemberInfo);
+  //  group: member
+  rpc getMemberByUsername(UsernameReq) returns (MemberInfo);
+  //  MemberRank management
+  //  group: memberrank
+  rpc createMemberRank(MemberRankInfo) returns (BaseIDResp);
+  //  group: memberrank
+  rpc updateMemberRank(MemberRankInfo) returns (BaseResp);
+  //  group: memberrank
+  rpc getMemberRankList(MemberRankListReq) returns (MemberRankListResp);
+  //  group: memberrank
+  rpc getMemberRankById(IDReq) returns (MemberRankInfo);
+  //  group: memberrank
+  rpc deleteMemberRank(IDsReq) returns (BaseResp);
+}
+
