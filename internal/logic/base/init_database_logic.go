@@ -118,7 +118,7 @@ func (l *InitDatabaseLogic) insertApiData() (err error) {
 		Path:        "/member",
 		Description: "apiDesc.getMemberById",
 		ApiGroup:    "member",
-		Method:      "Post",
+		Method:      "POST",
 	})
 
 	if err != nil {
