@@ -3,14 +3,11 @@ package memberrank
 import (
 	"context"
 
-	"github.com/suyuan32/simple-admin-member-rpc/ent"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/svc"
+	"github.com/suyuan32/simple-admin-member-rpc/internal/utils/dberrorhandler"
 	"github.com/suyuan32/simple-admin-member-rpc/mms"
 
 	"github.com/suyuan32/simple-admin-core/pkg/i18n"
-	"github.com/suyuan32/simple-admin-core/pkg/msg/logmsg"
-	"github.com/suyuan32/simple-admin-core/pkg/statuserr"
-
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -37,14 +34,7 @@ func (l *CreateMemberRankLogic) CreateMemberRank(in *mms.MemberRankInfo) (*mms.B
 		Save(l.ctx)
 
 	if err != nil {
-		switch {
-		case ent.IsConstraintError(err):
-			logx.Errorw(err.Error(), logx.Field("detail", in))
-			return nil, statuserr.NewInvalidArgumentError(i18n.CreateFailed)
-		default:
-			logx.Errorw(logmsg.DatabaseError, logx.Field("detail", err.Error()))
-			return nil, statuserr.NewInternalError(i18n.DatabaseError)
-		}
+		return nil, dberrorhandler.DefaultEntError(err, in)
 	}
 
 	return &mms.BaseIDResp{Id: result.ID, Msg: i18n.CreateSuccess}, nil

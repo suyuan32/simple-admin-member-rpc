@@ -6,10 +6,9 @@ import (
 	"github.com/suyuan32/simple-admin-member-rpc/ent/member"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/predicate"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/svc"
+	"github.com/suyuan32/simple-admin-member-rpc/internal/utils/dberrorhandler"
 	"github.com/suyuan32/simple-admin-member-rpc/mms"
 
-	"github.com/suyuan32/simple-admin-core/pkg/i18n"
-	"github.com/suyuan32/simple-admin-core/pkg/statuserr"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -48,8 +47,7 @@ func (l *GetMemberListLogic) GetMemberList(in *mms.MemberListReq) (*mms.MemberLi
 	result, err := l.svcCtx.DB.Member.Query().Where(predicates...).Page(l.ctx, in.Page, in.PageSize)
 
 	if err != nil {
-		logx.Error(err.Error())
-		return nil, statuserr.NewInternalError(i18n.DatabaseError)
+		return nil, dberrorhandler.DefaultEntError(err, in)
 	}
 
 	resp := &mms.MemberListResp{}
