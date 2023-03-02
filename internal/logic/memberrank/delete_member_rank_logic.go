@@ -30,7 +30,7 @@ func (l *DeleteMemberRankLogic) DeleteMemberRank(in *mms.IDsReq) (*mms.BaseResp,
 	_, err := l.svcCtx.DB.MemberRank.Delete().Where(memberrank.IDIn(in.Ids...)).Exec(l.ctx)
 
 	if err != nil {
-		return nil, dberrorhandler.DefaultEntError(err, in)
+		return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
 	}
 
 	return &mms.BaseResp{Msg: i18n.DeleteSuccess}, nil

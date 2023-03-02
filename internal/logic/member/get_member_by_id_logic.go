@@ -28,7 +28,7 @@ func NewGetMemberByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 func (l *GetMemberByIdLogic) GetMemberById(in *mms.UUIDReq) (*mms.MemberInfo, error) {
 	result, err := l.svcCtx.DB.Member.Get(l.ctx, uuidx.ParseUUIDString(in.Id))
 	if err != nil {
-		return nil, dberrorhandler.DefaultEntError(err, in)
+		return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
 	}
 
 	return &mms.MemberInfo{

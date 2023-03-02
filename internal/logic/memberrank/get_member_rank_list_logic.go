@@ -39,7 +39,7 @@ func (l *GetMemberRankListLogic) GetMemberRankList(in *mms.MemberRankListReq) (*
 	}
 	result, err := l.svcCtx.DB.MemberRank.Query().Where(predicates...).Page(l.ctx, in.Page, in.PageSize)
 	if err != nil {
-		return nil, dberrorhandler.DefaultEntError(err, in)
+		return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
 	}
 
 	resp := &mms.MemberRankListResp{}

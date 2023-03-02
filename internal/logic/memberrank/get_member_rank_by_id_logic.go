@@ -27,7 +27,7 @@ func NewGetMemberRankByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 func (l *GetMemberRankByIdLogic) GetMemberRankById(in *mms.IDReq) (*mms.MemberRankInfo, error) {
 	result, err := l.svcCtx.DB.MemberRank.Get(l.ctx, in.Id)
 	if err != nil {
-		return nil, dberrorhandler.DefaultEntError(err, in)
+		return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
 	}
 
 	return &mms.MemberRankInfo{

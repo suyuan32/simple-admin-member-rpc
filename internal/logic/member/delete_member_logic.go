@@ -31,7 +31,7 @@ func (l *DeleteMemberLogic) DeleteMember(in *mms.UUIDsReq) (*mms.BaseResp, error
 	_, err := l.svcCtx.DB.Member.Delete().Where(member.IDIn(uuidx.ParseUUIDSlice(in.Ids)...)).Exec(l.ctx)
 
 	if err != nil {
-		return nil, dberrorhandler.DefaultEntError(err, in)
+		return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
 	}
 
 	return &mms.BaseResp{Msg: i18n.DeleteSuccess}, nil

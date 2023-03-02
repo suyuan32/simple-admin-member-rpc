@@ -34,7 +34,7 @@ func (l *CreateMemberRankLogic) CreateMemberRank(in *mms.MemberRankInfo) (*mms.B
 		Save(l.ctx)
 
 	if err != nil {
-		return nil, dberrorhandler.DefaultEntError(err, in)
+		return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
 	}
 
 	return &mms.BaseIDResp{Id: result.ID, Msg: i18n.CreateSuccess}, nil
