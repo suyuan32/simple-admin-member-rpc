@@ -5,10 +5,9 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql/schema"
+	"github.com/suyuan32/simple-admin-common/i18n"
+	"github.com/suyuan32/simple-admin-common/msg/logmsg"
 	"github.com/suyuan32/simple-admin-core/pkg/enum"
-	"github.com/suyuan32/simple-admin-core/pkg/i18n"
-	"github.com/suyuan32/simple-admin-core/pkg/msg/logmsg"
-	"github.com/suyuan32/simple-admin-core/pkg/statuserr"
 	"github.com/suyuan32/simple-admin-core/pkg/utils"
 	"github.com/suyuan32/simple-admin-core/rpc/types/core"
 	"github.com/zeromicro/go-zero/core/errorx"
@@ -38,14 +37,14 @@ func (l *InitDatabaseLogic) InitDatabase(in *mms.Empty) (*mms.BaseResp, error) {
 	err := l.insertApiData()
 	if err != nil {
 		if strings.Contains(err.Error(), "common.createFailed") {
-			return nil, statuserr.NewInvalidArgumentError(i18n.AlreadyInit)
+			return nil, errorx.NewInvalidArgumentError(i18n.AlreadyInit)
 		}
-		return nil, statuserr.NewInternalError(err.Error())
+		return nil, errorx.NewInternalError(err.Error())
 	}
 
 	err = l.insertMenuData()
 	if err != nil {
-		return nil, statuserr.NewInternalError(err.Error())
+		return nil, errorx.NewInternalError(err.Error())
 	}
 
 	if err := l.svcCtx.DB.Schema.Create(l.ctx, schema.WithForeignKeys(false)); err != nil {
@@ -55,12 +54,12 @@ func (l *InitDatabaseLogic) InitDatabase(in *mms.Empty) (*mms.BaseResp, error) {
 
 	err = l.insertMemberData()
 	if err != nil {
-		return nil, statuserr.NewInternalError(err.Error())
+		return nil, errorx.NewInternalError(err.Error())
 	}
 
 	err = l.insertMemberRankData()
 	if err != nil {
-		return nil, statuserr.NewInternalError(err.Error())
+		return nil, errorx.NewInternalError(err.Error())
 	}
 
 	return &mms.BaseResp{
@@ -312,7 +311,7 @@ func (l *InitDatabaseLogic) insertMemberData() error {
 	err := l.svcCtx.DB.Member.CreateBulk(members...).Exec(l.ctx)
 	if err != nil {
 		logx.Errorw(err.Error())
-		return statuserr.NewInternalError(err.Error())
+		return errorx.NewInternalError(err.Error())
 	} else {
 		return nil
 	}
@@ -338,7 +337,7 @@ func (l *InitDatabaseLogic) insertMemberRankData() error {
 	err := l.svcCtx.DB.MemberRank.CreateBulk(memberRanks...).Exec(l.ctx)
 	if err != nil {
 		logx.Errorw(err.Error())
-		return statuserr.NewInternalError(err.Error())
+		return errorx.NewInternalError(err.Error())
 	} else {
 		return nil
 	}
