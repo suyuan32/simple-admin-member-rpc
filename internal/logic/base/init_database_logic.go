@@ -5,10 +5,11 @@ import (
 	"strings"
 
 	"entgo.io/ent/dialect/sql/schema"
+	"github.com/suyuan32/simple-admin-common/enum/common"
+	"github.com/suyuan32/simple-admin-common/enum/errorcode"
 	"github.com/suyuan32/simple-admin-common/i18n"
 	"github.com/suyuan32/simple-admin-common/msg/logmsg"
-	"github.com/suyuan32/simple-admin-core/pkg/enum"
-	"github.com/suyuan32/simple-admin-core/pkg/utils"
+	"github.com/suyuan32/simple-admin-common/utils/encrypt"
 	"github.com/suyuan32/simple-admin-core/rpc/types/core"
 	"github.com/zeromicro/go-zero/core/errorx"
 
@@ -49,7 +50,7 @@ func (l *InitDatabaseLogic) InitDatabase(in *mms.Empty) (*mms.BaseResp, error) {
 
 	if err := l.svcCtx.DB.Schema.Create(l.ctx, schema.WithForeignKeys(false)); err != nil {
 		logx.Errorw(logmsg.DatabaseError, logx.Field("detail", err.Error()))
-		return nil, errorx.NewCodeError(enum.Internal, err.Error())
+		return nil, errorx.NewCodeError(errorcode.Internal, err.Error())
 	}
 
 	err = l.insertMemberData()
@@ -190,7 +191,7 @@ func (l *InitDatabaseLogic) insertMenuData() error {
 		CreatedAt: 0,
 		UpdatedAt: 0,
 		Level:     2,
-		ParentId:  enum.DefaultParentId,
+		ParentId:  common.DefaultParentId,
 		Path:      "",
 		Name:      "MemberManagementDirectory",
 		Redirect:  "",
@@ -296,7 +297,7 @@ func (l *InitDatabaseLogic) insertMemberData() error {
 		SetEmail("simpleadmin@gmail.com").
 		SetMobile("18888888888").
 		SetRankID(1).
-		SetPassword(utils.BcryptEncrypt("simple-admin")),
+		SetPassword(encrypt.BcryptEncrypt("simple-admin")),
 	)
 
 	members = append(members, l.svcCtx.DB.Member.Create().
@@ -305,7 +306,7 @@ func (l *InitDatabaseLogic) insertMemberData() error {
 		SetEmail("vip@gmail.com").
 		SetMobile("18888888889").
 		SetRankID(2).
-		SetPassword(utils.BcryptEncrypt("simple-admin")),
+		SetPassword(encrypt.BcryptEncrypt("simple-admin")),
 	)
 
 	err := l.svcCtx.DB.Member.CreateBulk(members...).Exec(l.ctx)
