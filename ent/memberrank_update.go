@@ -104,7 +104,7 @@ func (mru *MemberRankUpdate) RemoveMembers(m ...*Member) *MemberRankUpdate {
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (mru *MemberRankUpdate) Save(ctx context.Context) (int, error) {
 	mru.defaults()
-	return withHooks[int, MemberRankMutation](ctx, mru.sqlSave, mru.mutation, mru.hooks)
+	return withHooks(ctx, mru.sqlSave, mru.mutation, mru.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -169,10 +169,7 @@ func (mru *MemberRankUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{memberrank.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeUUID,
-					Column: member.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -185,10 +182,7 @@ func (mru *MemberRankUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{memberrank.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeUUID,
-					Column: member.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -204,10 +198,7 @@ func (mru *MemberRankUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{memberrank.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeUUID,
-					Column: member.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -322,7 +313,7 @@ func (mruo *MemberRankUpdateOne) Select(field string, fields ...string) *MemberR
 // Save executes the query and returns the updated MemberRank entity.
 func (mruo *MemberRankUpdateOne) Save(ctx context.Context) (*MemberRank, error) {
 	mruo.defaults()
-	return withHooks[*MemberRank, MemberRankMutation](ctx, mruo.sqlSave, mruo.mutation, mruo.hooks)
+	return withHooks(ctx, mruo.sqlSave, mruo.mutation, mruo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -404,10 +395,7 @@ func (mruo *MemberRankUpdateOne) sqlSave(ctx context.Context) (_node *MemberRank
 			Columns: []string{memberrank.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeUUID,
-					Column: member.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -420,10 +408,7 @@ func (mruo *MemberRankUpdateOne) sqlSave(ctx context.Context) (_node *MemberRank
 			Columns: []string{memberrank.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeUUID,
-					Column: member.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -439,10 +424,7 @@ func (mruo *MemberRankUpdateOne) sqlSave(ctx context.Context) (_node *MemberRank
 			Columns: []string{memberrank.MembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeUUID,
-					Column: member.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(member.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

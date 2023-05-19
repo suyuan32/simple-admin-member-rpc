@@ -20,7 +20,7 @@ import (
 type MemberRankQuery struct {
 	config
 	ctx         *QueryContext
-	order       []OrderFunc
+	order       []memberrank.OrderOption
 	inters      []Interceptor
 	predicates  []predicate.MemberRank
 	withMembers *MemberQuery
@@ -55,7 +55,7 @@ func (mrq *MemberRankQuery) Unique(unique bool) *MemberRankQuery {
 }
 
 // Order specifies how the records should be ordered.
-func (mrq *MemberRankQuery) Order(o ...OrderFunc) *MemberRankQuery {
+func (mrq *MemberRankQuery) Order(o ...memberrank.OrderOption) *MemberRankQuery {
 	mrq.order = append(mrq.order, o...)
 	return mrq
 }
@@ -271,7 +271,7 @@ func (mrq *MemberRankQuery) Clone() *MemberRankQuery {
 	return &MemberRankQuery{
 		config:      mrq.config,
 		ctx:         mrq.ctx.Clone(),
-		order:       append([]OrderFunc{}, mrq.order...),
+		order:       append([]memberrank.OrderOption{}, mrq.order...),
 		inters:      append([]Interceptor{}, mrq.inters...),
 		predicates:  append([]predicate.MemberRank{}, mrq.predicates...),
 		withMembers: mrq.withMembers.Clone(),
@@ -412,8 +412,11 @@ func (mrq *MemberRankQuery) loadMembers(ctx context.Context, query *MemberQuery,
 			init(nodes[i])
 		}
 	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(member.FieldRankID)
+	}
 	query.Where(predicate.Member(func(s *sql.Selector) {
-		s.Where(sql.InValues(memberrank.MembersColumn, fks...))
+		s.Where(sql.InValues(s.C(memberrank.MembersColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -423,7 +426,7 @@ func (mrq *MemberRankQuery) loadMembers(ctx context.Context, query *MemberQuery,
 		fk := n.RankID
 		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "rank_id" returned %v for node %v`, fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "rank_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}

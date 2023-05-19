@@ -15,13 +15,13 @@ var (
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "status", Type: field.TypeUint8, Nullable: true, Default: 1},
-		{Name: "username", Type: field.TypeString, Unique: true},
-		{Name: "password", Type: field.TypeString},
-		{Name: "nickname", Type: field.TypeString, Unique: true},
-		{Name: "mobile", Type: field.TypeString, Nullable: true},
-		{Name: "email", Type: field.TypeString, Nullable: true},
-		{Name: "avatar", Type: field.TypeString, Nullable: true, Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
-		{Name: "rank_id", Type: field.TypeUint64, Nullable: true, Default: 2},
+		{Name: "username", Type: field.TypeString, Unique: true, Comment: "Member's login name | 登录名"},
+		{Name: "password", Type: field.TypeString, Comment: "Password | 密码"},
+		{Name: "nickname", Type: field.TypeString, Unique: true, Comment: "Nickname | 昵称"},
+		{Name: "mobile", Type: field.TypeString, Nullable: true, Comment: "Mobile number | 手机号"},
+		{Name: "email", Type: field.TypeString, Nullable: true, Comment: "Email | 邮箱号"},
+		{Name: "avatar", Type: field.TypeString, Nullable: true, Comment: "Avatar | 头像路径", Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
+		{Name: "rank_id", Type: field.TypeUint64, Nullable: true, Comment: "Member Rank ID | 会员等级ID", Default: 2},
 	}
 	// MmsMembersTable holds the schema information for the "mms_members" table.
 	MmsMembersTable = &schema.Table{

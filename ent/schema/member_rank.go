@@ -25,7 +25,7 @@ func (MemberRank) Fields() []ent.Field {
 
 func (MemberRank) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		mixins.BaseMixin{},
+		mixins.BaseIDMixin{},
 	}
 }
 

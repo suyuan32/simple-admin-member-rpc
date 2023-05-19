@@ -7,7 +7,7 @@ import (
 	"github.com/suyuan32/simple-admin-member-rpc/internal/config"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/server"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/svc"
-	"github.com/suyuan32/simple-admin-member-rpc/mms"
+	"github.com/suyuan32/simple-admin-member-rpc/types/mms"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"

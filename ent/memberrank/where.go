@@ -439,11 +439,7 @@ func HasMembers() predicate.MemberRank {
 // HasMembersWith applies the HasEdge predicate on the "members" edge with a given conditions (other predicates).
 func HasMembersWith(preds ...predicate.Member) predicate.MemberRank {
 	return predicate.MemberRank(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(MembersInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, MembersTable, MembersColumn),
-		)
+		step := newMembersStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

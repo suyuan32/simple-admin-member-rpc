@@ -193,7 +193,7 @@ func (mu *MemberUpdate) ClearRanks() *MemberUpdate {
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (mu *MemberUpdate) Save(ctx context.Context) (int, error) {
 	mu.defaults()
-	return withHooks[int, MemberMutation](ctx, mu.sqlSave, mu.mutation, mu.hooks)
+	return withHooks(ctx, mu.sqlSave, mu.mutation, mu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -282,10 +282,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{member.RanksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeUint64,
-					Column: memberrank.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(memberrank.FieldID, field.TypeUint64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -298,10 +295,7 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{member.RanksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeUint64,
-					Column: memberrank.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(memberrank.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {
@@ -506,7 +500,7 @@ func (muo *MemberUpdateOne) Select(field string, fields ...string) *MemberUpdate
 // Save executes the query and returns the updated Member entity.
 func (muo *MemberUpdateOne) Save(ctx context.Context) (*Member, error) {
 	muo.defaults()
-	return withHooks[*Member, MemberMutation](ctx, muo.sqlSave, muo.mutation, muo.hooks)
+	return withHooks(ctx, muo.sqlSave, muo.mutation, muo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -612,10 +606,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 			Columns: []string{member.RanksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeUint64,
-					Column: memberrank.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(memberrank.FieldID, field.TypeUint64),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -628,10 +619,7 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 			Columns: []string{member.RanksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeUint64,
-					Column: memberrank.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(memberrank.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {

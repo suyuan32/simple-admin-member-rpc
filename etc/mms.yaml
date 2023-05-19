@@ -2,24 +2,24 @@ Name: mms.rpc
 ListenOn: 0.0.0.0:9103
 
 DatabaseConf:
-  Type: mysql
-  Host: 127.0.0.1
-  Port: 3306
+  Type: postgres
+  Host: 192.168.50.216
+  Port: 5432
   DBName: simple_admin
-  Username: # set your username
-  Password: # set your password
+  Username: postgres
+  Password: '123456'
   MaxOpenConn: 100
-  SSLMode: disable
+  SSLMode: disable # disable or require
   CacheTime: 5
 
 RedisConf:
-  Host: 127.0.0.1:6379
+  Host: 192.168.50.216:6379 # 改成自己的redis地址
   Type: node
 
 Log:
   ServiceName: mmsRpcLogger
   Mode: file
-  Path: /home/data/logs/mms/rpc
+  Path: D:\projects\logs\mms\api
   Encoding: json
   Level: info
   Compress: false
@@ -30,6 +30,3 @@ Prometheus:
   Host: 0.0.0.0
   Port: 4001
   Path: /metrics
-
-CoreRpc:
-  Target: k8s://default/core-rpc-svc:9101

@@ -6,7 +6,7 @@ package mmsclient
 import (
 	"context"
 
-	"github.com/suyuan32/simple-admin-member-rpc/mms"
+	"github.com/suyuan32/simple-admin-member-rpc/types/mms"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

@@ -10,7 +10,7 @@ import (
 	"github.com/suyuan32/simple-admin-member-rpc/internal/logic/member"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/logic/memberrank"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/svc"
-	"github.com/suyuan32/simple-admin-member-rpc/mms"
+	"github.com/suyuan32/simple-admin-member-rpc/types/mms"
 )
 
 type MmsServer struct {

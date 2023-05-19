@@ -3,17 +3,60 @@ syntax = "proto3";
 package mms;
 option go_package="./mms";
 
-message IDsReq {
-  repeated uint64 ids = 1;
+message BaseResp {
+  string msg = 1;
 }
+
+message MemberListResp {
+  uint64 total = 1;
+  repeated MemberInfo data = 2;
+}
+
+message MemberListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+  string username = 3;
+  string nickname = 4;
+  string mobile = 5;
+  string email = 6;
+  uint64 rank_id = 7;
+}
+
+message MemberLoginResp {
+  string id = 1;
+  string nickname = 2;
+  string avatar = 3;
+  uint64 rank_id = 4;
+}
+
+message MemberRankInfo {
+  uint64 id = 1;
+  int64 created_at = 2;
+  int64 updated_at = 3;
+  string name = 4;
+  string description = 5;
+  string remark = 6;
+  string code = 7;
+}
+
+message IDReq {
+  uint64 id = 1;
+}
+
+message UsernameReq {
+  string username = 1;
+}
+
+//  base message
+message Empty {}
 
 message UUIDsReq {
   repeated string ids = 1;
 }
 
-message BaseUUIDResp {
-  string id = 1;
-  string msg = 2;
+message PageInfoReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
 }
 
 message MemberInfo {
@@ -30,14 +73,14 @@ message MemberInfo {
   string avatar = 11;
 }
 
-message MemberListResp {
-  uint64 total = 1;
-  repeated MemberInfo data = 2;
+message MemberRegisterReq {
+  string username = 1;
+  string email = 2;
+  string password = 3;
 }
 
-message MemberRankListResp {
-  uint64 total = 1;
-  repeated MemberRankInfo data = 2;
+message IDsReq {
+  repeated uint64 ids = 1;
 }
 
 message UUIDReq {
@@ -49,57 +92,14 @@ message BaseIDResp {
   string msg = 2;
 }
 
-message MemberRankInfo {
-  uint64 id = 1;
-  int64 created_at = 2;
-  int64 updated_at = 3;
-  string name = 4;
-  string description = 5;
-  string remark = 6;
-  string code = 7;
-}
-
-//  base message
-message Empty {}
-
-message IDReq {
-  uint64 id = 1;
-}
-
-message MemberListReq {
-  uint64 page = 1;
-  uint64 page_size = 2;
-  string username = 3;
-  string nickname = 4;
-  string mobile = 5;
-  string email = 6;
-  uint64 rank_id = 7;
-}
-
-message MemberRegisterReq {
-  string username = 1;
-  string email = 2;
-  string password = 3;
-}
-
-message UsernameReq {
-  string username = 1;
-}
-
-message BaseResp {
-  string msg = 1;
-}
-
-message PageInfoReq {
-  uint64 page = 1;
-  uint64 page_size = 2;
-}
-
-message MemberLoginResp {
+message BaseUUIDResp {
   string id = 1;
-  string nickname = 2;
-  string avatar = 3;
-  uint64 rank_id = 4;
+  string msg = 2;
+}
+
+message MemberRankListResp {
+  uint64 total = 1;
+  repeated MemberRankInfo data = 2;
 }
 
 message MemberRankListReq {

@@ -27,7 +27,7 @@ func (md *MemberDelete) Where(ps ...predicate.Member) *MemberDelete {
 
 // Exec executes the deletion query and returns how many vertices were deleted.
 func (md *MemberDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks[int, MemberMutation](ctx, md.sqlExec, md.mutation, md.hooks)
+	return withHooks(ctx, md.sqlExec, md.mutation, md.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.

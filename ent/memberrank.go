@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/memberrank"
 )
@@ -30,7 +31,8 @@ type MemberRank struct {
 	Remark string `json:"remark,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberRankQuery when eager-loading is set.
-	Edges MemberRankEdges `json:"edges"`
+	Edges        MemberRankEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // MemberRankEdges holds the relations/edges for other nodes in the graph.
@@ -63,7 +65,7 @@ func (*MemberRank) scanValues(columns []string) ([]any, error) {
 		case memberrank.FieldCreatedAt, memberrank.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type MemberRank", columns[i])
+			values[i] = new(sql.UnknownType)
 		}
 	}
 	return values, nil
@@ -119,9 +121,17 @@ func (mr *MemberRank) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				mr.Remark = value.String
 			}
+		default:
+			mr.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
+}
+
+// Value returns the ent.Value that was dynamically selected and assigned to the MemberRank.
+// This includes values selected through modifiers, order, etc.
+func (mr *MemberRank) Value(name string) (ent.Value, error) {
+	return mr.selectValues.Get(name)
 }
 
 // QueryMembers queries the "members" edge of the MemberRank entity.

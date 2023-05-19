@@ -7,7 +7,7 @@ import (
 	"github.com/suyuan32/simple-admin-member-rpc/ent/predicate"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/svc"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/utils/dberrorhandler"
-	"github.com/suyuan32/simple-admin-member-rpc/mms"
+	"github.com/suyuan32/simple-admin-member-rpc/types/mms"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

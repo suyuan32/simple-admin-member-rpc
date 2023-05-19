@@ -179,7 +179,7 @@ func (mc *MemberCreate) Mutation() *MemberMutation {
 // Save creates the Member in the database.
 func (mc *MemberCreate) Save(ctx context.Context) (*Member, error) {
 	mc.defaults()
-	return withHooks[*Member, MemberMutation](ctx, mc.sqlSave, mc.mutation, mc.hooks)
+	return withHooks(ctx, mc.sqlSave, mc.mutation, mc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -328,10 +328,7 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 			Columns: []string{member.RanksColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeUint64,
-					Column: memberrank.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(memberrank.FieldID, field.TypeUint64),
 			},
 		}
 		for _, k := range nodes {
@@ -367,8 +364,8 @@ func (mcb *MemberCreateBulk) Save(ctx context.Context) ([]*Member, error) {
 					return nil, err
 				}
 				builder.mutation = mutation
-				nodes[i], specs[i] = builder.createSpec()
 				var err error
+				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
 					_, err = mutators[i+1].Mutate(root, mcb.builders[i+1].mutation)
 				} else {

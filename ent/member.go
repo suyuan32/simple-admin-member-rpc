@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	uuid "github.com/gofrs/uuid/v5"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/member"
@@ -41,7 +42,8 @@ type Member struct {
 	Avatar string `json:"avatar,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberQuery when eager-loading is set.
-	Edges MemberEdges `json:"edges"`
+	Edges        MemberEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // MemberEdges holds the relations/edges for other nodes in the graph.
@@ -80,7 +82,7 @@ func (*Member) scanValues(columns []string) ([]any, error) {
 		case member.FieldID:
 			values[i] = new(uuid.UUID)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type Member", columns[i])
+			values[i] = new(sql.UnknownType)
 		}
 	}
 	return values, nil
@@ -160,9 +162,17 @@ func (m *Member) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.Avatar = value.String
 			}
+		default:
+			m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
+}
+
+// Value returns the ent.Value that was dynamically selected and assigned to the Member.
+// This includes values selected through modifiers, order, etc.
+func (m *Member) Value(name string) (ent.Value, error) {
+	return m.selectValues.Get(name)
 }
 
 // QueryRanks queries the "ranks" edge of the Member entity.

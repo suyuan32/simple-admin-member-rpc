@@ -20,7 +20,7 @@ import (
 type MemberQuery struct {
 	config
 	ctx        *QueryContext
-	order      []OrderFunc
+	order      []member.OrderOption
 	inters     []Interceptor
 	predicates []predicate.Member
 	withRanks  *MemberRankQuery
@@ -55,7 +55,7 @@ func (mq *MemberQuery) Unique(unique bool) *MemberQuery {
 }
 
 // Order specifies how the records should be ordered.
-func (mq *MemberQuery) Order(o ...OrderFunc) *MemberQuery {
+func (mq *MemberQuery) Order(o ...member.OrderOption) *MemberQuery {
 	mq.order = append(mq.order, o...)
 	return mq
 }
@@ -271,7 +271,7 @@ func (mq *MemberQuery) Clone() *MemberQuery {
 	return &MemberQuery{
 		config:     mq.config,
 		ctx:        mq.ctx.Clone(),
-		order:      append([]OrderFunc{}, mq.order...),
+		order:      append([]member.OrderOption{}, mq.order...),
 		inters:     append([]Interceptor{}, mq.inters...),
 		predicates: append([]predicate.Member{}, mq.predicates...),
 		withRanks:  mq.withRanks.Clone(),
@@ -455,6 +455,9 @@ func (mq *MemberQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != member.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if mq.withRanks != nil {
+			_spec.Node.AddColumnOnce(member.FieldRankID)
 		}
 	}
 	if ps := mq.predicates; len(ps) > 0 {

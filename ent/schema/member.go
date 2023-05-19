@@ -18,17 +18,30 @@ type Member struct {
 
 func (Member) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("username").Unique().Comment("Member's login name | 登录名"),
-		field.String("password").Comment("Password | 密码"),
-		field.String("nickname").Unique().Comment("Nickname | 昵称"),
-		field.Uint64("rank_id").Optional().Default(2).Comment("Member Rank ID | 会员等级ID"),
-		field.String("mobile").Optional().Comment("Mobile number | 手机号"),
-		field.String("email").Optional().Comment("Email | 邮箱号"),
+		field.String("username").Unique().
+			Comment("Member's login name | 登录名").
+			Annotations(entsql.WithComments(true)),
+		field.String("password").
+			Comment("Password | 密码").
+			Annotations(entsql.WithComments(true)),
+		field.String("nickname").Unique().
+			Comment("Nickname | 昵称").
+			Annotations(entsql.WithComments(true)),
+		field.Uint64("rank_id").Optional().Default(2).
+			Comment("Member Rank ID | 会员等级ID").
+			Annotations(entsql.WithComments(true)),
+		field.String("mobile").Optional().
+			Comment("Mobile number | 手机号").
+			Annotations(entsql.WithComments(true)),
+		field.String("email").Optional().
+			Comment("Email | 邮箱号").
+			Annotations(entsql.WithComments(true)),
 		field.String("avatar").
 			SchemaType(map[string]string{dialect.MySQL: "varchar(512)"}).
 			Optional().
 			Default("").
-			Comment("Avatar | 头像路径"),
+			Comment("Avatar | 头像路径").
+			Annotations(entsql.WithComments(true)),
 	}
 }
 
