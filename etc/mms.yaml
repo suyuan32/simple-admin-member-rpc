@@ -2,18 +2,18 @@ Name: mms.rpc
 ListenOn: 0.0.0.0:9103
 
 DatabaseConf:
-  Type: postgres
-  Host: 192.168.50.216
-  Port: 5432
+  Type: mysql
+  Host: 127.0.0.1
+  Port: 3306
   DBName: simple_admin
-  Username: postgres
-  Password: '123456'
+  Username: # set your username
+  Password: # set your password
   MaxOpenConn: 100
-  SSLMode: disable # disable or require
+  SSLMode: disable
   CacheTime: 5
 
 RedisConf:
-  Host: 192.168.50.216:6379 # 改成自己的redis地址
+  Host: 127.0.0.1:6379
   Type: node
 
 Log:

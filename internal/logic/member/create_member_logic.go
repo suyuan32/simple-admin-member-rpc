@@ -3,6 +3,8 @@ package member
 import (
 	"context"
 
+	"github.com/suyuan32/simple-admin-common/utils/encrypt"
+
 	"github.com/suyuan32/simple-admin-member-rpc/internal/svc"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/utils/dberrorhandler"
 	"github.com/suyuan32/simple-admin-member-rpc/types/mms"
@@ -29,7 +31,7 @@ func (l *CreateMemberLogic) CreateMember(in *mms.MemberInfo) (*mms.BaseUUIDResp,
 	result, err := l.svcCtx.DB.Member.Create().
 		SetStatus(uint8(in.Status)).
 		SetUsername(in.Username).
-		SetPassword(in.Password).
+		SetPassword(encrypt.BcryptEncrypt(in.Password)).
 		SetNickname(in.Nickname).
 		SetRankID(in.RankId).
 		SetMobile(in.Mobile).
