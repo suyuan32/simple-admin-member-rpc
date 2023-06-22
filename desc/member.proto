@@ -3,17 +3,17 @@ syntax = "proto3";
 // Member message
 
 message MemberInfo {
-  string id = 1;
-  int64 created_at = 2;
-  int64 updated_at = 3;
-  uint32 status = 4;
-  string username = 5;
-  string password = 6;
-  string nickname = 7;
-  uint64 rank_id = 8;
-  string mobile = 9;
-  string email = 10;
-  string avatar = 11;
+  optional string id = 1;
+  optional int64 created_at = 2;
+  optional int64 updated_at = 3;
+  optional uint32 status = 4;
+  optional string username = 5;
+  optional string password = 6;
+  optional string nickname = 7;
+  optional uint64 rank_id = 8;
+  optional string mobile = 9;
+  optional string email = 10;
+  optional string avatar = 11;
 }
 
 message MemberListResp {
@@ -24,11 +24,11 @@ message MemberListResp {
 message MemberListReq {
   uint64 page = 1;
   uint64 page_size = 2;
-  string username = 3;
-  string nickname = 4;
-  string mobile = 5;
-  string email = 6;
-  uint64 rank_id = 7;
+  optional string username = 3;
+  optional string nickname = 4;
+  optional string mobile = 5;
+  optional string email = 6;
+  optional uint64 rank_id = 7;
 }
 
 message MemberLoginResp {

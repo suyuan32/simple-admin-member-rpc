@@ -2,8 +2,8 @@ package member
 
 import (
 	"context"
-
 	"github.com/suyuan32/simple-admin-common/utils/encrypt"
+	"github.com/suyuan32/simple-admin-common/utils/pointy"
 
 	"github.com/suyuan32/simple-admin-member-rpc/internal/svc"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/utils/dberrorhandler"
@@ -28,16 +28,19 @@ func NewCreateMemberLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Crea
 }
 
 func (l *CreateMemberLogic) CreateMember(in *mms.MemberInfo) (*mms.BaseUUIDResp, error) {
-	result, err := l.svcCtx.DB.Member.Create().
-		SetStatus(uint8(in.Status)).
-		SetUsername(in.Username).
-		SetPassword(encrypt.BcryptEncrypt(in.Password)).
-		SetNickname(in.Nickname).
-		SetRankID(in.RankId).
-		SetMobile(in.Mobile).
-		SetEmail(in.Email).
-		SetAvatar(in.Avatar).
-		Save(l.ctx)
+	query := l.svcCtx.DB.Member.Create().
+		SetNotNilStatus(pointy.GetStatusPointer(in.Status)).
+		SetNotNilUsername(in.Username).
+		SetNotNilNickname(in.Nickname).
+		SetNotNilRankID(in.RankId).
+		SetNotNilMobile(in.Mobile).
+		SetNotNilEmail(in.Email).
+		SetNotNilAvatar(in.Avatar)
+
+	if in.Password != nil {
+		query.SetNotNilPassword(pointy.GetPointer(encrypt.BcryptEncrypt(*in.Password)))
+	}
+	result, err := query.Save(l.ctx)
 
 	if err != nil {
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)

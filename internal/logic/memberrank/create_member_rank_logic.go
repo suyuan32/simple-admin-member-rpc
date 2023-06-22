@@ -27,10 +27,10 @@ func NewCreateMemberRankLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 
 func (l *CreateMemberRankLogic) CreateMemberRank(in *mms.MemberRankInfo) (*mms.BaseIDResp, error) {
 	result, err := l.svcCtx.DB.MemberRank.Create().
-		SetName(in.Name).
-		SetCode(in.Code).
-		SetDescription(in.Description).
-		SetRemark(in.Remark).
+		SetNotNilName(in.Name).
+		SetNotNilCode(in.Code).
+		SetNotNilDescription(in.Description).
+		SetNotNilRemark(in.Remark).
 		Save(l.ctx)
 
 	if err != nil {

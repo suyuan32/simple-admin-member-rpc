@@ -2,6 +2,7 @@ package member
 
 import (
 	"context"
+	"github.com/suyuan32/simple-admin-common/utils/pointy"
 
 	"github.com/suyuan32/simple-admin-member-rpc/ent/member"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/svc"
@@ -32,16 +33,16 @@ func (l *GetMemberByUsernameLogic) GetMemberByUsername(in *mms.UsernameReq) (*mm
 	}
 
 	return &mms.MemberInfo{
-		Id:        result.ID.String(),
-		CreatedAt: result.CreatedAt.UnixMilli(),
-		UpdatedAt: result.UpdatedAt.UnixMilli(),
-		Status:    uint32(result.Status),
-		Username:  result.Username,
-		Password:  result.Password,
-		Nickname:  result.Nickname,
-		RankId:    result.RankID,
-		Mobile:    result.Mobile,
-		Email:     result.Email,
-		Avatar:    result.Avatar,
+		Id:        pointy.GetPointer(result.ID.String()),
+		CreatedAt: pointy.GetPointer(result.CreatedAt.UnixMilli()),
+		UpdatedAt: pointy.GetPointer(result.UpdatedAt.UnixMilli()),
+		Status:    pointy.GetPointer(uint32(result.Status)),
+		Username:  &result.Username,
+		Password:  &result.Password,
+		Nickname:  &result.Nickname,
+		RankId:    &result.RankID,
+		Mobile:    &result.Mobile,
+		Email:     &result.Email,
+		Avatar:    &result.Avatar,
 	}, nil
 }

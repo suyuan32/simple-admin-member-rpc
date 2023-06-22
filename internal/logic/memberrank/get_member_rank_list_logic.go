@@ -2,6 +2,7 @@ package memberrank
 
 import (
 	"context"
+	"github.com/suyuan32/simple-admin-common/utils/pointy"
 
 	"github.com/suyuan32/simple-admin-member-rpc/ent/memberrank"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/predicate"
@@ -28,14 +29,14 @@ func NewGetMemberRankListLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 
 func (l *GetMemberRankListLogic) GetMemberRankList(in *mms.MemberRankListReq) (*mms.MemberRankListResp, error) {
 	var predicates []predicate.MemberRank
-	if in.Name != "" {
-		predicates = append(predicates, memberrank.NameContains(in.Name))
+	if in.Name != nil {
+		predicates = append(predicates, memberrank.NameContains(*in.Name))
 	}
-	if in.Description != "" {
-		predicates = append(predicates, memberrank.DescriptionContains(in.Description))
+	if in.Description != nil {
+		predicates = append(predicates, memberrank.DescriptionContains(*in.Description))
 	}
-	if in.Remark != "" {
-		predicates = append(predicates, memberrank.RemarkContains(in.Remark))
+	if in.Remark != nil {
+		predicates = append(predicates, memberrank.RemarkContains(*in.Remark))
 	}
 	result, err := l.svcCtx.DB.MemberRank.Query().Where(predicates...).Page(l.ctx, in.Page, in.PageSize)
 	if err != nil {
@@ -47,13 +48,13 @@ func (l *GetMemberRankListLogic) GetMemberRankList(in *mms.MemberRankListReq) (*
 
 	for _, v := range result.List {
 		resp.Data = append(resp.Data, &mms.MemberRankInfo{
-			Id:          v.ID,
-			CreatedAt:   v.CreatedAt.UnixMilli(),
-			UpdatedAt:   v.UpdatedAt.UnixMilli(),
-			Name:        v.Name,
-			Description: v.Description,
-			Remark:      v.Remark,
-			Code:        v.Code,
+			Id:          pointy.GetPointer(v.ID),
+			CreatedAt:   pointy.GetPointer(v.CreatedAt.UnixMilli()),
+			UpdatedAt:   pointy.GetPointer(v.UpdatedAt.UnixMilli()),
+			Name:        &v.Name,
+			Description: &v.Description,
+			Remark:      &v.Remark,
+			Code:        &v.Code,
 		})
 	}
 

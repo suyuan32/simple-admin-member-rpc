@@ -2,6 +2,8 @@ package member
 
 import (
 	"context"
+	"github.com/suyuan32/simple-admin-common/utils/encrypt"
+	"github.com/suyuan32/simple-admin-common/utils/pointy"
 
 	"github.com/suyuan32/simple-admin-member-rpc/internal/svc"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/utils/dberrorhandler"
@@ -27,16 +29,20 @@ func NewUpdateMemberLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Upda
 }
 
 func (l *UpdateMemberLogic) UpdateMember(in *mms.MemberInfo) (*mms.BaseResp, error) {
-	err := l.svcCtx.DB.Member.UpdateOneID(uuidx.ParseUUIDString(in.Id)).
-		SetNotEmptyStatus(uint8(in.Status)).
-		SetNotEmptyUsername(in.Username).
-		SetNotEmptyPassword(in.Password).
-		SetNotEmptyNickname(in.Nickname).
-		SetNotEmptyRankID(in.RankId).
-		SetNotEmptyMobile(in.Mobile).
-		SetNotEmptyEmail(in.Email).
-		SetNotEmptyAvatar(in.Avatar).
-		Exec(l.ctx)
+	query := l.svcCtx.DB.Member.UpdateOneID(uuidx.ParseUUIDString(*in.Id)).
+		SetNotNilStatus(pointy.GetStatusPointer(in.Status)).
+		SetNotNilUsername(in.Username).
+		SetNotNilNickname(in.Nickname).
+		SetNotNilRankID(in.RankId).
+		SetNotNilMobile(in.Mobile).
+		SetNotNilEmail(in.Email).
+		SetNotNilAvatar(in.Avatar)
+
+	if in.Password != nil {
+		query.SetNotNilPassword(pointy.GetPointer(encrypt.BcryptEncrypt(*in.Password)))
+	}
+
+	err := query.Exec(l.ctx)
 
 	if err != nil {
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)

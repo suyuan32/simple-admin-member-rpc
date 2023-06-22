@@ -59,6 +59,13 @@ var (
 		Name:       "mms_ranks",
 		Columns:    MmsRanksColumns,
 		PrimaryKey: []*schema.Column{MmsRanksColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "memberrank_code",
+				Unique:  true,
+				Columns: []*schema.Column{MmsRanksColumns[4]},
+			},
+		},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{

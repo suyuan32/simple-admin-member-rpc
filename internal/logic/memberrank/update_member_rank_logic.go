@@ -26,11 +26,11 @@ func NewUpdateMemberRankLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 }
 
 func (l *UpdateMemberRankLogic) UpdateMemberRank(in *mms.MemberRankInfo) (*mms.BaseResp, error) {
-	err := l.svcCtx.DB.MemberRank.UpdateOneID(in.Id).
-		SetNotEmptyName(in.Name).
-		SetNotEmptyCode(in.Code).
-		SetNotEmptyDescription(in.Description).
-		SetNotEmptyRemark(in.Remark).
+	err := l.svcCtx.DB.MemberRank.UpdateOneID(*in.Id).
+		SetNotNilName(in.Name).
+		SetNotNilCode(in.Code).
+		SetNotNilDescription(in.Description).
+		SetNotNilRemark(in.Remark).
 		Exec(l.ctx)
 
 	if err != nil {

@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 
 	"github.com/suyuan32/simple-admin-common/orm/ent/mixins"
 )
@@ -25,7 +26,7 @@ func (MemberRank) Fields() []ent.Field {
 
 func (MemberRank) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		mixins.BaseIDMixin{},
+		mixins.IDMixin{},
 	}
 }
 
@@ -36,7 +37,9 @@ func (MemberRank) Edges() []ent.Edge {
 }
 
 func (MemberRank) Indexes() []ent.Index {
-	return nil
+	return []ent.Index{
+		index.Fields("code").Unique(),
+	}
 }
 
 func (MemberRank) Annotations() []schema.Annotation {
