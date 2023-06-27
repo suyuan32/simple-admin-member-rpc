@@ -9,8 +9,8 @@ require (
 	github.com/gofrs/uuid/v5 v5.0.0
 	github.com/suyuan32/simple-admin-common v1.0.11
 	github.com/zeromicro/go-zero v1.5.3
-	google.golang.org/grpc v1.56.0
-	google.golang.org/protobuf v1.30.0
+	google.golang.org/grpc v1.56.1
+	google.golang.org/protobuf v1.31.0
 )
 
 require (
