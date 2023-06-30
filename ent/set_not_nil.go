@@ -2,7 +2,11 @@
 
 package ent
 
-import "time"
+import (
+	"time"
+
+	uuid "github.com/gofrs/uuid/v5"
+)
 
 // set field if value's pointer is not nil.
 func (m *MemberUpdate) SetNotNilUpdatedAt(value *time.Time) *MemberUpdate {
@@ -338,4 +342,388 @@ func (mr *MemberRankCreate) SetNotNilRemark(value *string) *MemberRankCreate {
 		return mr.SetRemark(*value)
 	}
 	return mr
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdate) SetNotNilUpdatedAt(value *time.Time) *OauthProviderUpdate {
+	if value != nil {
+		return op.SetUpdatedAt(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdateOne) SetNotNilUpdatedAt(value *time.Time) *OauthProviderUpdateOne {
+	if value != nil {
+		return op.SetUpdatedAt(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderCreate) SetNotNilUpdatedAt(value *time.Time) *OauthProviderCreate {
+	if value != nil {
+		return op.SetUpdatedAt(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdate) SetNotNilName(value *string) *OauthProviderUpdate {
+	if value != nil {
+		return op.SetName(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdateOne) SetNotNilName(value *string) *OauthProviderUpdateOne {
+	if value != nil {
+		return op.SetName(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderCreate) SetNotNilName(value *string) *OauthProviderCreate {
+	if value != nil {
+		return op.SetName(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdate) SetNotNilClientID(value *string) *OauthProviderUpdate {
+	if value != nil {
+		return op.SetClientID(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdateOne) SetNotNilClientID(value *string) *OauthProviderUpdateOne {
+	if value != nil {
+		return op.SetClientID(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderCreate) SetNotNilClientID(value *string) *OauthProviderCreate {
+	if value != nil {
+		return op.SetClientID(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdate) SetNotNilClientSecret(value *string) *OauthProviderUpdate {
+	if value != nil {
+		return op.SetClientSecret(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdateOne) SetNotNilClientSecret(value *string) *OauthProviderUpdateOne {
+	if value != nil {
+		return op.SetClientSecret(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderCreate) SetNotNilClientSecret(value *string) *OauthProviderCreate {
+	if value != nil {
+		return op.SetClientSecret(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdate) SetNotNilRedirectURL(value *string) *OauthProviderUpdate {
+	if value != nil {
+		return op.SetRedirectURL(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdateOne) SetNotNilRedirectURL(value *string) *OauthProviderUpdateOne {
+	if value != nil {
+		return op.SetRedirectURL(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderCreate) SetNotNilRedirectURL(value *string) *OauthProviderCreate {
+	if value != nil {
+		return op.SetRedirectURL(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdate) SetNotNilScopes(value *string) *OauthProviderUpdate {
+	if value != nil {
+		return op.SetScopes(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdateOne) SetNotNilScopes(value *string) *OauthProviderUpdateOne {
+	if value != nil {
+		return op.SetScopes(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderCreate) SetNotNilScopes(value *string) *OauthProviderCreate {
+	if value != nil {
+		return op.SetScopes(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdate) SetNotNilAuthURL(value *string) *OauthProviderUpdate {
+	if value != nil {
+		return op.SetAuthURL(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdateOne) SetNotNilAuthURL(value *string) *OauthProviderUpdateOne {
+	if value != nil {
+		return op.SetAuthURL(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderCreate) SetNotNilAuthURL(value *string) *OauthProviderCreate {
+	if value != nil {
+		return op.SetAuthURL(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdate) SetNotNilTokenURL(value *string) *OauthProviderUpdate {
+	if value != nil {
+		return op.SetTokenURL(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdateOne) SetNotNilTokenURL(value *string) *OauthProviderUpdateOne {
+	if value != nil {
+		return op.SetTokenURL(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderCreate) SetNotNilTokenURL(value *string) *OauthProviderCreate {
+	if value != nil {
+		return op.SetTokenURL(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdate) SetNotNilAuthStyle(value *uint64) *OauthProviderUpdate {
+	if value != nil {
+		return op.SetAuthStyle(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdateOne) SetNotNilAuthStyle(value *uint64) *OauthProviderUpdateOne {
+	if value != nil {
+		return op.SetAuthStyle(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderCreate) SetNotNilAuthStyle(value *uint64) *OauthProviderCreate {
+	if value != nil {
+		return op.SetAuthStyle(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdate) SetNotNilInfoURL(value *string) *OauthProviderUpdate {
+	if value != nil {
+		return op.SetInfoURL(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderUpdateOne) SetNotNilInfoURL(value *string) *OauthProviderUpdateOne {
+	if value != nil {
+		return op.SetInfoURL(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (op *OauthProviderCreate) SetNotNilInfoURL(value *string) *OauthProviderCreate {
+	if value != nil {
+		return op.SetInfoURL(*value)
+	}
+	return op
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenUpdate) SetNotNilUpdatedAt(value *time.Time) *TokenUpdate {
+	if value != nil {
+		return t.SetUpdatedAt(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenUpdateOne) SetNotNilUpdatedAt(value *time.Time) *TokenUpdateOne {
+	if value != nil {
+		return t.SetUpdatedAt(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenCreate) SetNotNilUpdatedAt(value *time.Time) *TokenCreate {
+	if value != nil {
+		return t.SetUpdatedAt(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenUpdate) SetNotNilStatus(value *uint8) *TokenUpdate {
+	if value != nil {
+		return t.SetStatus(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenUpdateOne) SetNotNilStatus(value *uint8) *TokenUpdateOne {
+	if value != nil {
+		return t.SetStatus(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenCreate) SetNotNilStatus(value *uint8) *TokenCreate {
+	if value != nil {
+		return t.SetStatus(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenUpdate) SetNotNilUUID(value *uuid.UUID) *TokenUpdate {
+	if value != nil {
+		return t.SetUUID(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenUpdateOne) SetNotNilUUID(value *uuid.UUID) *TokenUpdateOne {
+	if value != nil {
+		return t.SetUUID(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenCreate) SetNotNilUUID(value *uuid.UUID) *TokenCreate {
+	if value != nil {
+		return t.SetUUID(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenUpdate) SetNotNilToken(value *string) *TokenUpdate {
+	if value != nil {
+		return t.SetToken(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenUpdateOne) SetNotNilToken(value *string) *TokenUpdateOne {
+	if value != nil {
+		return t.SetToken(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenCreate) SetNotNilToken(value *string) *TokenCreate {
+	if value != nil {
+		return t.SetToken(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenUpdate) SetNotNilSource(value *string) *TokenUpdate {
+	if value != nil {
+		return t.SetSource(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenUpdateOne) SetNotNilSource(value *string) *TokenUpdateOne {
+	if value != nil {
+		return t.SetSource(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenCreate) SetNotNilSource(value *string) *TokenCreate {
+	if value != nil {
+		return t.SetSource(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenUpdate) SetNotNilExpiredAt(value *time.Time) *TokenUpdate {
+	if value != nil {
+		return t.SetExpiredAt(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenUpdateOne) SetNotNilExpiredAt(value *time.Time) *TokenUpdateOne {
+	if value != nil {
+		return t.SetExpiredAt(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenCreate) SetNotNilExpiredAt(value *time.Time) *TokenCreate {
+	if value != nil {
+		return t.SetExpiredAt(*value)
+	}
+	return t
 }

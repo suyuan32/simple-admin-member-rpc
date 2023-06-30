@@ -16,6 +16,10 @@ type Tx struct {
 	Member *MemberClient
 	// MemberRank is the client for interacting with the MemberRank builders.
 	MemberRank *MemberRankClient
+	// OauthProvider is the client for interacting with the OauthProvider builders.
+	OauthProvider *OauthProviderClient
+	// Token is the client for interacting with the Token builders.
+	Token *TokenClient
 
 	// lazily loaded.
 	client     *Client
@@ -149,6 +153,8 @@ func (tx *Tx) Client() *Client {
 func (tx *Tx) init() {
 	tx.Member = NewMemberClient(tx.config)
 	tx.MemberRank = NewMemberRankClient(tx.config)
+	tx.OauthProvider = NewOauthProviderClient(tx.config)
+	tx.Token = NewTokenClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

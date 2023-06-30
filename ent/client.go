@@ -17,6 +17,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/member"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/memberrank"
+	"github.com/suyuan32/simple-admin-member-rpc/ent/oauthprovider"
+	"github.com/suyuan32/simple-admin-member-rpc/ent/token"
 )
 
 // Client is the client that holds all ent builders.
@@ -28,6 +30,10 @@ type Client struct {
 	Member *MemberClient
 	// MemberRank is the client for interacting with the MemberRank builders.
 	MemberRank *MemberRankClient
+	// OauthProvider is the client for interacting with the OauthProvider builders.
+	OauthProvider *OauthProviderClient
+	// Token is the client for interacting with the Token builders.
+	Token *TokenClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -43,6 +49,8 @@ func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.Member = NewMemberClient(c.config)
 	c.MemberRank = NewMemberRankClient(c.config)
+	c.OauthProvider = NewOauthProviderClient(c.config)
+	c.Token = NewTokenClient(c.config)
 }
 
 type (
@@ -123,10 +131,12 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:        ctx,
-		config:     cfg,
-		Member:     NewMemberClient(cfg),
-		MemberRank: NewMemberRankClient(cfg),
+		ctx:           ctx,
+		config:        cfg,
+		Member:        NewMemberClient(cfg),
+		MemberRank:    NewMemberRankClient(cfg),
+		OauthProvider: NewOauthProviderClient(cfg),
+		Token:         NewTokenClient(cfg),
 	}, nil
 }
 
@@ -144,10 +154,12 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:        ctx,
-		config:     cfg,
-		Member:     NewMemberClient(cfg),
-		MemberRank: NewMemberRankClient(cfg),
+		ctx:           ctx,
+		config:        cfg,
+		Member:        NewMemberClient(cfg),
+		MemberRank:    NewMemberRankClient(cfg),
+		OauthProvider: NewOauthProviderClient(cfg),
+		Token:         NewTokenClient(cfg),
 	}, nil
 }
 
@@ -178,6 +190,8 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	c.Member.Use(hooks...)
 	c.MemberRank.Use(hooks...)
+	c.OauthProvider.Use(hooks...)
+	c.Token.Use(hooks...)
 }
 
 // Intercept adds the query interceptors to all the entity clients.
@@ -185,6 +199,8 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	c.Member.Intercept(interceptors...)
 	c.MemberRank.Intercept(interceptors...)
+	c.OauthProvider.Intercept(interceptors...)
+	c.Token.Intercept(interceptors...)
 }
 
 // Mutate implements the ent.Mutator interface.
@@ -194,6 +210,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Member.mutate(ctx, m)
 	case *MemberRankMutation:
 		return c.MemberRank.mutate(ctx, m)
+	case *OauthProviderMutation:
+		return c.OauthProvider.mutate(ctx, m)
+	case *TokenMutation:
+		return c.Token.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
 	}
@@ -467,12 +487,248 @@ func (c *MemberRankClient) mutate(ctx context.Context, m *MemberRankMutation) (V
 	}
 }
 
+// OauthProviderClient is a client for the OauthProvider schema.
+type OauthProviderClient struct {
+	config
+}
+
+// NewOauthProviderClient returns a client for the OauthProvider from the given config.
+func NewOauthProviderClient(c config) *OauthProviderClient {
+	return &OauthProviderClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `oauthprovider.Hooks(f(g(h())))`.
+func (c *OauthProviderClient) Use(hooks ...Hook) {
+	c.hooks.OauthProvider = append(c.hooks.OauthProvider, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `oauthprovider.Intercept(f(g(h())))`.
+func (c *OauthProviderClient) Intercept(interceptors ...Interceptor) {
+	c.inters.OauthProvider = append(c.inters.OauthProvider, interceptors...)
+}
+
+// Create returns a builder for creating a OauthProvider entity.
+func (c *OauthProviderClient) Create() *OauthProviderCreate {
+	mutation := newOauthProviderMutation(c.config, OpCreate)
+	return &OauthProviderCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of OauthProvider entities.
+func (c *OauthProviderClient) CreateBulk(builders ...*OauthProviderCreate) *OauthProviderCreateBulk {
+	return &OauthProviderCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for OauthProvider.
+func (c *OauthProviderClient) Update() *OauthProviderUpdate {
+	mutation := newOauthProviderMutation(c.config, OpUpdate)
+	return &OauthProviderUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *OauthProviderClient) UpdateOne(op *OauthProvider) *OauthProviderUpdateOne {
+	mutation := newOauthProviderMutation(c.config, OpUpdateOne, withOauthProvider(op))
+	return &OauthProviderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *OauthProviderClient) UpdateOneID(id uint64) *OauthProviderUpdateOne {
+	mutation := newOauthProviderMutation(c.config, OpUpdateOne, withOauthProviderID(id))
+	return &OauthProviderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for OauthProvider.
+func (c *OauthProviderClient) Delete() *OauthProviderDelete {
+	mutation := newOauthProviderMutation(c.config, OpDelete)
+	return &OauthProviderDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *OauthProviderClient) DeleteOne(op *OauthProvider) *OauthProviderDeleteOne {
+	return c.DeleteOneID(op.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *OauthProviderClient) DeleteOneID(id uint64) *OauthProviderDeleteOne {
+	builder := c.Delete().Where(oauthprovider.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &OauthProviderDeleteOne{builder}
+}
+
+// Query returns a query builder for OauthProvider.
+func (c *OauthProviderClient) Query() *OauthProviderQuery {
+	return &OauthProviderQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeOauthProvider},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a OauthProvider entity by its id.
+func (c *OauthProviderClient) Get(ctx context.Context, id uint64) (*OauthProvider, error) {
+	return c.Query().Where(oauthprovider.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *OauthProviderClient) GetX(ctx context.Context, id uint64) *OauthProvider {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *OauthProviderClient) Hooks() []Hook {
+	return c.hooks.OauthProvider
+}
+
+// Interceptors returns the client interceptors.
+func (c *OauthProviderClient) Interceptors() []Interceptor {
+	return c.inters.OauthProvider
+}
+
+func (c *OauthProviderClient) mutate(ctx context.Context, m *OauthProviderMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&OauthProviderCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&OauthProviderUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&OauthProviderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&OauthProviderDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown OauthProvider mutation op: %q", m.Op())
+	}
+}
+
+// TokenClient is a client for the Token schema.
+type TokenClient struct {
+	config
+}
+
+// NewTokenClient returns a client for the Token from the given config.
+func NewTokenClient(c config) *TokenClient {
+	return &TokenClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `token.Hooks(f(g(h())))`.
+func (c *TokenClient) Use(hooks ...Hook) {
+	c.hooks.Token = append(c.hooks.Token, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `token.Intercept(f(g(h())))`.
+func (c *TokenClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Token = append(c.inters.Token, interceptors...)
+}
+
+// Create returns a builder for creating a Token entity.
+func (c *TokenClient) Create() *TokenCreate {
+	mutation := newTokenMutation(c.config, OpCreate)
+	return &TokenCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Token entities.
+func (c *TokenClient) CreateBulk(builders ...*TokenCreate) *TokenCreateBulk {
+	return &TokenCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Token.
+func (c *TokenClient) Update() *TokenUpdate {
+	mutation := newTokenMutation(c.config, OpUpdate)
+	return &TokenUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TokenClient) UpdateOne(t *Token) *TokenUpdateOne {
+	mutation := newTokenMutation(c.config, OpUpdateOne, withToken(t))
+	return &TokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TokenClient) UpdateOneID(id uuid.UUID) *TokenUpdateOne {
+	mutation := newTokenMutation(c.config, OpUpdateOne, withTokenID(id))
+	return &TokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Token.
+func (c *TokenClient) Delete() *TokenDelete {
+	mutation := newTokenMutation(c.config, OpDelete)
+	return &TokenDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TokenClient) DeleteOne(t *Token) *TokenDeleteOne {
+	return c.DeleteOneID(t.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TokenClient) DeleteOneID(id uuid.UUID) *TokenDeleteOne {
+	builder := c.Delete().Where(token.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TokenDeleteOne{builder}
+}
+
+// Query returns a query builder for Token.
+func (c *TokenClient) Query() *TokenQuery {
+	return &TokenQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeToken},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Token entity by its id.
+func (c *TokenClient) Get(ctx context.Context, id uuid.UUID) (*Token, error) {
+	return c.Query().Where(token.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TokenClient) GetX(ctx context.Context, id uuid.UUID) *Token {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TokenClient) Hooks() []Hook {
+	return c.hooks.Token
+}
+
+// Interceptors returns the client interceptors.
+func (c *TokenClient) Interceptors() []Interceptor {
+	return c.inters.Token
+}
+
+func (c *TokenClient) mutate(ctx context.Context, m *TokenMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TokenCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TokenUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TokenDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Token mutation op: %q", m.Op())
+	}
+}
+
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Member, MemberRank []ent.Hook
+		Member, MemberRank, OauthProvider, Token []ent.Hook
 	}
 	inters struct {
-		Member, MemberRank []ent.Interceptor
+		Member, MemberRank, OauthProvider, Token []ent.Interceptor
 	}
 )

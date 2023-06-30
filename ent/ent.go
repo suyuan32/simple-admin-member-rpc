@@ -14,6 +14,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/member"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/memberrank"
+	"github.com/suyuan32/simple-admin-member-rpc/ent/oauthprovider"
+	"github.com/suyuan32/simple-admin-member-rpc/ent/token"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -74,8 +76,10 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			member.Table:     member.ValidColumn,
-			memberrank.Table: memberrank.ValidColumn,
+			member.Table:        member.ValidColumn,
+			memberrank.Table:    memberrank.ValidColumn,
+			oauthprovider.Table: oauthprovider.ValidColumn,
+			token.Table:         token.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)
