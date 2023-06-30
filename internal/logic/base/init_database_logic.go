@@ -48,6 +48,11 @@ func (l *InitDatabaseLogic) InitDatabase(in *mms.Empty) (*mms.BaseResp, error) {
 		return nil, errorx.NewInternalError(err.Error())
 	}
 
+	err = l.insertProviderData()
+	if err != nil {
+		return nil, errorx.NewInternalError(err.Error())
+	}
+
 	return &mms.BaseResp{
 		Msg: i18n.Success,
 	}, nil
@@ -101,6 +106,42 @@ func (l *InitDatabaseLogic) insertMemberRankData() error {
 	)
 
 	err := l.svcCtx.DB.MemberRank.CreateBulk(memberRanks...).Exec(l.ctx)
+	if err != nil {
+		logx.Errorw(err.Error())
+		return errorx.NewInternalError(err.Error())
+	} else {
+		return nil
+	}
+}
+
+func (l *InitDatabaseLogic) insertProviderData() error {
+	var providers []*ent.OauthProviderCreate
+
+	providers = append(providers, l.svcCtx.DB.OauthProvider.Create().
+		SetName("google").
+		SetClientID("your client id").
+		SetClientSecret("your client secret").
+		SetRedirectURL("http://localhost:3100/oauth/login/callback").
+		SetScopes("email openid").
+		SetAuthURL("https://accounts.google.com/o/oauth2/auth").
+		SetTokenURL("https://oauth2.googleapis.com/token").
+		SetAuthStyle(1).
+		SetInfoURL("https://www.googleapis.com/oauth2/v2/userinfo?access_token=TOKEN"),
+	)
+
+	providers = append(providers, l.svcCtx.DB.OauthProvider.Create().
+		SetName("github").
+		SetClientID("your client id").
+		SetClientSecret("your client secret").
+		SetRedirectURL("http://localhost:3100/oauth/login/callback").
+		SetScopes("email openid").
+		SetAuthURL("https://github.com/login/oauth/authorize").
+		SetTokenURL("https://github.com/login/oauth/access_token").
+		SetAuthStyle(2).
+		SetInfoURL("https://api.github.com/user"),
+	)
+
+	err := l.svcCtx.DB.OauthProvider.CreateBulk(providers...).Exec(l.ctx)
 	if err != nil {
 		logx.Errorw(err.Error())
 		return errorx.NewInternalError(err.Error())

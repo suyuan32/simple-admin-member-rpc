@@ -8,6 +8,8 @@ import (
 
 	"github.com/suyuan32/simple-admin-member-rpc/ent/member"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/memberrank"
+	"github.com/suyuan32/simple-admin-member-rpc/ent/oauthprovider"
+	"github.com/suyuan32/simple-admin-member-rpc/ent/token"
 )
 
 const errInvalidPage = "INVALID_PAGE"
@@ -206,6 +208,164 @@ func (mr *MemberRankQuery) Page(
 
 	mr = mr.Offset(int((pageNum - 1) * pageSize)).Limit(int(pageSize))
 	list, err := mr.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	ret.List = list
+
+	return ret, nil
+}
+
+type OauthProviderPager struct {
+	Order  oauthprovider.OrderOption
+	Filter func(*OauthProviderQuery) (*OauthProviderQuery, error)
+}
+
+// OauthProviderPaginateOption enables pagination customization.
+type OauthProviderPaginateOption func(*OauthProviderPager)
+
+// DefaultOauthProviderOrder is the default ordering of OauthProvider.
+var DefaultOauthProviderOrder = Desc(oauthprovider.FieldID)
+
+func newOauthProviderPager(opts []OauthProviderPaginateOption) (*OauthProviderPager, error) {
+	pager := &OauthProviderPager{}
+	for _, opt := range opts {
+		opt(pager)
+	}
+	if pager.Order == nil {
+		pager.Order = DefaultOauthProviderOrder
+	}
+	return pager, nil
+}
+
+func (p *OauthProviderPager) ApplyFilter(query *OauthProviderQuery) (*OauthProviderQuery, error) {
+	if p.Filter != nil {
+		return p.Filter(query)
+	}
+	return query, nil
+}
+
+// OauthProviderPageList is OauthProvider PageList result.
+type OauthProviderPageList struct {
+	List        []*OauthProvider `json:"list"`
+	PageDetails *PageDetails     `json:"pageDetails"`
+}
+
+func (op *OauthProviderQuery) Page(
+	ctx context.Context, pageNum uint64, pageSize uint64, opts ...OauthProviderPaginateOption,
+) (*OauthProviderPageList, error) {
+
+	pager, err := newOauthProviderPager(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	if op, err = pager.ApplyFilter(op); err != nil {
+		return nil, err
+	}
+
+	ret := &OauthProviderPageList{}
+
+	ret.PageDetails = &PageDetails{
+		Page: pageNum,
+		Size: pageSize,
+	}
+
+	count, err := op.Clone().Count(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	ret.PageDetails.Total = uint64(count)
+
+	if pager.Order != nil {
+		op = op.Order(pager.Order)
+	} else {
+		op = op.Order(DefaultOauthProviderOrder)
+	}
+
+	op = op.Offset(int((pageNum - 1) * pageSize)).Limit(int(pageSize))
+	list, err := op.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	ret.List = list
+
+	return ret, nil
+}
+
+type TokenPager struct {
+	Order  token.OrderOption
+	Filter func(*TokenQuery) (*TokenQuery, error)
+}
+
+// TokenPaginateOption enables pagination customization.
+type TokenPaginateOption func(*TokenPager)
+
+// DefaultTokenOrder is the default ordering of Token.
+var DefaultTokenOrder = Desc(token.FieldID)
+
+func newTokenPager(opts []TokenPaginateOption) (*TokenPager, error) {
+	pager := &TokenPager{}
+	for _, opt := range opts {
+		opt(pager)
+	}
+	if pager.Order == nil {
+		pager.Order = DefaultTokenOrder
+	}
+	return pager, nil
+}
+
+func (p *TokenPager) ApplyFilter(query *TokenQuery) (*TokenQuery, error) {
+	if p.Filter != nil {
+		return p.Filter(query)
+	}
+	return query, nil
+}
+
+// TokenPageList is Token PageList result.
+type TokenPageList struct {
+	List        []*Token     `json:"list"`
+	PageDetails *PageDetails `json:"pageDetails"`
+}
+
+func (t *TokenQuery) Page(
+	ctx context.Context, pageNum uint64, pageSize uint64, opts ...TokenPaginateOption,
+) (*TokenPageList, error) {
+
+	pager, err := newTokenPager(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	if t, err = pager.ApplyFilter(t); err != nil {
+		return nil, err
+	}
+
+	ret := &TokenPageList{}
+
+	ret.PageDetails = &PageDetails{
+		Page: pageNum,
+		Size: pageSize,
+	}
+
+	count, err := t.Clone().Count(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	ret.PageDetails.Total = uint64(count)
+
+	if pager.Order != nil {
+		t = t.Order(pager.Order)
+	} else {
+		t = t.Order(DefaultTokenOrder)
+	}
+
+	t = t.Offset(int((pageNum - 1) * pageSize)).Limit(int(pageSize))
+	list, err := t.All(ctx)
 	if err != nil {
 		return nil, err
 	}

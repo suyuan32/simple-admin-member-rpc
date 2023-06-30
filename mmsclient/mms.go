@@ -13,24 +13,33 @@ import (
 )
 
 type (
-	BaseIDResp         = mms.BaseIDResp
-	BaseResp           = mms.BaseResp
-	BaseUUIDResp       = mms.BaseUUIDResp
-	Empty              = mms.Empty
-	IDReq              = mms.IDReq
-	IDsReq             = mms.IDsReq
-	MemberInfo         = mms.MemberInfo
-	MemberListReq      = mms.MemberListReq
-	MemberListResp     = mms.MemberListResp
-	MemberLoginResp    = mms.MemberLoginResp
-	MemberRankInfo     = mms.MemberRankInfo
-	MemberRankListReq  = mms.MemberRankListReq
-	MemberRankListResp = mms.MemberRankListResp
-	MemberRegisterReq  = mms.MemberRegisterReq
-	PageInfoReq        = mms.PageInfoReq
-	UUIDReq            = mms.UUIDReq
-	UUIDsReq           = mms.UUIDsReq
-	UsernameReq        = mms.UsernameReq
+	BaseIDResp            = mms.BaseIDResp
+	BaseResp              = mms.BaseResp
+	BaseUUIDResp          = mms.BaseUUIDResp
+	CallbackReq           = mms.CallbackReq
+	Empty                 = mms.Empty
+	IDReq                 = mms.IDReq
+	IDsReq                = mms.IDsReq
+	MemberInfo            = mms.MemberInfo
+	MemberListReq         = mms.MemberListReq
+	MemberListResp        = mms.MemberListResp
+	MemberLoginResp       = mms.MemberLoginResp
+	MemberRankInfo        = mms.MemberRankInfo
+	MemberRankListReq     = mms.MemberRankListReq
+	MemberRankListResp    = mms.MemberRankListResp
+	MemberRegisterReq     = mms.MemberRegisterReq
+	OauthLoginReq         = mms.OauthLoginReq
+	OauthProviderInfo     = mms.OauthProviderInfo
+	OauthProviderListReq  = mms.OauthProviderListReq
+	OauthProviderListResp = mms.OauthProviderListResp
+	OauthRedirectResp     = mms.OauthRedirectResp
+	PageInfoReq           = mms.PageInfoReq
+	TokenInfo             = mms.TokenInfo
+	TokenListReq          = mms.TokenListReq
+	TokenListResp         = mms.TokenListResp
+	UUIDReq               = mms.UUIDReq
+	UUIDsReq              = mms.UUIDsReq
+	UsernameReq           = mms.UsernameReq
 
 	Mms interface {
 		InitDatabase(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*BaseResp, error)
@@ -47,6 +56,21 @@ type (
 		GetMemberRankList(ctx context.Context, in *MemberRankListReq, opts ...grpc.CallOption) (*MemberRankListResp, error)
 		GetMemberRankById(ctx context.Context, in *IDReq, opts ...grpc.CallOption) (*MemberRankInfo, error)
 		DeleteMemberRank(ctx context.Context, in *IDsReq, opts ...grpc.CallOption) (*BaseResp, error)
+		// OauthProvider management
+		CreateOauthProvider(ctx context.Context, in *OauthProviderInfo, opts ...grpc.CallOption) (*BaseIDResp, error)
+		UpdateOauthProvider(ctx context.Context, in *OauthProviderInfo, opts ...grpc.CallOption) (*BaseResp, error)
+		GetOauthProviderList(ctx context.Context, in *OauthProviderListReq, opts ...grpc.CallOption) (*OauthProviderListResp, error)
+		GetOauthProviderById(ctx context.Context, in *IDReq, opts ...grpc.CallOption) (*OauthProviderInfo, error)
+		DeleteOauthProvider(ctx context.Context, in *IDsReq, opts ...grpc.CallOption) (*BaseResp, error)
+		OauthLogin(ctx context.Context, in *OauthLoginReq, opts ...grpc.CallOption) (*OauthRedirectResp, error)
+		OauthCallback(ctx context.Context, in *CallbackReq, opts ...grpc.CallOption) (*MemberInfo, error)
+		// Token management
+		CreateToken(ctx context.Context, in *TokenInfo, opts ...grpc.CallOption) (*BaseUUIDResp, error)
+		DeleteToken(ctx context.Context, in *UUIDsReq, opts ...grpc.CallOption) (*BaseResp, error)
+		GetTokenList(ctx context.Context, in *TokenListReq, opts ...grpc.CallOption) (*TokenListResp, error)
+		GetTokenById(ctx context.Context, in *UUIDReq, opts ...grpc.CallOption) (*TokenInfo, error)
+		BlockUserAllToken(ctx context.Context, in *UUIDReq, opts ...grpc.CallOption) (*BaseResp, error)
+		UpdateToken(ctx context.Context, in *TokenInfo, opts ...grpc.CallOption) (*BaseResp, error)
 	}
 
 	defaultMms struct {
@@ -120,4 +144,71 @@ func (m *defaultMms) GetMemberRankById(ctx context.Context, in *IDReq, opts ...g
 func (m *defaultMms) DeleteMemberRank(ctx context.Context, in *IDsReq, opts ...grpc.CallOption) (*BaseResp, error) {
 	client := mms.NewMmsClient(m.cli.Conn())
 	return client.DeleteMemberRank(ctx, in, opts...)
+}
+
+// OauthProvider management
+func (m *defaultMms) CreateOauthProvider(ctx context.Context, in *OauthProviderInfo, opts ...grpc.CallOption) (*BaseIDResp, error) {
+	client := mms.NewMmsClient(m.cli.Conn())
+	return client.CreateOauthProvider(ctx, in, opts...)
+}
+
+func (m *defaultMms) UpdateOauthProvider(ctx context.Context, in *OauthProviderInfo, opts ...grpc.CallOption) (*BaseResp, error) {
+	client := mms.NewMmsClient(m.cli.Conn())
+	return client.UpdateOauthProvider(ctx, in, opts...)
+}
+
+func (m *defaultMms) GetOauthProviderList(ctx context.Context, in *OauthProviderListReq, opts ...grpc.CallOption) (*OauthProviderListResp, error) {
+	client := mms.NewMmsClient(m.cli.Conn())
+	return client.GetOauthProviderList(ctx, in, opts...)
+}
+
+func (m *defaultMms) GetOauthProviderById(ctx context.Context, in *IDReq, opts ...grpc.CallOption) (*OauthProviderInfo, error) {
+	client := mms.NewMmsClient(m.cli.Conn())
+	return client.GetOauthProviderById(ctx, in, opts...)
+}
+
+func (m *defaultMms) DeleteOauthProvider(ctx context.Context, in *IDsReq, opts ...grpc.CallOption) (*BaseResp, error) {
+	client := mms.NewMmsClient(m.cli.Conn())
+	return client.DeleteOauthProvider(ctx, in, opts...)
+}
+
+func (m *defaultMms) OauthLogin(ctx context.Context, in *OauthLoginReq, opts ...grpc.CallOption) (*OauthRedirectResp, error) {
+	client := mms.NewMmsClient(m.cli.Conn())
+	return client.OauthLogin(ctx, in, opts...)
+}
+
+func (m *defaultMms) OauthCallback(ctx context.Context, in *CallbackReq, opts ...grpc.CallOption) (*MemberInfo, error) {
+	client := mms.NewMmsClient(m.cli.Conn())
+	return client.OauthCallback(ctx, in, opts...)
+}
+
+// Token management
+func (m *defaultMms) CreateToken(ctx context.Context, in *TokenInfo, opts ...grpc.CallOption) (*BaseUUIDResp, error) {
+	client := mms.NewMmsClient(m.cli.Conn())
+	return client.CreateToken(ctx, in, opts...)
+}
+
+func (m *defaultMms) DeleteToken(ctx context.Context, in *UUIDsReq, opts ...grpc.CallOption) (*BaseResp, error) {
+	client := mms.NewMmsClient(m.cli.Conn())
+	return client.DeleteToken(ctx, in, opts...)
+}
+
+func (m *defaultMms) GetTokenList(ctx context.Context, in *TokenListReq, opts ...grpc.CallOption) (*TokenListResp, error) {
+	client := mms.NewMmsClient(m.cli.Conn())
+	return client.GetTokenList(ctx, in, opts...)
+}
+
+func (m *defaultMms) GetTokenById(ctx context.Context, in *UUIDReq, opts ...grpc.CallOption) (*TokenInfo, error) {
+	client := mms.NewMmsClient(m.cli.Conn())
+	return client.GetTokenById(ctx, in, opts...)
+}
+
+func (m *defaultMms) BlockUserAllToken(ctx context.Context, in *UUIDReq, opts ...grpc.CallOption) (*BaseResp, error) {
+	client := mms.NewMmsClient(m.cli.Conn())
+	return client.BlockUserAllToken(ctx, in, opts...)
+}
+
+func (m *defaultMms) UpdateToken(ctx context.Context, in *TokenInfo, opts ...grpc.CallOption) (*BaseResp, error) {
+	client := mms.NewMmsClient(m.cli.Conn())
+	return client.UpdateToken(ctx, in, opts...)
 }

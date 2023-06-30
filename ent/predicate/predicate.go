@@ -11,3 +11,9 @@ type Member func(*sql.Selector)
 
 // MemberRank is the predicate function for memberrank builders.
 type MemberRank func(*sql.Selector)
+
+// OauthProvider is the predicate function for oauthprovider builders.
+type OauthProvider func(*sql.Selector)
+
+// Token is the predicate function for token builders.
+type Token func(*sql.Selector)

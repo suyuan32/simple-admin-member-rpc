@@ -19,18 +19,31 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Mms_InitDatabase_FullMethodName        = "/mms.Mms/initDatabase"
-	Mms_CreateMember_FullMethodName        = "/mms.Mms/createMember"
-	Mms_UpdateMember_FullMethodName        = "/mms.Mms/updateMember"
-	Mms_GetMemberList_FullMethodName       = "/mms.Mms/getMemberList"
-	Mms_DeleteMember_FullMethodName        = "/mms.Mms/deleteMember"
-	Mms_GetMemberById_FullMethodName       = "/mms.Mms/getMemberById"
-	Mms_GetMemberByUsername_FullMethodName = "/mms.Mms/getMemberByUsername"
-	Mms_CreateMemberRank_FullMethodName    = "/mms.Mms/createMemberRank"
-	Mms_UpdateMemberRank_FullMethodName    = "/mms.Mms/updateMemberRank"
-	Mms_GetMemberRankList_FullMethodName   = "/mms.Mms/getMemberRankList"
-	Mms_GetMemberRankById_FullMethodName   = "/mms.Mms/getMemberRankById"
-	Mms_DeleteMemberRank_FullMethodName    = "/mms.Mms/deleteMemberRank"
+	Mms_InitDatabase_FullMethodName         = "/mms.Mms/initDatabase"
+	Mms_CreateMember_FullMethodName         = "/mms.Mms/createMember"
+	Mms_UpdateMember_FullMethodName         = "/mms.Mms/updateMember"
+	Mms_GetMemberList_FullMethodName        = "/mms.Mms/getMemberList"
+	Mms_DeleteMember_FullMethodName         = "/mms.Mms/deleteMember"
+	Mms_GetMemberById_FullMethodName        = "/mms.Mms/getMemberById"
+	Mms_GetMemberByUsername_FullMethodName  = "/mms.Mms/getMemberByUsername"
+	Mms_CreateMemberRank_FullMethodName     = "/mms.Mms/createMemberRank"
+	Mms_UpdateMemberRank_FullMethodName     = "/mms.Mms/updateMemberRank"
+	Mms_GetMemberRankList_FullMethodName    = "/mms.Mms/getMemberRankList"
+	Mms_GetMemberRankById_FullMethodName    = "/mms.Mms/getMemberRankById"
+	Mms_DeleteMemberRank_FullMethodName     = "/mms.Mms/deleteMemberRank"
+	Mms_CreateOauthProvider_FullMethodName  = "/mms.Mms/createOauthProvider"
+	Mms_UpdateOauthProvider_FullMethodName  = "/mms.Mms/updateOauthProvider"
+	Mms_GetOauthProviderList_FullMethodName = "/mms.Mms/getOauthProviderList"
+	Mms_GetOauthProviderById_FullMethodName = "/mms.Mms/getOauthProviderById"
+	Mms_DeleteOauthProvider_FullMethodName  = "/mms.Mms/deleteOauthProvider"
+	Mms_OauthLogin_FullMethodName           = "/mms.Mms/oauthLogin"
+	Mms_OauthCallback_FullMethodName        = "/mms.Mms/oauthCallback"
+	Mms_CreateToken_FullMethodName          = "/mms.Mms/createToken"
+	Mms_DeleteToken_FullMethodName          = "/mms.Mms/deleteToken"
+	Mms_GetTokenList_FullMethodName         = "/mms.Mms/getTokenList"
+	Mms_GetTokenById_FullMethodName         = "/mms.Mms/getTokenById"
+	Mms_BlockUserAllToken_FullMethodName    = "/mms.Mms/blockUserAllToken"
+	Mms_UpdateToken_FullMethodName          = "/mms.Mms/updateToken"
 )
 
 // MmsClient is the client API for Mms service.
@@ -63,6 +76,34 @@ type MmsClient interface {
 	GetMemberRankById(ctx context.Context, in *IDReq, opts ...grpc.CallOption) (*MemberRankInfo, error)
 	// group: memberrank
 	DeleteMemberRank(ctx context.Context, in *IDsReq, opts ...grpc.CallOption) (*BaseResp, error)
+	// OauthProvider management
+	// group: oauthprovider
+	CreateOauthProvider(ctx context.Context, in *OauthProviderInfo, opts ...grpc.CallOption) (*BaseIDResp, error)
+	// group: oauthprovider
+	UpdateOauthProvider(ctx context.Context, in *OauthProviderInfo, opts ...grpc.CallOption) (*BaseResp, error)
+	// group: oauthprovider
+	GetOauthProviderList(ctx context.Context, in *OauthProviderListReq, opts ...grpc.CallOption) (*OauthProviderListResp, error)
+	// group: oauthprovider
+	GetOauthProviderById(ctx context.Context, in *IDReq, opts ...grpc.CallOption) (*OauthProviderInfo, error)
+	// group: oauthprovider
+	DeleteOauthProvider(ctx context.Context, in *IDsReq, opts ...grpc.CallOption) (*BaseResp, error)
+	// group: oauthprovider
+	OauthLogin(ctx context.Context, in *OauthLoginReq, opts ...grpc.CallOption) (*OauthRedirectResp, error)
+	// group: oauthprovider
+	OauthCallback(ctx context.Context, in *CallbackReq, opts ...grpc.CallOption) (*MemberInfo, error)
+	// Token management
+	// group: token
+	CreateToken(ctx context.Context, in *TokenInfo, opts ...grpc.CallOption) (*BaseUUIDResp, error)
+	// group: token
+	DeleteToken(ctx context.Context, in *UUIDsReq, opts ...grpc.CallOption) (*BaseResp, error)
+	// group: token
+	GetTokenList(ctx context.Context, in *TokenListReq, opts ...grpc.CallOption) (*TokenListResp, error)
+	// group: token
+	GetTokenById(ctx context.Context, in *UUIDReq, opts ...grpc.CallOption) (*TokenInfo, error)
+	// group: token
+	BlockUserAllToken(ctx context.Context, in *UUIDReq, opts ...grpc.CallOption) (*BaseResp, error)
+	// group: token
+	UpdateToken(ctx context.Context, in *TokenInfo, opts ...grpc.CallOption) (*BaseResp, error)
 }
 
 type mmsClient struct {
@@ -181,6 +222,123 @@ func (c *mmsClient) DeleteMemberRank(ctx context.Context, in *IDsReq, opts ...gr
 	return out, nil
 }
 
+func (c *mmsClient) CreateOauthProvider(ctx context.Context, in *OauthProviderInfo, opts ...grpc.CallOption) (*BaseIDResp, error) {
+	out := new(BaseIDResp)
+	err := c.cc.Invoke(ctx, Mms_CreateOauthProvider_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mmsClient) UpdateOauthProvider(ctx context.Context, in *OauthProviderInfo, opts ...grpc.CallOption) (*BaseResp, error) {
+	out := new(BaseResp)
+	err := c.cc.Invoke(ctx, Mms_UpdateOauthProvider_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mmsClient) GetOauthProviderList(ctx context.Context, in *OauthProviderListReq, opts ...grpc.CallOption) (*OauthProviderListResp, error) {
+	out := new(OauthProviderListResp)
+	err := c.cc.Invoke(ctx, Mms_GetOauthProviderList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mmsClient) GetOauthProviderById(ctx context.Context, in *IDReq, opts ...grpc.CallOption) (*OauthProviderInfo, error) {
+	out := new(OauthProviderInfo)
+	err := c.cc.Invoke(ctx, Mms_GetOauthProviderById_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mmsClient) DeleteOauthProvider(ctx context.Context, in *IDsReq, opts ...grpc.CallOption) (*BaseResp, error) {
+	out := new(BaseResp)
+	err := c.cc.Invoke(ctx, Mms_DeleteOauthProvider_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mmsClient) OauthLogin(ctx context.Context, in *OauthLoginReq, opts ...grpc.CallOption) (*OauthRedirectResp, error) {
+	out := new(OauthRedirectResp)
+	err := c.cc.Invoke(ctx, Mms_OauthLogin_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mmsClient) OauthCallback(ctx context.Context, in *CallbackReq, opts ...grpc.CallOption) (*MemberInfo, error) {
+	out := new(MemberInfo)
+	err := c.cc.Invoke(ctx, Mms_OauthCallback_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mmsClient) CreateToken(ctx context.Context, in *TokenInfo, opts ...grpc.CallOption) (*BaseUUIDResp, error) {
+	out := new(BaseUUIDResp)
+	err := c.cc.Invoke(ctx, Mms_CreateToken_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mmsClient) DeleteToken(ctx context.Context, in *UUIDsReq, opts ...grpc.CallOption) (*BaseResp, error) {
+	out := new(BaseResp)
+	err := c.cc.Invoke(ctx, Mms_DeleteToken_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mmsClient) GetTokenList(ctx context.Context, in *TokenListReq, opts ...grpc.CallOption) (*TokenListResp, error) {
+	out := new(TokenListResp)
+	err := c.cc.Invoke(ctx, Mms_GetTokenList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mmsClient) GetTokenById(ctx context.Context, in *UUIDReq, opts ...grpc.CallOption) (*TokenInfo, error) {
+	out := new(TokenInfo)
+	err := c.cc.Invoke(ctx, Mms_GetTokenById_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mmsClient) BlockUserAllToken(ctx context.Context, in *UUIDReq, opts ...grpc.CallOption) (*BaseResp, error) {
+	out := new(BaseResp)
+	err := c.cc.Invoke(ctx, Mms_BlockUserAllToken_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mmsClient) UpdateToken(ctx context.Context, in *TokenInfo, opts ...grpc.CallOption) (*BaseResp, error) {
+	out := new(BaseResp)
+	err := c.cc.Invoke(ctx, Mms_UpdateToken_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MmsServer is the server API for Mms service.
 // All implementations must embed UnimplementedMmsServer
 // for forward compatibility
@@ -211,6 +369,34 @@ type MmsServer interface {
 	GetMemberRankById(context.Context, *IDReq) (*MemberRankInfo, error)
 	// group: memberrank
 	DeleteMemberRank(context.Context, *IDsReq) (*BaseResp, error)
+	// OauthProvider management
+	// group: oauthprovider
+	CreateOauthProvider(context.Context, *OauthProviderInfo) (*BaseIDResp, error)
+	// group: oauthprovider
+	UpdateOauthProvider(context.Context, *OauthProviderInfo) (*BaseResp, error)
+	// group: oauthprovider
+	GetOauthProviderList(context.Context, *OauthProviderListReq) (*OauthProviderListResp, error)
+	// group: oauthprovider
+	GetOauthProviderById(context.Context, *IDReq) (*OauthProviderInfo, error)
+	// group: oauthprovider
+	DeleteOauthProvider(context.Context, *IDsReq) (*BaseResp, error)
+	// group: oauthprovider
+	OauthLogin(context.Context, *OauthLoginReq) (*OauthRedirectResp, error)
+	// group: oauthprovider
+	OauthCallback(context.Context, *CallbackReq) (*MemberInfo, error)
+	// Token management
+	// group: token
+	CreateToken(context.Context, *TokenInfo) (*BaseUUIDResp, error)
+	// group: token
+	DeleteToken(context.Context, *UUIDsReq) (*BaseResp, error)
+	// group: token
+	GetTokenList(context.Context, *TokenListReq) (*TokenListResp, error)
+	// group: token
+	GetTokenById(context.Context, *UUIDReq) (*TokenInfo, error)
+	// group: token
+	BlockUserAllToken(context.Context, *UUIDReq) (*BaseResp, error)
+	// group: token
+	UpdateToken(context.Context, *TokenInfo) (*BaseResp, error)
 	mustEmbedUnimplementedMmsServer()
 }
 
@@ -253,6 +439,45 @@ func (UnimplementedMmsServer) GetMemberRankById(context.Context, *IDReq) (*Membe
 }
 func (UnimplementedMmsServer) DeleteMemberRank(context.Context, *IDsReq) (*BaseResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteMemberRank not implemented")
+}
+func (UnimplementedMmsServer) CreateOauthProvider(context.Context, *OauthProviderInfo) (*BaseIDResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateOauthProvider not implemented")
+}
+func (UnimplementedMmsServer) UpdateOauthProvider(context.Context, *OauthProviderInfo) (*BaseResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateOauthProvider not implemented")
+}
+func (UnimplementedMmsServer) GetOauthProviderList(context.Context, *OauthProviderListReq) (*OauthProviderListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetOauthProviderList not implemented")
+}
+func (UnimplementedMmsServer) GetOauthProviderById(context.Context, *IDReq) (*OauthProviderInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetOauthProviderById not implemented")
+}
+func (UnimplementedMmsServer) DeleteOauthProvider(context.Context, *IDsReq) (*BaseResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteOauthProvider not implemented")
+}
+func (UnimplementedMmsServer) OauthLogin(context.Context, *OauthLoginReq) (*OauthRedirectResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OauthLogin not implemented")
+}
+func (UnimplementedMmsServer) OauthCallback(context.Context, *CallbackReq) (*MemberInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OauthCallback not implemented")
+}
+func (UnimplementedMmsServer) CreateToken(context.Context, *TokenInfo) (*BaseUUIDResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateToken not implemented")
+}
+func (UnimplementedMmsServer) DeleteToken(context.Context, *UUIDsReq) (*BaseResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteToken not implemented")
+}
+func (UnimplementedMmsServer) GetTokenList(context.Context, *TokenListReq) (*TokenListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTokenList not implemented")
+}
+func (UnimplementedMmsServer) GetTokenById(context.Context, *UUIDReq) (*TokenInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTokenById not implemented")
+}
+func (UnimplementedMmsServer) BlockUserAllToken(context.Context, *UUIDReq) (*BaseResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BlockUserAllToken not implemented")
+}
+func (UnimplementedMmsServer) UpdateToken(context.Context, *TokenInfo) (*BaseResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateToken not implemented")
 }
 func (UnimplementedMmsServer) mustEmbedUnimplementedMmsServer() {}
 
@@ -483,6 +708,240 @@ func _Mms_DeleteMemberRank_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Mms_CreateOauthProvider_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OauthProviderInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MmsServer).CreateOauthProvider(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Mms_CreateOauthProvider_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MmsServer).CreateOauthProvider(ctx, req.(*OauthProviderInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Mms_UpdateOauthProvider_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OauthProviderInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MmsServer).UpdateOauthProvider(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Mms_UpdateOauthProvider_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MmsServer).UpdateOauthProvider(ctx, req.(*OauthProviderInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Mms_GetOauthProviderList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OauthProviderListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MmsServer).GetOauthProviderList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Mms_GetOauthProviderList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MmsServer).GetOauthProviderList(ctx, req.(*OauthProviderListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Mms_GetOauthProviderById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IDReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MmsServer).GetOauthProviderById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Mms_GetOauthProviderById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MmsServer).GetOauthProviderById(ctx, req.(*IDReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Mms_DeleteOauthProvider_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IDsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MmsServer).DeleteOauthProvider(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Mms_DeleteOauthProvider_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MmsServer).DeleteOauthProvider(ctx, req.(*IDsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Mms_OauthLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OauthLoginReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MmsServer).OauthLogin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Mms_OauthLogin_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MmsServer).OauthLogin(ctx, req.(*OauthLoginReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Mms_OauthCallback_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CallbackReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MmsServer).OauthCallback(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Mms_OauthCallback_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MmsServer).OauthCallback(ctx, req.(*CallbackReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Mms_CreateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TokenInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MmsServer).CreateToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Mms_CreateToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MmsServer).CreateToken(ctx, req.(*TokenInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Mms_DeleteToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UUIDsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MmsServer).DeleteToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Mms_DeleteToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MmsServer).DeleteToken(ctx, req.(*UUIDsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Mms_GetTokenList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TokenListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MmsServer).GetTokenList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Mms_GetTokenList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MmsServer).GetTokenList(ctx, req.(*TokenListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Mms_GetTokenById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UUIDReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MmsServer).GetTokenById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Mms_GetTokenById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MmsServer).GetTokenById(ctx, req.(*UUIDReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Mms_BlockUserAllToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UUIDReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MmsServer).BlockUserAllToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Mms_BlockUserAllToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MmsServer).BlockUserAllToken(ctx, req.(*UUIDReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Mms_UpdateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TokenInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MmsServer).UpdateToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Mms_UpdateToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MmsServer).UpdateToken(ctx, req.(*TokenInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Mms_ServiceDesc is the grpc.ServiceDesc for Mms service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -537,6 +996,58 @@ var Mms_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "deleteMemberRank",
 			Handler:    _Mms_DeleteMemberRank_Handler,
+		},
+		{
+			MethodName: "createOauthProvider",
+			Handler:    _Mms_CreateOauthProvider_Handler,
+		},
+		{
+			MethodName: "updateOauthProvider",
+			Handler:    _Mms_UpdateOauthProvider_Handler,
+		},
+		{
+			MethodName: "getOauthProviderList",
+			Handler:    _Mms_GetOauthProviderList_Handler,
+		},
+		{
+			MethodName: "getOauthProviderById",
+			Handler:    _Mms_GetOauthProviderById_Handler,
+		},
+		{
+			MethodName: "deleteOauthProvider",
+			Handler:    _Mms_DeleteOauthProvider_Handler,
+		},
+		{
+			MethodName: "oauthLogin",
+			Handler:    _Mms_OauthLogin_Handler,
+		},
+		{
+			MethodName: "oauthCallback",
+			Handler:    _Mms_OauthCallback_Handler,
+		},
+		{
+			MethodName: "createToken",
+			Handler:    _Mms_CreateToken_Handler,
+		},
+		{
+			MethodName: "deleteToken",
+			Handler:    _Mms_DeleteToken_Handler,
+		},
+		{
+			MethodName: "getTokenList",
+			Handler:    _Mms_GetTokenList_Handler,
+		},
+		{
+			MethodName: "getTokenById",
+			Handler:    _Mms_GetTokenById_Handler,
+		},
+		{
+			MethodName: "blockUserAllToken",
+			Handler:    _Mms_BlockUserAllToken_Handler,
+		},
+		{
+			MethodName: "updateToken",
+			Handler:    _Mms_UpdateToken_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

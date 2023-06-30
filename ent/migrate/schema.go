@@ -67,10 +67,62 @@ var (
 			},
 		},
 	}
+	// MmsOauthProvidersColumns holds the columns for the "mms_oauth_providers" table.
+	MmsOauthProvidersColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUint64, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "name", Type: field.TypeString, Unique: true, Comment: "The provider's name | 提供商名称"},
+		{Name: "client_id", Type: field.TypeString, Comment: "The client id | 客户端 id"},
+		{Name: "client_secret", Type: field.TypeString, Comment: "The client secret | 客户端密钥"},
+		{Name: "redirect_url", Type: field.TypeString, Comment: "The redirect url | 跳转地址"},
+		{Name: "scopes", Type: field.TypeString, Comment: "The scopes | 权限范围"},
+		{Name: "auth_url", Type: field.TypeString, Comment: "The auth url of the provider | 认证地址"},
+		{Name: "token_url", Type: field.TypeString, Comment: "The token url of the provider | 获取 token地址"},
+		{Name: "auth_style", Type: field.TypeUint64, Comment: "The auth style, 0: auto detect 1: third party log in 2: log in with username and password"},
+		{Name: "info_url", Type: field.TypeString, Comment: "The URL to request user information by token | 用户信息请求地址"},
+	}
+	// MmsOauthProvidersTable holds the schema information for the "mms_oauth_providers" table.
+	MmsOauthProvidersTable = &schema.Table{
+		Name:       "mms_oauth_providers",
+		Columns:    MmsOauthProvidersColumns,
+		PrimaryKey: []*schema.Column{MmsOauthProvidersColumns[0]},
+	}
+	// MmsTokensColumns holds the columns for the "mms_tokens" table.
+	MmsTokensColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "status", Type: field.TypeUint8, Nullable: true, Default: 1},
+		{Name: "uuid", Type: field.TypeUUID, Comment: " User's UUID | 用户的UUID"},
+		{Name: "token", Type: field.TypeString, Comment: "Token string | Token 字符串"},
+		{Name: "source", Type: field.TypeString, Comment: "Log in source such as GitHub | Token 来源 （本地为core, 第三方如github等）"},
+		{Name: "expired_at", Type: field.TypeTime, Comment: " Expire time | 过期时间"},
+	}
+	// MmsTokensTable holds the schema information for the "mms_tokens" table.
+	MmsTokensTable = &schema.Table{
+		Name:       "mms_tokens",
+		Columns:    MmsTokensColumns,
+		PrimaryKey: []*schema.Column{MmsTokensColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "token_uuid",
+				Unique:  false,
+				Columns: []*schema.Column{MmsTokensColumns[4]},
+			},
+			{
+				Name:    "token_expired_at",
+				Unique:  false,
+				Columns: []*schema.Column{MmsTokensColumns[7]},
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		MmsMembersTable,
 		MmsRanksTable,
+		MmsOauthProvidersTable,
+		MmsTokensTable,
 	}
 )
 
@@ -81,5 +133,11 @@ func init() {
 	}
 	MmsRanksTable.Annotation = &entsql.Annotation{
 		Table: "mms_ranks",
+	}
+	MmsOauthProvidersTable.Annotation = &entsql.Annotation{
+		Table: "mms_oauth_providers",
+	}
+	MmsTokensTable.Annotation = &entsql.Annotation{
+		Table: "mms_tokens",
 	}
 }

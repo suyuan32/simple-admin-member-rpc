@@ -8,7 +8,9 @@ import (
 	uuid "github.com/gofrs/uuid/v5"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/member"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/memberrank"
+	"github.com/suyuan32/simple-admin-member-rpc/ent/oauthprovider"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/schema"
+	"github.com/suyuan32/simple-admin-member-rpc/ent/token"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -63,4 +65,44 @@ func init() {
 	memberrank.DefaultUpdatedAt = memberrankDescUpdatedAt.Default.(func() time.Time)
 	// memberrank.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	memberrank.UpdateDefaultUpdatedAt = memberrankDescUpdatedAt.UpdateDefault.(func() time.Time)
+	oauthproviderMixin := schema.OauthProvider{}.Mixin()
+	oauthproviderMixinFields0 := oauthproviderMixin[0].Fields()
+	_ = oauthproviderMixinFields0
+	oauthproviderFields := schema.OauthProvider{}.Fields()
+	_ = oauthproviderFields
+	// oauthproviderDescCreatedAt is the schema descriptor for created_at field.
+	oauthproviderDescCreatedAt := oauthproviderMixinFields0[1].Descriptor()
+	// oauthprovider.DefaultCreatedAt holds the default value on creation for the created_at field.
+	oauthprovider.DefaultCreatedAt = oauthproviderDescCreatedAt.Default.(func() time.Time)
+	// oauthproviderDescUpdatedAt is the schema descriptor for updated_at field.
+	oauthproviderDescUpdatedAt := oauthproviderMixinFields0[2].Descriptor()
+	// oauthprovider.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	oauthprovider.DefaultUpdatedAt = oauthproviderDescUpdatedAt.Default.(func() time.Time)
+	// oauthprovider.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	oauthprovider.UpdateDefaultUpdatedAt = oauthproviderDescUpdatedAt.UpdateDefault.(func() time.Time)
+	tokenMixin := schema.Token{}.Mixin()
+	tokenMixinFields0 := tokenMixin[0].Fields()
+	_ = tokenMixinFields0
+	tokenMixinFields1 := tokenMixin[1].Fields()
+	_ = tokenMixinFields1
+	tokenFields := schema.Token{}.Fields()
+	_ = tokenFields
+	// tokenDescCreatedAt is the schema descriptor for created_at field.
+	tokenDescCreatedAt := tokenMixinFields0[1].Descriptor()
+	// token.DefaultCreatedAt holds the default value on creation for the created_at field.
+	token.DefaultCreatedAt = tokenDescCreatedAt.Default.(func() time.Time)
+	// tokenDescUpdatedAt is the schema descriptor for updated_at field.
+	tokenDescUpdatedAt := tokenMixinFields0[2].Descriptor()
+	// token.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	token.DefaultUpdatedAt = tokenDescUpdatedAt.Default.(func() time.Time)
+	// token.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	token.UpdateDefaultUpdatedAt = tokenDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// tokenDescStatus is the schema descriptor for status field.
+	tokenDescStatus := tokenMixinFields1[0].Descriptor()
+	// token.DefaultStatus holds the default value on creation for the status field.
+	token.DefaultStatus = tokenDescStatus.Default.(uint8)
+	// tokenDescID is the schema descriptor for id field.
+	tokenDescID := tokenMixinFields0[0].Descriptor()
+	// token.DefaultID holds the default value on creation for the id field.
+	token.DefaultID = tokenDescID.Default.(func() uuid.UUID)
 }

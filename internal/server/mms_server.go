@@ -9,6 +9,8 @@ import (
 	"github.com/suyuan32/simple-admin-member-rpc/internal/logic/base"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/logic/member"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/logic/memberrank"
+	"github.com/suyuan32/simple-admin-member-rpc/internal/logic/oauthprovider"
+	"github.com/suyuan32/simple-admin-member-rpc/internal/logic/token"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/svc"
 	"github.com/suyuan32/simple-admin-member-rpc/types/mms"
 )
@@ -84,4 +86,71 @@ func (s *MmsServer) GetMemberRankById(ctx context.Context, in *mms.IDReq) (*mms.
 func (s *MmsServer) DeleteMemberRank(ctx context.Context, in *mms.IDsReq) (*mms.BaseResp, error) {
 	l := memberrank.NewDeleteMemberRankLogic(ctx, s.svcCtx)
 	return l.DeleteMemberRank(in)
+}
+
+// OauthProvider management
+func (s *MmsServer) CreateOauthProvider(ctx context.Context, in *mms.OauthProviderInfo) (*mms.BaseIDResp, error) {
+	l := oauthprovider.NewCreateOauthProviderLogic(ctx, s.svcCtx)
+	return l.CreateOauthProvider(in)
+}
+
+func (s *MmsServer) UpdateOauthProvider(ctx context.Context, in *mms.OauthProviderInfo) (*mms.BaseResp, error) {
+	l := oauthprovider.NewUpdateOauthProviderLogic(ctx, s.svcCtx)
+	return l.UpdateOauthProvider(in)
+}
+
+func (s *MmsServer) GetOauthProviderList(ctx context.Context, in *mms.OauthProviderListReq) (*mms.OauthProviderListResp, error) {
+	l := oauthprovider.NewGetOauthProviderListLogic(ctx, s.svcCtx)
+	return l.GetOauthProviderList(in)
+}
+
+func (s *MmsServer) GetOauthProviderById(ctx context.Context, in *mms.IDReq) (*mms.OauthProviderInfo, error) {
+	l := oauthprovider.NewGetOauthProviderByIdLogic(ctx, s.svcCtx)
+	return l.GetOauthProviderById(in)
+}
+
+func (s *MmsServer) DeleteOauthProvider(ctx context.Context, in *mms.IDsReq) (*mms.BaseResp, error) {
+	l := oauthprovider.NewDeleteOauthProviderLogic(ctx, s.svcCtx)
+	return l.DeleteOauthProvider(in)
+}
+
+func (s *MmsServer) OauthLogin(ctx context.Context, in *mms.OauthLoginReq) (*mms.OauthRedirectResp, error) {
+	l := oauthprovider.NewOauthLoginLogic(ctx, s.svcCtx)
+	return l.OauthLogin(in)
+}
+
+func (s *MmsServer) OauthCallback(ctx context.Context, in *mms.CallbackReq) (*mms.MemberInfo, error) {
+	l := oauthprovider.NewOauthCallbackLogic(ctx, s.svcCtx)
+	return l.OauthCallback(in)
+}
+
+// Token management
+func (s *MmsServer) CreateToken(ctx context.Context, in *mms.TokenInfo) (*mms.BaseUUIDResp, error) {
+	l := token.NewCreateTokenLogic(ctx, s.svcCtx)
+	return l.CreateToken(in)
+}
+
+func (s *MmsServer) DeleteToken(ctx context.Context, in *mms.UUIDsReq) (*mms.BaseResp, error) {
+	l := token.NewDeleteTokenLogic(ctx, s.svcCtx)
+	return l.DeleteToken(in)
+}
+
+func (s *MmsServer) GetTokenList(ctx context.Context, in *mms.TokenListReq) (*mms.TokenListResp, error) {
+	l := token.NewGetTokenListLogic(ctx, s.svcCtx)
+	return l.GetTokenList(in)
+}
+
+func (s *MmsServer) GetTokenById(ctx context.Context, in *mms.UUIDReq) (*mms.TokenInfo, error) {
+	l := token.NewGetTokenByIdLogic(ctx, s.svcCtx)
+	return l.GetTokenById(in)
+}
+
+func (s *MmsServer) BlockUserAllToken(ctx context.Context, in *mms.UUIDReq) (*mms.BaseResp, error) {
+	l := token.NewBlockUserAllTokenLogic(ctx, s.svcCtx)
+	return l.BlockUserAllToken(in)
+}
+
+func (s *MmsServer) UpdateToken(ctx context.Context, in *mms.TokenInfo) (*mms.BaseResp, error) {
+	l := token.NewUpdateTokenLogic(ctx, s.svcCtx)
+	return l.UpdateToken(in)
 }
