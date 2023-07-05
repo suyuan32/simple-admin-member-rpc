@@ -45,8 +45,8 @@ func (Token) Edges() []ent.Edge {
 
 func (Token) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("uuid"),
-		index.Fields("expired_at"),
+		index.Fields("uuid").StorageKey("mms_token_uuid"),
+		index.Fields("expired_at").StorageKey("mms_token_expired_at"),
 	}
 }
 
