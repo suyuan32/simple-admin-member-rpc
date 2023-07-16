@@ -2,6 +2,7 @@ package base
 
 import (
 	"context"
+	"github.com/suyuan32/simple-admin-member-rpc/internal/utils/dberrorhandler"
 
 	"entgo.io/ent/dialect/sql/schema"
 	"github.com/suyuan32/simple-admin-common/enum/errorcode"
@@ -32,7 +33,6 @@ func NewInitDatabaseLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Init
 }
 
 func (l *InitDatabaseLogic) InitDatabase(in *mms.Empty) (*mms.BaseResp, error) {
-
 	if err := l.svcCtx.DB.Schema.Create(l.ctx, schema.WithForeignKeys(false)); err != nil {
 		logx.Errorw(logmsg.DatabaseError, logx.Field("detail", err.Error()))
 		return nil, errorx.NewCodeError(errorcode.Internal, err.Error())
@@ -40,17 +40,17 @@ func (l *InitDatabaseLogic) InitDatabase(in *mms.Empty) (*mms.BaseResp, error) {
 
 	err := l.insertMemberData()
 	if err != nil {
-		return nil, errorx.NewInternalError(err.Error())
+		return nil, err
 	}
 
 	err = l.insertMemberRankData()
 	if err != nil {
-		return nil, errorx.NewInternalError(err.Error())
+		return nil, err
 	}
 
 	err = l.insertProviderData()
 	if err != nil {
-		return nil, errorx.NewInternalError(err.Error())
+		return nil, err
 	}
 
 	return &mms.BaseResp{
@@ -81,8 +81,8 @@ func (l *InitDatabaseLogic) insertMemberData() error {
 
 	err := l.svcCtx.DB.Member.CreateBulk(members...).Exec(l.ctx)
 	if err != nil {
-		logx.Errorw(err.Error())
-		return errorx.NewInternalError(err.Error())
+		logx.Errorw("failed to insert member data for initialization", logx.Field("detail", err))
+		return dberrorhandler.DefaultEntError(l.Logger, err, nil)
 	} else {
 		return nil
 	}
@@ -107,8 +107,8 @@ func (l *InitDatabaseLogic) insertMemberRankData() error {
 
 	err := l.svcCtx.DB.MemberRank.CreateBulk(memberRanks...).Exec(l.ctx)
 	if err != nil {
-		logx.Errorw(err.Error())
-		return errorx.NewInternalError(err.Error())
+		logx.Errorw("failed to insert member rank data for initialization", logx.Field("detail", err))
+		return dberrorhandler.DefaultEntError(l.Logger, err, nil)
 	} else {
 		return nil
 	}
@@ -143,8 +143,8 @@ func (l *InitDatabaseLogic) insertProviderData() error {
 
 	err := l.svcCtx.DB.OauthProvider.CreateBulk(providers...).Exec(l.ctx)
 	if err != nil {
-		logx.Errorw(err.Error())
-		return errorx.NewInternalError(err.Error())
+		logx.Errorw("failed to insert member's oauth provider data for initialization", logx.Field("detail", err))
+		return dberrorhandler.DefaultEntError(l.Logger, err, nil)
 	} else {
 		return nil
 	}
