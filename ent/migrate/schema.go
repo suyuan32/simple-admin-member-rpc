@@ -106,12 +106,12 @@ var (
 		PrimaryKey: []*schema.Column{MmsTokensColumns[0]},
 		Indexes: []*schema.Index{
 			{
-				Name:    "token_uuid",
+				Name:    "mms_token_uuid",
 				Unique:  false,
 				Columns: []*schema.Column{MmsTokensColumns[4]},
 			},
 			{
-				Name:    "token_expired_at",
+				Name:    "mms_token_expired_at",
 				Unique:  false,
 				Columns: []*schema.Column{MmsTokensColumns[7]},
 			},
