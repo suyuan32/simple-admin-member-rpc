@@ -12,9 +12,9 @@ var (
 	// MmsMembersColumns holds the columns for the "mms_members" table.
 	MmsMembersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "status", Type: field.TypeUint8, Nullable: true, Default: 1},
+		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
+		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "status 1 normal 2 ban | 状态 1 正常 2 禁用", Default: 1},
 		{Name: "username", Type: field.TypeString, Unique: true, Comment: "Member's login name | 登录名"},
 		{Name: "password", Type: field.TypeString, Comment: "Password | 密码"},
 		{Name: "nickname", Type: field.TypeString, Unique: true, Comment: "Nickname | 昵称"},
@@ -47,8 +47,8 @@ var (
 	// MmsRanksColumns holds the columns for the "mms_ranks" table.
 	MmsRanksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUint64, Increment: true},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
 		{Name: "name", Type: field.TypeString},
 		{Name: "code", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString},
@@ -70,8 +70,8 @@ var (
 	// MmsOauthProvidersColumns holds the columns for the "mms_oauth_providers" table.
 	MmsOauthProvidersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUint64, Increment: true},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
 		{Name: "name", Type: field.TypeString, Unique: true, Comment: "The provider's name | 提供商名称"},
 		{Name: "client_id", Type: field.TypeString, Comment: "The client id | 客户端 id"},
 		{Name: "client_secret", Type: field.TypeString, Comment: "The client secret | 客户端密钥"},
@@ -91,9 +91,9 @@ var (
 	// MmsTokensColumns holds the columns for the "mms_tokens" table.
 	MmsTokensColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "status", Type: field.TypeUint8, Nullable: true, Default: 1},
+		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
+		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
+		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "status 1 normal 2 ban | 状态 1 正常 2 禁用", Default: 1},
 		{Name: "uuid", Type: field.TypeUUID, Comment: " User's UUID | 用户的UUID"},
 		{Name: "token", Type: field.TypeString, Comment: "Token string | Token 字符串"},
 		{Name: "source", Type: field.TypeString, Comment: "Log in source such as GitHub | Token 来源 （本地为core, 第三方如github等）"},
