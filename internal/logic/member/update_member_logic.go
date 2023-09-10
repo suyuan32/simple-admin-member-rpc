@@ -38,7 +38,7 @@ func (l *UpdateMemberLogic) UpdateMember(in *mms.MemberInfo) (*mms.BaseResp, err
 		SetNotNilEmail(in.Email).
 		SetNotNilAvatar(in.Avatar)
 
-	if in.Password != nil {
+	if in.Password != nil && *in.Password != "" {
 		query.SetNotNilPassword(pointy.GetPointer(encrypt.BcryptEncrypt(*in.Password)))
 	}
 
