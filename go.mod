@@ -7,10 +7,10 @@ replace github.com/zeromicro/go-zero v1.5.5 => github.com/suyuan32/simple-admin-
 require (
 	entgo.io/ent v0.12.3
 	github.com/gofrs/uuid/v5 v5.0.0
-	github.com/suyuan32/simple-admin-common v1.1.4-0.20230907234509-0f50bae0cb12
+	github.com/suyuan32/simple-admin-common v1.1.4
 	github.com/zeromicro/go-zero v1.5.5
 	golang.org/x/oauth2 v0.12.0
-	google.golang.org/grpc v1.57.0
+	google.golang.org/grpc v1.58.0
 	google.golang.org/protobuf v1.31.0
 )
 
