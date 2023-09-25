@@ -44,6 +44,9 @@ func (l *GetMemberListLogic) GetMemberList(in *mms.MemberListReq) (*mms.MemberLi
 	if in.RankId != nil && *in.RankId != 0 {
 		predicates = append(predicates, member.RankIDEQ(*in.RankId))
 	}
+	if in.WechatId != nil {
+		predicates = append(predicates, member.WechatOpenIDEQ(*in.WechatId))
+	}
 
 	result, err := l.svcCtx.DB.Member.Query().Where(predicates...).Page(l.ctx, in.Page, in.PageSize)
 
