@@ -225,6 +225,30 @@ func (m *MemberCreate) SetNotNilAvatar(value *string) *MemberCreate {
 }
 
 // set field if value's pointer is not nil.
+func (m *MemberUpdate) SetNotNilWechatOpenID(value *string) *MemberUpdate {
+	if value != nil {
+		return m.SetWechatOpenID(*value)
+	}
+	return m
+}
+
+// set field if value's pointer is not nil.
+func (m *MemberUpdateOne) SetNotNilWechatOpenID(value *string) *MemberUpdateOne {
+	if value != nil {
+		return m.SetWechatOpenID(*value)
+	}
+	return m
+}
+
+// set field if value's pointer is not nil.
+func (m *MemberCreate) SetNotNilWechatOpenID(value *string) *MemberCreate {
+	if value != nil {
+		return m.SetWechatOpenID(*value)
+	}
+	return m
+}
+
+// set field if value's pointer is not nil.
 func (mr *MemberRankUpdate) SetNotNilUpdatedAt(value *time.Time) *MemberRankUpdate {
 	if value != nil {
 		return mr.SetUpdatedAt(*value)

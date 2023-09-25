@@ -14,6 +14,7 @@ message MemberInfo {
   optional string mobile = 9;
   optional string email = 10;
   optional string avatar = 11;
+  optional string wechat_id = 12;
 }
 
 message MemberListResp {
@@ -29,6 +30,7 @@ message MemberListReq {
   optional string mobile = 5;
   optional string email = 6;
   optional uint64 rank_id = 7;
+  optional string wechat_id = 8;
 }
 
 message MemberLoginResp {

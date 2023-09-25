@@ -3,43 +3,9 @@ syntax = "proto3";
 package mms;
 option go_package="./mms";
 
-message MemberRegisterReq {
-  string username = 1;
-  string email = 2;
-  string password = 3;
-}
-
-message CallbackReq {
-  string state = 1;
-  string code = 2;
-}
-
-message UUIDReq {
-  string id = 1;
-}
-
-message BaseResp {
-  string msg = 1;
-}
-
-message OauthLoginReq {
-  string state = 1;
-  string provider = 2;
-}
-
-//  base message
-message Empty {}
-
-message IDsReq {
-  repeated uint64 ids = 1;
-}
-
-message MemberRankListReq {
-  uint64 page = 1;
-  uint64 page_size = 2;
-  optional string name = 3;
-  optional string description = 4;
-  optional string remark = 5;
+message MemberRankListResp {
+  uint64 total = 1;
+  repeated MemberRankInfo data = 2;
 }
 
 message TokenListResp {
@@ -47,19 +13,15 @@ message TokenListResp {
   repeated TokenInfo data = 2;
 }
 
-message TokenInfo {
-  optional string id = 1;
-  optional int64 created_at = 2;
-  optional int64 updated_at = 3;
-  optional uint32 status = 4;
-  optional string uuid = 5;
-  optional string token = 6;
-  optional string source = 7;
-  optional int64 expired_at = 8;
+message MemberLoginResp {
+  string id = 1;
+  string nickname = 2;
+  string avatar = 3;
+  uint64 rank_id = 4;
 }
 
-message UUIDsReq {
-  repeated string ids = 1;
+message BaseResp {
+  string msg = 1;
 }
 
 message MemberInfo {
@@ -74,21 +36,7 @@ message MemberInfo {
   optional string mobile = 9;
   optional string email = 10;
   optional string avatar = 11;
-}
-
-message MemberRankInfo {
-  optional uint64 id = 1;
-  optional int64 created_at = 2;
-  optional int64 updated_at = 3;
-  optional string name = 4;
-  optional string description = 5;
-  optional string remark = 6;
-  optional string code = 7;
-}
-
-message BaseUUIDResp {
-  string id = 1;
-  string msg = 2;
+  optional string wechat_id = 12;
 }
 
 message MemberListReq {
@@ -99,6 +47,20 @@ message MemberListReq {
   optional string mobile = 5;
   optional string email = 6;
   optional uint64 rank_id = 7;
+  optional string wechat_id = 8;
+}
+
+message TokenListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+  optional string username = 3;
+  optional string nickname = 4;
+  optional string email = 5;
+  optional string uuid = 6;
+}
+
+message IDReq {
+  uint64 id = 1;
 }
 
 message OauthProviderListResp {
@@ -106,13 +68,49 @@ message OauthProviderListResp {
   repeated OauthProviderInfo data = 2;
 }
 
-message IDReq {
-  uint64 id = 1;
+message MemberListResp {
+  uint64 total = 1;
+  repeated MemberInfo data = 2;
 }
 
-message MemberRankListResp {
-  uint64 total = 1;
-  repeated MemberRankInfo data = 2;
+message UUIDsReq {
+  repeated string ids = 1;
+}
+
+message UUIDReq {
+  string id = 1;
+}
+
+message PageInfoReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+}
+
+message MemberRankListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+  optional string name = 3;
+  optional string description = 4;
+  optional string remark = 5;
+}
+
+message UsernameReq {
+  string username = 1;
+}
+
+message BaseUUIDResp {
+  string id = 1;
+  string msg = 2;
+}
+
+message MemberRankInfo {
+  optional uint64 id = 1;
+  optional int64 created_at = 2;
+  optional int64 updated_at = 3;
+  optional string name = 4;
+  optional string description = 5;
+  optional string remark = 6;
+  optional string code = 7;
 }
 
 message OauthProviderInfo {
@@ -130,15 +128,27 @@ message OauthProviderInfo {
   optional string info_url = 12;
 }
 
-message MemberLoginResp {
-  string id = 1;
-  string nickname = 2;
-  string avatar = 3;
-  uint64 rank_id = 4;
+message TokenInfo {
+  optional string id = 1;
+  optional int64 created_at = 2;
+  optional int64 updated_at = 3;
+  optional uint32 status = 4;
+  optional string uuid = 5;
+  optional string token = 6;
+  optional string source = 7;
+  optional int64 expired_at = 8;
 }
 
-message UsernameReq {
-  string username = 1;
+//  base message
+message Empty {}
+
+message CallbackReq {
+  string state = 1;
+  string code = 2;
+}
+
+message OauthRedirectResp {
+  string url = 1;
 }
 
 message OauthProviderListReq {
@@ -147,32 +157,24 @@ message OauthProviderListReq {
   optional string name = 3;
 }
 
-message TokenListReq {
-  uint64 page = 1;
-  uint64 page_size = 2;
-  optional string username = 3;
-  optional string nickname = 4;
-  optional string email = 5;
-  optional string uuid = 6;
-}
-
-message PageInfoReq {
-  uint64 page = 1;
-  uint64 page_size = 2;
-}
-
 message BaseIDResp {
   uint64 id = 1;
   string msg = 2;
 }
 
-message MemberListResp {
-  uint64 total = 1;
-  repeated MemberInfo data = 2;
+message MemberRegisterReq {
+  string username = 1;
+  string email = 2;
+  string password = 3;
 }
 
-message OauthRedirectResp {
-  string url = 1;
+message OauthLoginReq {
+  string state = 1;
+  string provider = 2;
+}
+
+message IDsReq {
+  repeated uint64 ids = 1;
 }
 
 service Mms {
@@ -217,6 +219,8 @@ service Mms {
   rpc oauthLogin(OauthLoginReq) returns (OauthRedirectResp);
   //  group: oauthprovider
   rpc oauthCallback(CallbackReq) returns (MemberInfo);
+  //  group: oauthprovider
+  rpc wechatMiniProgramLogin(OauthLoginReq) returns (BaseResp);
   //  Token management
   //  group: token
   rpc createToken(TokenInfo) returns (BaseUUIDResp);

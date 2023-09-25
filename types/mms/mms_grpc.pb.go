@@ -19,31 +19,32 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Mms_InitDatabase_FullMethodName         = "/mms.Mms/initDatabase"
-	Mms_CreateMember_FullMethodName         = "/mms.Mms/createMember"
-	Mms_UpdateMember_FullMethodName         = "/mms.Mms/updateMember"
-	Mms_GetMemberList_FullMethodName        = "/mms.Mms/getMemberList"
-	Mms_DeleteMember_FullMethodName         = "/mms.Mms/deleteMember"
-	Mms_GetMemberById_FullMethodName        = "/mms.Mms/getMemberById"
-	Mms_GetMemberByUsername_FullMethodName  = "/mms.Mms/getMemberByUsername"
-	Mms_CreateMemberRank_FullMethodName     = "/mms.Mms/createMemberRank"
-	Mms_UpdateMemberRank_FullMethodName     = "/mms.Mms/updateMemberRank"
-	Mms_GetMemberRankList_FullMethodName    = "/mms.Mms/getMemberRankList"
-	Mms_GetMemberRankById_FullMethodName    = "/mms.Mms/getMemberRankById"
-	Mms_DeleteMemberRank_FullMethodName     = "/mms.Mms/deleteMemberRank"
-	Mms_CreateOauthProvider_FullMethodName  = "/mms.Mms/createOauthProvider"
-	Mms_UpdateOauthProvider_FullMethodName  = "/mms.Mms/updateOauthProvider"
-	Mms_GetOauthProviderList_FullMethodName = "/mms.Mms/getOauthProviderList"
-	Mms_GetOauthProviderById_FullMethodName = "/mms.Mms/getOauthProviderById"
-	Mms_DeleteOauthProvider_FullMethodName  = "/mms.Mms/deleteOauthProvider"
-	Mms_OauthLogin_FullMethodName           = "/mms.Mms/oauthLogin"
-	Mms_OauthCallback_FullMethodName        = "/mms.Mms/oauthCallback"
-	Mms_CreateToken_FullMethodName          = "/mms.Mms/createToken"
-	Mms_DeleteToken_FullMethodName          = "/mms.Mms/deleteToken"
-	Mms_GetTokenList_FullMethodName         = "/mms.Mms/getTokenList"
-	Mms_GetTokenById_FullMethodName         = "/mms.Mms/getTokenById"
-	Mms_BlockUserAllToken_FullMethodName    = "/mms.Mms/blockUserAllToken"
-	Mms_UpdateToken_FullMethodName          = "/mms.Mms/updateToken"
+	Mms_InitDatabase_FullMethodName           = "/mms.Mms/initDatabase"
+	Mms_CreateMember_FullMethodName           = "/mms.Mms/createMember"
+	Mms_UpdateMember_FullMethodName           = "/mms.Mms/updateMember"
+	Mms_GetMemberList_FullMethodName          = "/mms.Mms/getMemberList"
+	Mms_DeleteMember_FullMethodName           = "/mms.Mms/deleteMember"
+	Mms_GetMemberById_FullMethodName          = "/mms.Mms/getMemberById"
+	Mms_GetMemberByUsername_FullMethodName    = "/mms.Mms/getMemberByUsername"
+	Mms_CreateMemberRank_FullMethodName       = "/mms.Mms/createMemberRank"
+	Mms_UpdateMemberRank_FullMethodName       = "/mms.Mms/updateMemberRank"
+	Mms_GetMemberRankList_FullMethodName      = "/mms.Mms/getMemberRankList"
+	Mms_GetMemberRankById_FullMethodName      = "/mms.Mms/getMemberRankById"
+	Mms_DeleteMemberRank_FullMethodName       = "/mms.Mms/deleteMemberRank"
+	Mms_CreateOauthProvider_FullMethodName    = "/mms.Mms/createOauthProvider"
+	Mms_UpdateOauthProvider_FullMethodName    = "/mms.Mms/updateOauthProvider"
+	Mms_GetOauthProviderList_FullMethodName   = "/mms.Mms/getOauthProviderList"
+	Mms_GetOauthProviderById_FullMethodName   = "/mms.Mms/getOauthProviderById"
+	Mms_DeleteOauthProvider_FullMethodName    = "/mms.Mms/deleteOauthProvider"
+	Mms_OauthLogin_FullMethodName             = "/mms.Mms/oauthLogin"
+	Mms_OauthCallback_FullMethodName          = "/mms.Mms/oauthCallback"
+	Mms_WechatMiniProgramLogin_FullMethodName = "/mms.Mms/wechatMiniProgramLogin"
+	Mms_CreateToken_FullMethodName            = "/mms.Mms/createToken"
+	Mms_DeleteToken_FullMethodName            = "/mms.Mms/deleteToken"
+	Mms_GetTokenList_FullMethodName           = "/mms.Mms/getTokenList"
+	Mms_GetTokenById_FullMethodName           = "/mms.Mms/getTokenById"
+	Mms_BlockUserAllToken_FullMethodName      = "/mms.Mms/blockUserAllToken"
+	Mms_UpdateToken_FullMethodName            = "/mms.Mms/updateToken"
 )
 
 // MmsClient is the client API for Mms service.
@@ -91,6 +92,8 @@ type MmsClient interface {
 	OauthLogin(ctx context.Context, in *OauthLoginReq, opts ...grpc.CallOption) (*OauthRedirectResp, error)
 	// group: oauthprovider
 	OauthCallback(ctx context.Context, in *CallbackReq, opts ...grpc.CallOption) (*MemberInfo, error)
+	// group: oauthprovider
+	WechatMiniProgramLogin(ctx context.Context, in *OauthLoginReq, opts ...grpc.CallOption) (*BaseResp, error)
 	// Token management
 	// group: token
 	CreateToken(ctx context.Context, in *TokenInfo, opts ...grpc.CallOption) (*BaseUUIDResp, error)
@@ -285,6 +288,15 @@ func (c *mmsClient) OauthCallback(ctx context.Context, in *CallbackReq, opts ...
 	return out, nil
 }
 
+func (c *mmsClient) WechatMiniProgramLogin(ctx context.Context, in *OauthLoginReq, opts ...grpc.CallOption) (*BaseResp, error) {
+	out := new(BaseResp)
+	err := c.cc.Invoke(ctx, Mms_WechatMiniProgramLogin_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *mmsClient) CreateToken(ctx context.Context, in *TokenInfo, opts ...grpc.CallOption) (*BaseUUIDResp, error) {
 	out := new(BaseUUIDResp)
 	err := c.cc.Invoke(ctx, Mms_CreateToken_FullMethodName, in, out, opts...)
@@ -384,6 +396,8 @@ type MmsServer interface {
 	OauthLogin(context.Context, *OauthLoginReq) (*OauthRedirectResp, error)
 	// group: oauthprovider
 	OauthCallback(context.Context, *CallbackReq) (*MemberInfo, error)
+	// group: oauthprovider
+	WechatMiniProgramLogin(context.Context, *OauthLoginReq) (*BaseResp, error)
 	// Token management
 	// group: token
 	CreateToken(context.Context, *TokenInfo) (*BaseUUIDResp, error)
@@ -460,6 +474,9 @@ func (UnimplementedMmsServer) OauthLogin(context.Context, *OauthLoginReq) (*Oaut
 }
 func (UnimplementedMmsServer) OauthCallback(context.Context, *CallbackReq) (*MemberInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OauthCallback not implemented")
+}
+func (UnimplementedMmsServer) WechatMiniProgramLogin(context.Context, *OauthLoginReq) (*BaseResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WechatMiniProgramLogin not implemented")
 }
 func (UnimplementedMmsServer) CreateToken(context.Context, *TokenInfo) (*BaseUUIDResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateToken not implemented")
@@ -834,6 +851,24 @@ func _Mms_OauthCallback_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Mms_WechatMiniProgramLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OauthLoginReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MmsServer).WechatMiniProgramLogin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Mms_WechatMiniProgramLogin_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MmsServer).WechatMiniProgramLogin(ctx, req.(*OauthLoginReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Mms_CreateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TokenInfo)
 	if err := dec(in); err != nil {
@@ -1024,6 +1059,10 @@ var Mms_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "oauthCallback",
 			Handler:    _Mms_OauthCallback_Handler,
+		},
+		{
+			MethodName: "wechatMiniProgramLogin",
+			Handler:    _Mms_WechatMiniProgramLogin_Handler,
 		},
 		{
 			MethodName: "createToken",

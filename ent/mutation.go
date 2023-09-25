@@ -37,25 +37,26 @@ const (
 // MemberMutation represents an operation that mutates the Member nodes in the graph.
 type MemberMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *uuid.UUID
-	created_at    *time.Time
-	updated_at    *time.Time
-	status        *uint8
-	addstatus     *int8
-	username      *string
-	password      *string
-	nickname      *string
-	mobile        *string
-	email         *string
-	avatar        *string
-	clearedFields map[string]struct{}
-	ranks         *uint64
-	clearedranks  bool
-	done          bool
-	oldValue      func(context.Context) (*Member, error)
-	predicates    []predicate.Member
+	op             Op
+	typ            string
+	id             *uuid.UUID
+	created_at     *time.Time
+	updated_at     *time.Time
+	status         *uint8
+	addstatus      *int8
+	username       *string
+	password       *string
+	nickname       *string
+	mobile         *string
+	email          *string
+	avatar         *string
+	wechat_open_id *string
+	clearedFields  map[string]struct{}
+	ranks          *uint64
+	clearedranks   bool
+	done           bool
+	oldValue       func(context.Context) (*Member, error)
+	predicates     []predicate.Member
 }
 
 var _ ent.Mutation = (*MemberMutation)(nil)
@@ -608,6 +609,55 @@ func (m *MemberMutation) ResetAvatar() {
 	delete(m.clearedFields, member.FieldAvatar)
 }
 
+// SetWechatOpenID sets the "wechat_open_id" field.
+func (m *MemberMutation) SetWechatOpenID(s string) {
+	m.wechat_open_id = &s
+}
+
+// WechatOpenID returns the value of the "wechat_open_id" field in the mutation.
+func (m *MemberMutation) WechatOpenID() (r string, exists bool) {
+	v := m.wechat_open_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWechatOpenID returns the old "wechat_open_id" field's value of the Member entity.
+// If the Member object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberMutation) OldWechatOpenID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWechatOpenID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWechatOpenID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWechatOpenID: %w", err)
+	}
+	return oldValue.WechatOpenID, nil
+}
+
+// ClearWechatOpenID clears the value of the "wechat_open_id" field.
+func (m *MemberMutation) ClearWechatOpenID() {
+	m.wechat_open_id = nil
+	m.clearedFields[member.FieldWechatOpenID] = struct{}{}
+}
+
+// WechatOpenIDCleared returns if the "wechat_open_id" field was cleared in this mutation.
+func (m *MemberMutation) WechatOpenIDCleared() bool {
+	_, ok := m.clearedFields[member.FieldWechatOpenID]
+	return ok
+}
+
+// ResetWechatOpenID resets all changes to the "wechat_open_id" field.
+func (m *MemberMutation) ResetWechatOpenID() {
+	m.wechat_open_id = nil
+	delete(m.clearedFields, member.FieldWechatOpenID)
+}
+
 // SetRanksID sets the "ranks" edge to the MemberRank entity by id.
 func (m *MemberMutation) SetRanksID(id uint64) {
 	m.ranks = &id
@@ -681,7 +731,7 @@ func (m *MemberMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MemberMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.created_at != nil {
 		fields = append(fields, member.FieldCreatedAt)
 	}
@@ -712,6 +762,9 @@ func (m *MemberMutation) Fields() []string {
 	if m.avatar != nil {
 		fields = append(fields, member.FieldAvatar)
 	}
+	if m.wechat_open_id != nil {
+		fields = append(fields, member.FieldWechatOpenID)
+	}
 	return fields
 }
 
@@ -740,6 +793,8 @@ func (m *MemberMutation) Field(name string) (ent.Value, bool) {
 		return m.Email()
 	case member.FieldAvatar:
 		return m.Avatar()
+	case member.FieldWechatOpenID:
+		return m.WechatOpenID()
 	}
 	return nil, false
 }
@@ -769,6 +824,8 @@ func (m *MemberMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldEmail(ctx)
 	case member.FieldAvatar:
 		return m.OldAvatar(ctx)
+	case member.FieldWechatOpenID:
+		return m.OldWechatOpenID(ctx)
 	}
 	return nil, fmt.Errorf("unknown Member field %s", name)
 }
@@ -848,6 +905,13 @@ func (m *MemberMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAvatar(v)
 		return nil
+	case member.FieldWechatOpenID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWechatOpenID(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Member field %s", name)
 }
@@ -908,6 +972,9 @@ func (m *MemberMutation) ClearedFields() []string {
 	if m.FieldCleared(member.FieldAvatar) {
 		fields = append(fields, member.FieldAvatar)
 	}
+	if m.FieldCleared(member.FieldWechatOpenID) {
+		fields = append(fields, member.FieldWechatOpenID)
+	}
 	return fields
 }
 
@@ -936,6 +1003,9 @@ func (m *MemberMutation) ClearField(name string) error {
 		return nil
 	case member.FieldAvatar:
 		m.ClearAvatar()
+		return nil
+	case member.FieldWechatOpenID:
+		m.ClearWechatOpenID()
 		return nil
 	}
 	return fmt.Errorf("unknown Member nullable field %s", name)
@@ -974,6 +1044,9 @@ func (m *MemberMutation) ResetField(name string) error {
 		return nil
 	case member.FieldAvatar:
 		m.ResetAvatar()
+		return nil
+	case member.FieldWechatOpenID:
+		m.ResetWechatOpenID()
 		return nil
 	}
 	return fmt.Errorf("unknown Member field %s", name)

@@ -60,5 +60,7 @@ service Mms {
   rpc oauthLogin (OauthLoginReq) returns (OauthRedirectResp);
   // group: oauthprovider
   rpc oauthCallback (CallbackReq) returns (MemberInfo);
+  // group: oauthprovider
+  rpc wechatMiniProgramLogin (OauthLoginReq) returns (BaseResp);
 
 }

@@ -1,3 +1,4 @@
+### Go template
 # Binaries for programs and plugins
 *.exe
 *.exe~
@@ -14,7 +15,14 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
+*.gz
+*.rar
+*.tmp
+
+# Other files and folders
+.settings/
 .idea/
 .vscode/
 
+# config file avoid exposing private data
 *_dev.yaml

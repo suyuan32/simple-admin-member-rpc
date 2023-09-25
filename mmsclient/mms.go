@@ -64,6 +64,7 @@ type (
 		DeleteOauthProvider(ctx context.Context, in *IDsReq, opts ...grpc.CallOption) (*BaseResp, error)
 		OauthLogin(ctx context.Context, in *OauthLoginReq, opts ...grpc.CallOption) (*OauthRedirectResp, error)
 		OauthCallback(ctx context.Context, in *CallbackReq, opts ...grpc.CallOption) (*MemberInfo, error)
+		WechatMiniProgramLogin(ctx context.Context, in *OauthLoginReq, opts ...grpc.CallOption) (*BaseResp, error)
 		// Token management
 		CreateToken(ctx context.Context, in *TokenInfo, opts ...grpc.CallOption) (*BaseUUIDResp, error)
 		DeleteToken(ctx context.Context, in *UUIDsReq, opts ...grpc.CallOption) (*BaseResp, error)
@@ -180,6 +181,11 @@ func (m *defaultMms) OauthLogin(ctx context.Context, in *OauthLoginReq, opts ...
 func (m *defaultMms) OauthCallback(ctx context.Context, in *CallbackReq, opts ...grpc.CallOption) (*MemberInfo, error) {
 	client := mms.NewMmsClient(m.cli.Conn())
 	return client.OauthCallback(ctx, in, opts...)
+}
+
+func (m *defaultMms) WechatMiniProgramLogin(ctx context.Context, in *OauthLoginReq, opts ...grpc.CallOption) (*BaseResp, error) {
+	client := mms.NewMmsClient(m.cli.Conn())
+	return client.WechatMiniProgramLogin(ctx, in, opts...)
 }
 
 // Token management

@@ -138,6 +138,20 @@ func (mc *MemberCreate) SetNillableAvatar(s *string) *MemberCreate {
 	return mc
 }
 
+// SetWechatOpenID sets the "wechat_open_id" field.
+func (mc *MemberCreate) SetWechatOpenID(s string) *MemberCreate {
+	mc.mutation.SetWechatOpenID(s)
+	return mc
+}
+
+// SetNillableWechatOpenID sets the "wechat_open_id" field if the given value is not nil.
+func (mc *MemberCreate) SetNillableWechatOpenID(s *string) *MemberCreate {
+	if s != nil {
+		mc.SetWechatOpenID(*s)
+	}
+	return mc
+}
+
 // SetID sets the "id" field.
 func (mc *MemberCreate) SetID(u uuid.UUID) *MemberCreate {
 	mc.mutation.SetID(u)
@@ -319,6 +333,10 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 	if value, ok := mc.mutation.Avatar(); ok {
 		_spec.SetField(member.FieldAvatar, field.TypeString, value)
 		_node.Avatar = value
+	}
+	if value, ok := mc.mutation.WechatOpenID(); ok {
+		_spec.SetField(member.FieldWechatOpenID, field.TypeString, value)
+		_node.WechatOpenID = value
 	}
 	if nodes := mc.mutation.RanksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
