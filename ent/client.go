@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"reflect"
 
 	uuid "github.com/gofrs/uuid/v5"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/migrate"
@@ -19,6 +20,8 @@ import (
 	"github.com/suyuan32/simple-admin-member-rpc/ent/memberrank"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/oauthprovider"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/token"
+
+	stdsql "database/sql"
 )
 
 // Client is the client that holds all ent builders.
@@ -118,11 +121,14 @@ func Open(driverName, dataSourceName string, options ...Option) (*Client, error)
 	}
 }
 
+// ErrTxStarted is returned when trying to start a new transaction from a transactional client.
+var ErrTxStarted = errors.New("ent: cannot start a transaction within a transaction")
+
 // Tx returns a new transactional client. The provided context
 // is used until the transaction is committed or rolled back.
 func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	if _, ok := c.driver.(*txDriver); ok {
-		return nil, errors.New("ent: cannot start a transaction within a transaction")
+		return nil, ErrTxStarted
 	}
 	tx, err := newTx(ctx, c.driver)
 	if err != nil {
@@ -249,6 +255,21 @@ func (c *MemberClient) Create() *MemberCreate {
 
 // CreateBulk returns a builder for creating a bulk of Member entities.
 func (c *MemberClient) CreateBulk(builders ...*MemberCreate) *MemberCreateBulk {
+	return &MemberCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MemberClient) MapCreateBulk(slice any, setFunc func(*MemberCreate, int)) *MemberCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MemberCreateBulk{err: fmt.Errorf("calling to MemberClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MemberCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &MemberCreateBulk{config: c.config, builders: builders}
 }
 
@@ -386,6 +407,21 @@ func (c *MemberRankClient) CreateBulk(builders ...*MemberRankCreate) *MemberRank
 	return &MemberRankCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MemberRankClient) MapCreateBulk(slice any, setFunc func(*MemberRankCreate, int)) *MemberRankCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MemberRankCreateBulk{err: fmt.Errorf("calling to MemberRankClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MemberRankCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MemberRankCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for MemberRank.
 func (c *MemberRankClient) Update() *MemberRankUpdate {
 	mutation := newMemberRankMutation(c.config, OpUpdate)
@@ -520,6 +556,21 @@ func (c *OauthProviderClient) CreateBulk(builders ...*OauthProviderCreate) *Oaut
 	return &OauthProviderCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *OauthProviderClient) MapCreateBulk(slice any, setFunc func(*OauthProviderCreate, int)) *OauthProviderCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &OauthProviderCreateBulk{err: fmt.Errorf("calling to OauthProviderClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*OauthProviderCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &OauthProviderCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for OauthProvider.
 func (c *OauthProviderClient) Update() *OauthProviderUpdate {
 	mutation := newOauthProviderMutation(c.config, OpUpdate)
@@ -638,6 +689,21 @@ func (c *TokenClient) CreateBulk(builders ...*TokenCreate) *TokenCreateBulk {
 	return &TokenCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TokenClient) MapCreateBulk(slice any, setFunc func(*TokenCreate, int)) *TokenCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TokenCreateBulk{err: fmt.Errorf("calling to TokenClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TokenCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TokenCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Token.
 func (c *TokenClient) Update() *TokenUpdate {
 	mutation := newTokenMutation(c.config, OpUpdate)
@@ -732,3 +798,27 @@ type (
 		Member, MemberRank, OauthProvider, Token []ent.Interceptor
 	}
 )
+
+// ExecContext allows calling the underlying ExecContext method of the driver if it is supported by it.
+// See, database/sql#DB.ExecContext for more information.
+func (c *config) ExecContext(ctx context.Context, query string, args ...any) (stdsql.Result, error) {
+	ex, ok := c.driver.(interface {
+		ExecContext(context.Context, string, ...any) (stdsql.Result, error)
+	})
+	if !ok {
+		return nil, fmt.Errorf("Driver.ExecContext is not supported")
+	}
+	return ex.ExecContext(ctx, query, args...)
+}
+
+// QueryContext allows calling the underlying QueryContext method of the driver if it is supported by it.
+// See, database/sql#DB.QueryContext for more information.
+func (c *config) QueryContext(ctx context.Context, query string, args ...any) (*stdsql.Rows, error) {
+	q, ok := c.driver.(interface {
+		QueryContext(context.Context, string, ...any) (*stdsql.Rows, error)
+	})
+	if !ok {
+		return nil, fmt.Errorf("Driver.QueryContext is not supported")
+	}
+	return q.QueryContext(ctx, query, args...)
+}

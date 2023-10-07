@@ -450,32 +450,15 @@ func HasMembersWith(preds ...predicate.Member) predicate.MemberRank {
 
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.MemberRank) predicate.MemberRank {
-	return predicate.MemberRank(func(s *sql.Selector) {
-		s1 := s.Clone().SetP(nil)
-		for _, p := range predicates {
-			p(s1)
-		}
-		s.Where(s1.P())
-	})
+	return predicate.MemberRank(sql.AndPredicates(predicates...))
 }
 
 // Or groups predicates with the OR operator between them.
 func Or(predicates ...predicate.MemberRank) predicate.MemberRank {
-	return predicate.MemberRank(func(s *sql.Selector) {
-		s1 := s.Clone().SetP(nil)
-		for i, p := range predicates {
-			if i > 0 {
-				s1.Or()
-			}
-			p(s1)
-		}
-		s.Where(s1.P())
-	})
+	return predicate.MemberRank(sql.OrPredicates(predicates...))
 }
 
 // Not applies the not operator on the given predicate.
 func Not(p predicate.MemberRank) predicate.MemberRank {
-	return predicate.MemberRank(func(s *sql.Selector) {
-		p(s.Not())
-	})
+	return predicate.MemberRank(sql.NotPredicates(p))
 }

@@ -238,11 +238,15 @@ func (mrc *MemberRankCreate) createSpec() (*MemberRank, *sqlgraph.CreateSpec) {
 // MemberRankCreateBulk is the builder for creating many MemberRank entities in bulk.
 type MemberRankCreateBulk struct {
 	config
+	err      error
 	builders []*MemberRankCreate
 }
 
 // Save creates the MemberRank entities in the database.
 func (mrcb *MemberRankCreateBulk) Save(ctx context.Context) ([]*MemberRank, error) {
+	if mrcb.err != nil {
+		return nil, mrcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(mrcb.builders))
 	nodes := make([]*MemberRank, len(mrcb.builders))
 	mutators := make([]Mutator, len(mrcb.builders))
