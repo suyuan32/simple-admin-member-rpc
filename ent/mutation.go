@@ -666,6 +666,7 @@ func (m *MemberMutation) SetRanksID(id uint64) {
 // ClearRanks clears the "ranks" edge to the MemberRank entity.
 func (m *MemberMutation) ClearRanks() {
 	m.clearedranks = true
+	m.clearedFields[member.FieldRankID] = struct{}{}
 }
 
 // RanksCleared reports if the "ranks" edge to the MemberRank entity was cleared.
