@@ -106,6 +106,11 @@ func Avatar(v string) predicate.Member {
 	return predicate.Member(sql.FieldEQ(FieldAvatar, v))
 }
 
+// WechatOpenID applies equality check predicate on the "wechat_open_id" field. It's identical to WechatOpenIDEQ.
+func WechatOpenID(v string) predicate.Member {
+	return predicate.Member(sql.FieldEQ(FieldWechatOpenID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Member {
 	return predicate.Member(sql.FieldEQ(FieldCreatedAt, v))
@@ -686,6 +691,81 @@ func AvatarContainsFold(v string) predicate.Member {
 	return predicate.Member(sql.FieldContainsFold(FieldAvatar, v))
 }
 
+// WechatOpenIDEQ applies the EQ predicate on the "wechat_open_id" field.
+func WechatOpenIDEQ(v string) predicate.Member {
+	return predicate.Member(sql.FieldEQ(FieldWechatOpenID, v))
+}
+
+// WechatOpenIDNEQ applies the NEQ predicate on the "wechat_open_id" field.
+func WechatOpenIDNEQ(v string) predicate.Member {
+	return predicate.Member(sql.FieldNEQ(FieldWechatOpenID, v))
+}
+
+// WechatOpenIDIn applies the In predicate on the "wechat_open_id" field.
+func WechatOpenIDIn(vs ...string) predicate.Member {
+	return predicate.Member(sql.FieldIn(FieldWechatOpenID, vs...))
+}
+
+// WechatOpenIDNotIn applies the NotIn predicate on the "wechat_open_id" field.
+func WechatOpenIDNotIn(vs ...string) predicate.Member {
+	return predicate.Member(sql.FieldNotIn(FieldWechatOpenID, vs...))
+}
+
+// WechatOpenIDGT applies the GT predicate on the "wechat_open_id" field.
+func WechatOpenIDGT(v string) predicate.Member {
+	return predicate.Member(sql.FieldGT(FieldWechatOpenID, v))
+}
+
+// WechatOpenIDGTE applies the GTE predicate on the "wechat_open_id" field.
+func WechatOpenIDGTE(v string) predicate.Member {
+	return predicate.Member(sql.FieldGTE(FieldWechatOpenID, v))
+}
+
+// WechatOpenIDLT applies the LT predicate on the "wechat_open_id" field.
+func WechatOpenIDLT(v string) predicate.Member {
+	return predicate.Member(sql.FieldLT(FieldWechatOpenID, v))
+}
+
+// WechatOpenIDLTE applies the LTE predicate on the "wechat_open_id" field.
+func WechatOpenIDLTE(v string) predicate.Member {
+	return predicate.Member(sql.FieldLTE(FieldWechatOpenID, v))
+}
+
+// WechatOpenIDContains applies the Contains predicate on the "wechat_open_id" field.
+func WechatOpenIDContains(v string) predicate.Member {
+	return predicate.Member(sql.FieldContains(FieldWechatOpenID, v))
+}
+
+// WechatOpenIDHasPrefix applies the HasPrefix predicate on the "wechat_open_id" field.
+func WechatOpenIDHasPrefix(v string) predicate.Member {
+	return predicate.Member(sql.FieldHasPrefix(FieldWechatOpenID, v))
+}
+
+// WechatOpenIDHasSuffix applies the HasSuffix predicate on the "wechat_open_id" field.
+func WechatOpenIDHasSuffix(v string) predicate.Member {
+	return predicate.Member(sql.FieldHasSuffix(FieldWechatOpenID, v))
+}
+
+// WechatOpenIDIsNil applies the IsNil predicate on the "wechat_open_id" field.
+func WechatOpenIDIsNil() predicate.Member {
+	return predicate.Member(sql.FieldIsNull(FieldWechatOpenID))
+}
+
+// WechatOpenIDNotNil applies the NotNil predicate on the "wechat_open_id" field.
+func WechatOpenIDNotNil() predicate.Member {
+	return predicate.Member(sql.FieldNotNull(FieldWechatOpenID))
+}
+
+// WechatOpenIDEqualFold applies the EqualFold predicate on the "wechat_open_id" field.
+func WechatOpenIDEqualFold(v string) predicate.Member {
+	return predicate.Member(sql.FieldEqualFold(FieldWechatOpenID, v))
+}
+
+// WechatOpenIDContainsFold applies the ContainsFold predicate on the "wechat_open_id" field.
+func WechatOpenIDContainsFold(v string) predicate.Member {
+	return predicate.Member(sql.FieldContainsFold(FieldWechatOpenID, v))
+}
+
 // HasRanks applies the HasEdge predicate on the "ranks" edge.
 func HasRanks() predicate.Member {
 	return predicate.Member(func(s *sql.Selector) {
@@ -711,32 +791,15 @@ func HasRanksWith(preds ...predicate.MemberRank) predicate.Member {
 
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Member) predicate.Member {
-	return predicate.Member(func(s *sql.Selector) {
-		s1 := s.Clone().SetP(nil)
-		for _, p := range predicates {
-			p(s1)
-		}
-		s.Where(s1.P())
-	})
+	return predicate.Member(sql.AndPredicates(predicates...))
 }
 
 // Or groups predicates with the OR operator between them.
 func Or(predicates ...predicate.Member) predicate.Member {
-	return predicate.Member(func(s *sql.Selector) {
-		s1 := s.Clone().SetP(nil)
-		for i, p := range predicates {
-			if i > 0 {
-				s1.Or()
-			}
-			p(s1)
-		}
-		s.Where(s1.P())
-	})
+	return predicate.Member(sql.OrPredicates(predicates...))
 }
 
 // Not applies the not operator on the given predicate.
 func Not(p predicate.Member) predicate.Member {
-	return predicate.Member(func(s *sql.Selector) {
-		p(s.Not())
-	})
+	return predicate.Member(sql.NotPredicates(p))
 }

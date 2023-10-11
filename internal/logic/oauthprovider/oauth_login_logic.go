@@ -34,15 +34,15 @@ func NewOauthLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *OauthL
 }
 
 func (l *OauthLoginLogic) OauthLogin(in *mms.OauthLoginReq) (*mms.OauthRedirectResp, error) {
-	p, err := l.svcCtx.DB.OauthProvider.Query().Where(oauthprovider.NameEQ(in.Provider)).First(l.ctx)
-	if err != nil {
-		return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
-	}
-
 	var config oauth2.Config
-	if v, ok := providerConfig[p.Name]; ok {
+	if v, ok := providerConfig[in.Provider]; ok {
 		config = v
 	} else {
+		p, err := l.svcCtx.DB.OauthProvider.Query().Where(oauthprovider.NameEQ(in.Provider)).First(l.ctx)
+		if err != nil {
+			return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
+		}
+
 		providerConfig[p.Name] = oauth2.Config{
 			ClientID:     p.ClientID,
 			ClientSecret: p.ClientSecret,
@@ -55,10 +55,11 @@ func (l *OauthLoginLogic) OauthLogin(in *mms.OauthLoginReq) (*mms.OauthRedirectR
 			Scopes:      strings.Split(p.Scopes, " "),
 		}
 		config = providerConfig[p.Name]
-	}
 
-	if _, ok := userInfoURL[p.Name]; !ok {
-		userInfoURL[p.Name] = p.InfoURL
+		if _, ok := userInfoURL[p.Name]; !ok {
+			userInfoURL[p.Name] = p.InfoURL
+		}
+
 	}
 
 	url := config.AuthCodeURL(in.State)

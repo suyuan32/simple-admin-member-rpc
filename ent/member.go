@@ -24,7 +24,7 @@ type Member struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// Update Time | 修改日期
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// status 1 normal 2 ban | 状态 1 正常 2 禁用
+	// Status 1: normal 2: ban | 状态 1 正常 2 禁用
 	Status uint8 `json:"status,omitempty"`
 	// Member's login name | 登录名
 	Username string `json:"username,omitempty"`
@@ -40,6 +40,8 @@ type Member struct {
 	Email string `json:"email,omitempty"`
 	// Avatar | 头像路径
 	Avatar string `json:"avatar,omitempty"`
+	// Wechat Open ID | 微信 Open ID
+	WechatOpenID string `json:"wechat_open_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberQuery when eager-loading is set.
 	Edges        MemberEdges `json:"edges"`
@@ -75,7 +77,7 @@ func (*Member) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case member.FieldStatus, member.FieldRankID:
 			values[i] = new(sql.NullInt64)
-		case member.FieldUsername, member.FieldPassword, member.FieldNickname, member.FieldMobile, member.FieldEmail, member.FieldAvatar:
+		case member.FieldUsername, member.FieldPassword, member.FieldNickname, member.FieldMobile, member.FieldEmail, member.FieldAvatar, member.FieldWechatOpenID:
 			values[i] = new(sql.NullString)
 		case member.FieldCreatedAt, member.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -162,6 +164,12 @@ func (m *Member) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.Avatar = value.String
 			}
+		case member.FieldWechatOpenID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field wechat_open_id", values[i])
+			} else if value.Valid {
+				m.WechatOpenID = value.String
+			}
 		default:
 			m.selectValues.Set(columns[i], values[i])
 		}
@@ -232,6 +240,9 @@ func (m *Member) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("avatar=")
 	builder.WriteString(m.Avatar)
+	builder.WriteString(", ")
+	builder.WriteString("wechat_open_id=")
+	builder.WriteString(m.WechatOpenID)
 	builder.WriteByte(')')
 	return builder.String()
 }

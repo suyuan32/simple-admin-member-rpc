@@ -42,6 +42,9 @@ func (Member) Fields() []ent.Field {
 			Default("").
 			Comment("Avatar | 头像路径").
 			Annotations(entsql.WithComments(true)),
+		field.String("wechat_open_id").Optional().
+			Comment("Wechat Open ID | 微信 Open ID").
+			Annotations(entsql.WithComments(true)),
 	}
 }
 
@@ -62,6 +65,7 @@ func (Member) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("username", "email").
 			Unique(),
+		index.Fields("wechat_open_id").Unique(),
 	}
 }
 

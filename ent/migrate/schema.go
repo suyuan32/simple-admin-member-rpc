@@ -14,13 +14,14 @@ var (
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
-		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "status 1 normal 2 ban | 状态 1 正常 2 禁用", Default: 1},
+		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "Status 1: normal 2: ban | 状态 1 正常 2 禁用", Default: 1},
 		{Name: "username", Type: field.TypeString, Unique: true, Comment: "Member's login name | 登录名"},
 		{Name: "password", Type: field.TypeString, Comment: "Password | 密码"},
 		{Name: "nickname", Type: field.TypeString, Unique: true, Comment: "Nickname | 昵称"},
 		{Name: "mobile", Type: field.TypeString, Nullable: true, Comment: "Mobile number | 手机号"},
 		{Name: "email", Type: field.TypeString, Nullable: true, Comment: "Email | 邮箱号"},
 		{Name: "avatar", Type: field.TypeString, Nullable: true, Comment: "Avatar | 头像路径", Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
+		{Name: "wechat_open_id", Type: field.TypeString, Nullable: true, Comment: "Wechat Open ID | 微信 Open ID"},
 		{Name: "rank_id", Type: field.TypeUint64, Nullable: true, Comment: "Member Rank ID | 会员等级ID", Default: 2},
 	}
 	// MmsMembersTable holds the schema information for the "mms_members" table.
@@ -31,7 +32,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "mms_members_mms_ranks_ranks",
-				Columns:    []*schema.Column{MmsMembersColumns[10]},
+				Columns:    []*schema.Column{MmsMembersColumns[11]},
 				RefColumns: []*schema.Column{MmsRanksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -41,6 +42,11 @@ var (
 				Name:    "member_username_email",
 				Unique:  true,
 				Columns: []*schema.Column{MmsMembersColumns[4], MmsMembersColumns[8]},
+			},
+			{
+				Name:    "member_wechat_open_id",
+				Unique:  true,
+				Columns: []*schema.Column{MmsMembersColumns[10]},
 			},
 		},
 	}
@@ -93,7 +99,7 @@ var (
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
-		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "status 1 normal 2 ban | 状态 1 正常 2 禁用", Default: 1},
+		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "Status 1: normal 2: ban | 状态 1 正常 2 禁用", Default: 1},
 		{Name: "uuid", Type: field.TypeUUID, Comment: " User's UUID | 用户的UUID"},
 		{Name: "token", Type: field.TypeString, Comment: "Token string | Token 字符串"},
 		{Name: "source", Type: field.TypeString, Comment: "Log in source such as GitHub | Token 来源 （本地为core, 第三方如github等）"},

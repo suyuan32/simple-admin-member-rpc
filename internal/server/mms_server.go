@@ -124,6 +124,11 @@ func (s *MmsServer) OauthCallback(ctx context.Context, in *mms.CallbackReq) (*mm
 	return l.OauthCallback(in)
 }
 
+func (s *MmsServer) WechatMiniProgramLogin(ctx context.Context, in *mms.OauthLoginReq) (*mms.BaseResp, error) {
+	l := oauthprovider.NewWechatMiniProgramLoginLogic(ctx, s.svcCtx)
+	return l.WechatMiniProgramLogin(in)
+}
+
 // Token management
 func (s *MmsServer) CreateToken(ctx context.Context, in *mms.TokenInfo) (*mms.BaseUUIDResp, error) {
 	l := token.NewCreateTokenLogic(ctx, s.svcCtx)

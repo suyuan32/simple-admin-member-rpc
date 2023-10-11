@@ -35,6 +35,8 @@ const (
 	FieldEmail = "email"
 	// FieldAvatar holds the string denoting the avatar field in the database.
 	FieldAvatar = "avatar"
+	// FieldWechatOpenID holds the string denoting the wechat_open_id field in the database.
+	FieldWechatOpenID = "wechat_open_id"
 	// EdgeRanks holds the string denoting the ranks edge name in mutations.
 	EdgeRanks = "ranks"
 	// Table holds the table name of the member in the database.
@@ -61,6 +63,7 @@ var Columns = []string{
 	FieldMobile,
 	FieldEmail,
 	FieldAvatar,
+	FieldWechatOpenID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -146,6 +149,11 @@ func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 // ByAvatar orders the results by the avatar field.
 func ByAvatar(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAvatar, opts...).ToFunc()
+}
+
+// ByWechatOpenID orders the results by the wechat_open_id field.
+func ByWechatOpenID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWechatOpenID, opts...).ToFunc()
 }
 
 // ByRanksField orders the results by ranks field.

@@ -138,6 +138,20 @@ func (mc *MemberCreate) SetNillableAvatar(s *string) *MemberCreate {
 	return mc
 }
 
+// SetWechatOpenID sets the "wechat_open_id" field.
+func (mc *MemberCreate) SetWechatOpenID(s string) *MemberCreate {
+	mc.mutation.SetWechatOpenID(s)
+	return mc
+}
+
+// SetNillableWechatOpenID sets the "wechat_open_id" field if the given value is not nil.
+func (mc *MemberCreate) SetNillableWechatOpenID(s *string) *MemberCreate {
+	if s != nil {
+		mc.SetWechatOpenID(*s)
+	}
+	return mc
+}
+
 // SetID sets the "id" field.
 func (mc *MemberCreate) SetID(u uuid.UUID) *MemberCreate {
 	mc.mutation.SetID(u)
@@ -320,6 +334,10 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 		_spec.SetField(member.FieldAvatar, field.TypeString, value)
 		_node.Avatar = value
 	}
+	if value, ok := mc.mutation.WechatOpenID(); ok {
+		_spec.SetField(member.FieldWechatOpenID, field.TypeString, value)
+		_node.WechatOpenID = value
+	}
 	if nodes := mc.mutation.RanksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -343,11 +361,15 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 // MemberCreateBulk is the builder for creating many Member entities in bulk.
 type MemberCreateBulk struct {
 	config
+	err      error
 	builders []*MemberCreate
 }
 
 // Save creates the Member entities in the database.
 func (mcb *MemberCreateBulk) Save(ctx context.Context) ([]*Member, error) {
+	if mcb.err != nil {
+		return nil, mcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(mcb.builders))
 	nodes := make([]*Member, len(mcb.builders))
 	mutators := make([]Mutator, len(mcb.builders))

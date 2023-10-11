@@ -160,6 +160,26 @@ func (mu *MemberUpdate) ClearAvatar() *MemberUpdate {
 	return mu
 }
 
+// SetWechatOpenID sets the "wechat_open_id" field.
+func (mu *MemberUpdate) SetWechatOpenID(s string) *MemberUpdate {
+	mu.mutation.SetWechatOpenID(s)
+	return mu
+}
+
+// SetNillableWechatOpenID sets the "wechat_open_id" field if the given value is not nil.
+func (mu *MemberUpdate) SetNillableWechatOpenID(s *string) *MemberUpdate {
+	if s != nil {
+		mu.SetWechatOpenID(*s)
+	}
+	return mu
+}
+
+// ClearWechatOpenID clears the value of the "wechat_open_id" field.
+func (mu *MemberUpdate) ClearWechatOpenID() *MemberUpdate {
+	mu.mutation.ClearWechatOpenID()
+	return mu
+}
+
 // SetRanksID sets the "ranks" edge to the MemberRank entity by ID.
 func (mu *MemberUpdate) SetRanksID(id uint64) *MemberUpdate {
 	mu.mutation.SetRanksID(id)
@@ -273,6 +293,12 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mu.mutation.AvatarCleared() {
 		_spec.ClearField(member.FieldAvatar, field.TypeString)
+	}
+	if value, ok := mu.mutation.WechatOpenID(); ok {
+		_spec.SetField(member.FieldWechatOpenID, field.TypeString, value)
+	}
+	if mu.mutation.WechatOpenIDCleared() {
+		_spec.ClearField(member.FieldWechatOpenID, field.TypeString)
 	}
 	if mu.mutation.RanksCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -454,6 +480,26 @@ func (muo *MemberUpdateOne) ClearAvatar() *MemberUpdateOne {
 	return muo
 }
 
+// SetWechatOpenID sets the "wechat_open_id" field.
+func (muo *MemberUpdateOne) SetWechatOpenID(s string) *MemberUpdateOne {
+	muo.mutation.SetWechatOpenID(s)
+	return muo
+}
+
+// SetNillableWechatOpenID sets the "wechat_open_id" field if the given value is not nil.
+func (muo *MemberUpdateOne) SetNillableWechatOpenID(s *string) *MemberUpdateOne {
+	if s != nil {
+		muo.SetWechatOpenID(*s)
+	}
+	return muo
+}
+
+// ClearWechatOpenID clears the value of the "wechat_open_id" field.
+func (muo *MemberUpdateOne) ClearWechatOpenID() *MemberUpdateOne {
+	muo.mutation.ClearWechatOpenID()
+	return muo
+}
+
 // SetRanksID sets the "ranks" edge to the MemberRank entity by ID.
 func (muo *MemberUpdateOne) SetRanksID(id uint64) *MemberUpdateOne {
 	muo.mutation.SetRanksID(id)
@@ -597,6 +643,12 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 	}
 	if muo.mutation.AvatarCleared() {
 		_spec.ClearField(member.FieldAvatar, field.TypeString)
+	}
+	if value, ok := muo.mutation.WechatOpenID(); ok {
+		_spec.SetField(member.FieldWechatOpenID, field.TypeString, value)
+	}
+	if muo.mutation.WechatOpenIDCleared() {
+		_spec.ClearField(member.FieldWechatOpenID, field.TypeString)
 	}
 	if muo.mutation.RanksCleared() {
 		edge := &sqlgraph.EdgeSpec{
