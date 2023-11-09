@@ -15,6 +15,7 @@ message MemberInfo {
   optional string email = 10;
   optional string avatar = 11;
   optional string wechat_id = 12;
+  optional string rank_code = 13;
 }
 
 message MemberListResp {

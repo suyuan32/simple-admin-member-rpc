@@ -104,7 +104,7 @@ func (l *OauthCallbackLogic) OauthCallback(in *mms.CallbackReq) (*mms.MemberInfo
 			Status:    pointy.GetPointer(uint32(result.Status)),
 			Id:        pointy.GetPointer(result.ID.String()),
 			Username:  &result.Username,
-			RankId:    &result.RankID,
+			RankCode:  &result.Edges.Ranks.Code,
 			CreatedAt: pointy.GetPointer(result.CreatedAt.UnixMilli()),
 			UpdatedAt: pointy.GetPointer(result.UpdatedAt.UnixMilli()),
 		}, nil

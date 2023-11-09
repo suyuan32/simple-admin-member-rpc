@@ -27,7 +27,7 @@ func NewGetMemberByUsernameLogic(ctx context.Context, svcCtx *svc.ServiceContext
 }
 
 func (l *GetMemberByUsernameLogic) GetMemberByUsername(in *mms.UsernameReq) (*mms.MemberInfo, error) {
-	result, err := l.svcCtx.DB.Member.Query().Where(member.UsernameEQ(in.Username)).First(l.ctx)
+	result, err := l.svcCtx.DB.Member.Query().Where(member.UsernameEQ(in.Username)).WithRanks().First(l.ctx)
 	if err != nil {
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
 	}
@@ -41,6 +41,7 @@ func (l *GetMemberByUsernameLogic) GetMemberByUsername(in *mms.UsernameReq) (*mm
 		Password:  &result.Password,
 		Nickname:  &result.Nickname,
 		RankId:    &result.RankID,
+		RankCode:  &result.Edges.Ranks.Code,
 		Mobile:    &result.Mobile,
 		Email:     &result.Email,
 		Avatar:    &result.Avatar,

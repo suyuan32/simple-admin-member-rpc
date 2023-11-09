@@ -19,7 +19,7 @@ RedisConf:
 Log:
   ServiceName: mmsRpcLogger
   Mode: file
-  Path: D:\projects\logs\mms\api
+  Path: /home/data/logs/mms/rpc
   Encoding: json
   Level: info
   Compress: false
