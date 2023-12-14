@@ -68,15 +68,39 @@ func (mu *MemberUpdate) SetUsername(s string) *MemberUpdate {
 	return mu
 }
 
+// SetNillableUsername sets the "username" field if the given value is not nil.
+func (mu *MemberUpdate) SetNillableUsername(s *string) *MemberUpdate {
+	if s != nil {
+		mu.SetUsername(*s)
+	}
+	return mu
+}
+
 // SetPassword sets the "password" field.
 func (mu *MemberUpdate) SetPassword(s string) *MemberUpdate {
 	mu.mutation.SetPassword(s)
 	return mu
 }
 
+// SetNillablePassword sets the "password" field if the given value is not nil.
+func (mu *MemberUpdate) SetNillablePassword(s *string) *MemberUpdate {
+	if s != nil {
+		mu.SetPassword(*s)
+	}
+	return mu
+}
+
 // SetNickname sets the "nickname" field.
 func (mu *MemberUpdate) SetNickname(s string) *MemberUpdate {
 	mu.mutation.SetNickname(s)
+	return mu
+}
+
+// SetNillableNickname sets the "nickname" field if the given value is not nil.
+func (mu *MemberUpdate) SetNillableNickname(s *string) *MemberUpdate {
+	if s != nil {
+		mu.SetNickname(*s)
+	}
 	return mu
 }
 
@@ -388,15 +412,39 @@ func (muo *MemberUpdateOne) SetUsername(s string) *MemberUpdateOne {
 	return muo
 }
 
+// SetNillableUsername sets the "username" field if the given value is not nil.
+func (muo *MemberUpdateOne) SetNillableUsername(s *string) *MemberUpdateOne {
+	if s != nil {
+		muo.SetUsername(*s)
+	}
+	return muo
+}
+
 // SetPassword sets the "password" field.
 func (muo *MemberUpdateOne) SetPassword(s string) *MemberUpdateOne {
 	muo.mutation.SetPassword(s)
 	return muo
 }
 
+// SetNillablePassword sets the "password" field if the given value is not nil.
+func (muo *MemberUpdateOne) SetNillablePassword(s *string) *MemberUpdateOne {
+	if s != nil {
+		muo.SetPassword(*s)
+	}
+	return muo
+}
+
 // SetNickname sets the "nickname" field.
 func (muo *MemberUpdateOne) SetNickname(s string) *MemberUpdateOne {
 	muo.mutation.SetNickname(s)
+	return muo
+}
+
+// SetNillableNickname sets the "nickname" field if the given value is not nil.
+func (muo *MemberUpdateOne) SetNillableNickname(s *string) *MemberUpdateOne {
+	if s != nil {
+		muo.SetNickname(*s)
+	}
 	return muo
 }
 

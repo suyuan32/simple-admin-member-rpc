@@ -42,9 +42,25 @@ func (mru *MemberRankUpdate) SetName(s string) *MemberRankUpdate {
 	return mru
 }
 
+// SetNillableName sets the "name" field if the given value is not nil.
+func (mru *MemberRankUpdate) SetNillableName(s *string) *MemberRankUpdate {
+	if s != nil {
+		mru.SetName(*s)
+	}
+	return mru
+}
+
 // SetCode sets the "code" field.
 func (mru *MemberRankUpdate) SetCode(s string) *MemberRankUpdate {
 	mru.mutation.SetCode(s)
+	return mru
+}
+
+// SetNillableCode sets the "code" field if the given value is not nil.
+func (mru *MemberRankUpdate) SetNillableCode(s *string) *MemberRankUpdate {
+	if s != nil {
+		mru.SetCode(*s)
+	}
 	return mru
 }
 
@@ -54,9 +70,25 @@ func (mru *MemberRankUpdate) SetDescription(s string) *MemberRankUpdate {
 	return mru
 }
 
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (mru *MemberRankUpdate) SetNillableDescription(s *string) *MemberRankUpdate {
+	if s != nil {
+		mru.SetDescription(*s)
+	}
+	return mru
+}
+
 // SetRemark sets the "remark" field.
 func (mru *MemberRankUpdate) SetRemark(s string) *MemberRankUpdate {
 	mru.mutation.SetRemark(s)
+	return mru
+}
+
+// SetNillableRemark sets the "remark" field if the given value is not nil.
+func (mru *MemberRankUpdate) SetNillableRemark(s *string) *MemberRankUpdate {
+	if s != nil {
+		mru.SetRemark(*s)
+	}
 	return mru
 }
 
@@ -238,9 +270,25 @@ func (mruo *MemberRankUpdateOne) SetName(s string) *MemberRankUpdateOne {
 	return mruo
 }
 
+// SetNillableName sets the "name" field if the given value is not nil.
+func (mruo *MemberRankUpdateOne) SetNillableName(s *string) *MemberRankUpdateOne {
+	if s != nil {
+		mruo.SetName(*s)
+	}
+	return mruo
+}
+
 // SetCode sets the "code" field.
 func (mruo *MemberRankUpdateOne) SetCode(s string) *MemberRankUpdateOne {
 	mruo.mutation.SetCode(s)
+	return mruo
+}
+
+// SetNillableCode sets the "code" field if the given value is not nil.
+func (mruo *MemberRankUpdateOne) SetNillableCode(s *string) *MemberRankUpdateOne {
+	if s != nil {
+		mruo.SetCode(*s)
+	}
 	return mruo
 }
 
@@ -250,9 +298,25 @@ func (mruo *MemberRankUpdateOne) SetDescription(s string) *MemberRankUpdateOne {
 	return mruo
 }
 
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (mruo *MemberRankUpdateOne) SetNillableDescription(s *string) *MemberRankUpdateOne {
+	if s != nil {
+		mruo.SetDescription(*s)
+	}
+	return mruo
+}
+
 // SetRemark sets the "remark" field.
 func (mruo *MemberRankUpdateOne) SetRemark(s string) *MemberRankUpdateOne {
 	mruo.mutation.SetRemark(s)
+	return mruo
+}
+
+// SetNillableRemark sets the "remark" field if the given value is not nil.
+func (mruo *MemberRankUpdateOne) SetNillableRemark(s *string) *MemberRankUpdateOne {
+	if s != nil {
+		mruo.SetRemark(*s)
+	}
 	return mruo
 }
 
