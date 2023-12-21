@@ -2,6 +2,7 @@ package token
 
 import (
 	"context"
+	"github.com/suyuan32/simple-admin-common/config"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/utils/dberrorhandler"
 	"github.com/suyuan32/simple-admin-member-rpc/types/mms"
 	"time"
@@ -48,9 +49,9 @@ func (l *BlockUserAllTokenLogic) BlockUserAllToken(in *mms.UUIDReq) (*mms.BaseRe
 	}
 
 	for _, v := range tokenData {
-		expiredTime := int(v.ExpiredAt.Unix() - time.Now().Unix())
+		expiredTime := v.ExpiredAt.Sub(time.Now())
 		if expiredTime > 0 {
-			err = l.svcCtx.Redis.Setex("token_"+v.Token, "1", expiredTime)
+			err = l.svcCtx.Redis.Set(l.ctx, config.RedisTokenPrefix+v.Token, "1", expiredTime).Err()
 			if err != nil {
 				logx.Errorw(logmsg.RedisError, logx.Field("detail", err.Error()))
 				return nil, errorx.NewInternalError(i18n.RedisError)
