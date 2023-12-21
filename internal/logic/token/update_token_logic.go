@@ -2,6 +2,7 @@ package token
 
 import (
 	"context"
+	"github.com/suyuan32/simple-admin-common/config"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/utils/dberrorhandler"
 	"github.com/suyuan32/simple-admin-member-rpc/types/mms"
 	"time"
@@ -41,16 +42,16 @@ func (l *UpdateTokenLogic) UpdateToken(in *mms.TokenInfo) (*mms.BaseResp, error)
 	}
 
 	if uint8(*in.Status) == common.StatusBanned {
-		expiredTime := int(token.ExpiredAt.Unix() - time.Now().Unix())
+		expiredTime := token.ExpiredAt.Sub(time.Now())
 		if expiredTime > 0 {
-			err = l.svcCtx.Redis.Setex("token_"+token.Token, "1", expiredTime)
+			err = l.svcCtx.Redis.Set(l.ctx, config.RedisTokenPrefix+token.Token, "1", expiredTime).Err()
 			if err != nil {
 				logx.Errorw(logmsg.RedisError, logx.Field("detail", err.Error()))
 				return nil, errorx.NewInternalError(i18n.RedisError)
 			}
 		}
 	} else if uint8(*in.Status) == common.StatusNormal {
-		_, err := l.svcCtx.Redis.Del("token_" + token.Token)
+		err := l.svcCtx.Redis.Del(l.ctx, config.RedisTokenPrefix+token.Token).Err()
 		if err != nil {
 			logx.Errorw(logmsg.RedisError, logx.Field("detail", err.Error()))
 			return nil, errorx.NewInternalError(i18n.RedisError)
