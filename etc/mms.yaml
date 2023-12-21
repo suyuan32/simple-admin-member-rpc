@@ -14,7 +14,7 @@ DatabaseConf:
 
 RedisConf:
   Host: redis-server:6379
-  Type: node
+  Db: 0
 
 Log:
   ServiceName: mmsRpcLogger
