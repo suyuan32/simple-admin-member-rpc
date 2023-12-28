@@ -80,6 +80,7 @@ func (l *GetTokenListLogic) GetTokenList(in *mms.TokenListReq) (*mms.TokenListRe
 			Token:     &v.Token,
 			Status:    pointy.GetPointer(uint32(v.Status)),
 			Source:    &v.Source,
+			Username:  &v.Username,
 			ExpiredAt: pointy.GetPointer(v.ExpiredAt.UnixMilli()),
 			CreatedAt: pointy.GetPointer(v.CreatedAt.UnixMilli()),
 		})
