@@ -7,7 +7,8 @@ replace github.com/zeromicro/go-zero v1.6.1 => github.com/suyuan32/simple-admin-
 require (
 	entgo.io/ent v0.12.5
 	github.com/gofrs/uuid/v5 v5.0.0
-	github.com/suyuan32/simple-admin-common v1.2.8
+	github.com/redis/go-redis/v9 v9.3.1
+	github.com/suyuan32/simple-admin-common v1.3.0
 	github.com/zeromicro/go-zero v1.6.1
 	golang.org/x/oauth2 v0.15.0
 	google.golang.org/grpc v1.60.1
@@ -65,7 +66,6 @@ require (
 	github.com/prometheus/client_model v0.4.1-0.20230718164431-9a2bf3000d16 // indirect
 	github.com/prometheus/common v0.44.0 // indirect
 	github.com/prometheus/procfs v0.11.1 // indirect
-	github.com/redis/go-redis/v9 v9.3.1 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/zclconf/go-cty v1.13.1 // indirect
 	go.etcd.io/etcd/api/v3 v3.5.11 // indirect
