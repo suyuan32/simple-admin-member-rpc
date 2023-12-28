@@ -101,6 +101,10 @@ func init() {
 	tokenDescStatus := tokenMixinFields1[0].Descriptor()
 	// token.DefaultStatus holds the default value on creation for the status field.
 	token.DefaultStatus = tokenDescStatus.Default.(uint8)
+	// tokenDescUsername is the schema descriptor for username field.
+	tokenDescUsername := tokenFields[2].Descriptor()
+	// token.DefaultUsername holds the default value on creation for the username field.
+	token.DefaultUsername = tokenDescUsername.Default.(string)
 	// tokenDescID is the schema descriptor for id field.
 	tokenDescID := tokenMixinFields0[0].Descriptor()
 	// token.DefaultID holds the default value on creation for the id field.

@@ -705,6 +705,30 @@ func (t *TokenCreate) SetNotNilToken(value *string) *TokenCreate {
 }
 
 // set field if value's pointer is not nil.
+func (t *TokenUpdate) SetNotNilUsername(value *string) *TokenUpdate {
+	if value != nil {
+		return t.SetUsername(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenUpdateOne) SetNotNilUsername(value *string) *TokenUpdateOne {
+	if value != nil {
+		return t.SetUsername(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
+func (t *TokenCreate) SetNotNilUsername(value *string) *TokenCreate {
+	if value != nil {
+		return t.SetUsername(*value)
+	}
+	return t
+}
+
+// set field if value's pointer is not nil.
 func (t *TokenUpdate) SetNotNilSource(value *string) *TokenUpdate {
 	if value != nil {
 		return t.SetSource(*value)
