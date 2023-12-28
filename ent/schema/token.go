@@ -23,6 +23,10 @@ func (Token) Fields() []ent.Field {
 		field.String("token").
 			Comment("Token string | Token 字符串").
 			Annotations(entsql.WithComments(true)),
+		field.String("username").
+			Comment("Username | 用户名").
+			Default("unknown").
+			Annotations(entsql.WithComments(true)),
 		field.String("source").
 			Comment("Log in source such as GitHub | Token 来源 （本地为core, 第三方如github等）").
 			Annotations(entsql.WithComments(true)),

@@ -2742,6 +2742,7 @@ type TokenMutation struct {
 	addstatus     *int8
 	uuid          *uuid.UUID
 	token         *string
+	username      *string
 	source        *string
 	expired_at    *time.Time
 	clearedFields map[string]struct{}
@@ -3068,6 +3069,42 @@ func (m *TokenMutation) ResetToken() {
 	m.token = nil
 }
 
+// SetUsername sets the "username" field.
+func (m *TokenMutation) SetUsername(s string) {
+	m.username = &s
+}
+
+// Username returns the value of the "username" field in the mutation.
+func (m *TokenMutation) Username() (r string, exists bool) {
+	v := m.username
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUsername returns the old "username" field's value of the Token entity.
+// If the Token object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TokenMutation) OldUsername(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUsername is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUsername requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUsername: %w", err)
+	}
+	return oldValue.Username, nil
+}
+
+// ResetUsername resets all changes to the "username" field.
+func (m *TokenMutation) ResetUsername() {
+	m.username = nil
+}
+
 // SetSource sets the "source" field.
 func (m *TokenMutation) SetSource(s string) {
 	m.source = &s
@@ -3174,7 +3211,7 @@ func (m *TokenMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TokenMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, token.FieldCreatedAt)
 	}
@@ -3189,6 +3226,9 @@ func (m *TokenMutation) Fields() []string {
 	}
 	if m.token != nil {
 		fields = append(fields, token.FieldToken)
+	}
+	if m.username != nil {
+		fields = append(fields, token.FieldUsername)
 	}
 	if m.source != nil {
 		fields = append(fields, token.FieldSource)
@@ -3214,6 +3254,8 @@ func (m *TokenMutation) Field(name string) (ent.Value, bool) {
 		return m.UUID()
 	case token.FieldToken:
 		return m.Token()
+	case token.FieldUsername:
+		return m.Username()
 	case token.FieldSource:
 		return m.Source()
 	case token.FieldExpiredAt:
@@ -3237,6 +3279,8 @@ func (m *TokenMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldUUID(ctx)
 	case token.FieldToken:
 		return m.OldToken(ctx)
+	case token.FieldUsername:
+		return m.OldUsername(ctx)
 	case token.FieldSource:
 		return m.OldSource(ctx)
 	case token.FieldExpiredAt:
@@ -3284,6 +3328,13 @@ func (m *TokenMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetToken(v)
+		return nil
+	case token.FieldUsername:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUsername(v)
 		return nil
 	case token.FieldSource:
 		v, ok := value.(string)
@@ -3386,6 +3437,9 @@ func (m *TokenMutation) ResetField(name string) error {
 		return nil
 	case token.FieldToken:
 		m.ResetToken()
+		return nil
+	case token.FieldUsername:
+		m.ResetUsername()
 		return nil
 	case token.FieldSource:
 		m.ResetSource()

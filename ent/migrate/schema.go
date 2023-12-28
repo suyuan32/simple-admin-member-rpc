@@ -102,6 +102,7 @@ var (
 		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "Status 1: normal 2: ban | 状态 1 正常 2 禁用", Default: 1},
 		{Name: "uuid", Type: field.TypeUUID, Comment: " User's UUID | 用户的UUID"},
 		{Name: "token", Type: field.TypeString, Comment: "Token string | Token 字符串"},
+		{Name: "username", Type: field.TypeString, Comment: "Username | 用户名", Default: "unknown"},
 		{Name: "source", Type: field.TypeString, Comment: "Log in source such as GitHub | Token 来源 （本地为core, 第三方如github等）"},
 		{Name: "expired_at", Type: field.TypeTime, Comment: " Expire time | 过期时间"},
 	}
@@ -119,7 +120,7 @@ var (
 			{
 				Name:    "mms_token_expired_at",
 				Unique:  false,
-				Columns: []*schema.Column{MmsTokensColumns[7]},
+				Columns: []*schema.Column{MmsTokensColumns[8]},
 			},
 		},
 	}
