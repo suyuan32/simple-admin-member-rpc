@@ -35,7 +35,7 @@ func (l *CreateTokenLogic) CreateToken(in *mms.TokenInfo) (*mms.BaseUUIDResp, er
 		SetNotNilToken(in.Token).
 		SetNotNilSource(in.Source).
 		SetNotNilUsername(in.Username).
-		SetNotNilExpiredAt(pointy.GetTimePointer(in.ExpiredAt, 0)).
+		SetNotNilExpiredAt(pointy.GetTimeMilliPointer(in.ExpiredAt)).
 		Save(l.ctx)
 	if err != nil {
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
