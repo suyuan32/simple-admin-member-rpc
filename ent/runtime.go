@@ -46,6 +46,10 @@ func init() {
 	memberDescAvatar := memberFields[6].Descriptor()
 	// member.DefaultAvatar holds the default value on creation for the avatar field.
 	member.DefaultAvatar = memberDescAvatar.Default.(string)
+	// memberDescExpiredAt is the schema descriptor for expired_at field.
+	memberDescExpiredAt := memberFields[8].Descriptor()
+	// member.DefaultExpiredAt holds the default value on creation for the expired_at field.
+	member.DefaultExpiredAt = memberDescExpiredAt.Default.(time.Time)
 	// memberDescID is the schema descriptor for id field.
 	memberDescID := memberMixinFields0[0].Descriptor()
 	// member.DefaultID holds the default value on creation for the id field.

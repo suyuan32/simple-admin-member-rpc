@@ -44,5 +44,6 @@ func (l *GetMemberByIdLogic) GetMemberById(in *mms.UUIDReq) (*mms.MemberInfo, er
 		Mobile:    &result.Mobile,
 		Email:     &result.Email,
 		Avatar:    &result.Avatar,
+		ExpiredAt: pointy.GetPointer(result.ExpiredAt.UnixMilli()),
 	}, nil
 }

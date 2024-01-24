@@ -45,5 +45,6 @@ func (l *GetMemberByUsernameLogic) GetMemberByUsername(in *mms.UsernameReq) (*mm
 		Mobile:    &result.Mobile,
 		Email:     &result.Email,
 		Avatar:    &result.Avatar,
+		ExpiredAt: pointy.GetPointer(result.ExpiredAt.UnixMilli()),
 	}, nil
 }

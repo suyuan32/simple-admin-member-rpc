@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+	"time"
 
 	"github.com/suyuan32/simple-admin-common/orm/ent/mixins"
 )
@@ -44,6 +45,10 @@ func (Member) Fields() []ent.Field {
 			Annotations(entsql.WithComments(true)),
 		field.String("wechat_open_id").Optional().
 			Comment("Wechat Open ID | 微信 Open ID").
+			Annotations(entsql.WithComments(true)),
+		field.Time("expired_at").Optional().
+			Comment("Member expired time | 会员到期时间").
+			Default(time.Date(2099, 1, 1, 0, 0, 0, 0, time.Local)).
 			Annotations(entsql.WithComments(true)),
 	}
 }
