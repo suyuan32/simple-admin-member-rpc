@@ -37,7 +37,8 @@ func (l *UpdateMemberLogic) UpdateMember(in *mms.MemberInfo) (*mms.BaseResp, err
 		SetNotNilMobile(in.Mobile).
 		SetNotNilEmail(in.Email).
 		SetNotNilAvatar(in.Avatar).
-		SetNotNilWechatOpenID(in.WechatId)
+		SetNotNilWechatOpenID(in.WechatId).
+		SetNotNilExpiredAt(pointy.GetTimeMilliPointer(in.ExpiredAt))
 
 	if in.Password != nil && *in.Password != "" {
 		query.SetNotNilPassword(pointy.GetPointer(encrypt.BcryptEncrypt(*in.Password)))

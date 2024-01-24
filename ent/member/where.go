@@ -111,6 +111,11 @@ func WechatOpenID(v string) predicate.Member {
 	return predicate.Member(sql.FieldEQ(FieldWechatOpenID, v))
 }
 
+// ExpiredAt applies equality check predicate on the "expired_at" field. It's identical to ExpiredAtEQ.
+func ExpiredAt(v time.Time) predicate.Member {
+	return predicate.Member(sql.FieldEQ(FieldExpiredAt, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Member {
 	return predicate.Member(sql.FieldEQ(FieldCreatedAt, v))
@@ -764,6 +769,56 @@ func WechatOpenIDEqualFold(v string) predicate.Member {
 // WechatOpenIDContainsFold applies the ContainsFold predicate on the "wechat_open_id" field.
 func WechatOpenIDContainsFold(v string) predicate.Member {
 	return predicate.Member(sql.FieldContainsFold(FieldWechatOpenID, v))
+}
+
+// ExpiredAtEQ applies the EQ predicate on the "expired_at" field.
+func ExpiredAtEQ(v time.Time) predicate.Member {
+	return predicate.Member(sql.FieldEQ(FieldExpiredAt, v))
+}
+
+// ExpiredAtNEQ applies the NEQ predicate on the "expired_at" field.
+func ExpiredAtNEQ(v time.Time) predicate.Member {
+	return predicate.Member(sql.FieldNEQ(FieldExpiredAt, v))
+}
+
+// ExpiredAtIn applies the In predicate on the "expired_at" field.
+func ExpiredAtIn(vs ...time.Time) predicate.Member {
+	return predicate.Member(sql.FieldIn(FieldExpiredAt, vs...))
+}
+
+// ExpiredAtNotIn applies the NotIn predicate on the "expired_at" field.
+func ExpiredAtNotIn(vs ...time.Time) predicate.Member {
+	return predicate.Member(sql.FieldNotIn(FieldExpiredAt, vs...))
+}
+
+// ExpiredAtGT applies the GT predicate on the "expired_at" field.
+func ExpiredAtGT(v time.Time) predicate.Member {
+	return predicate.Member(sql.FieldGT(FieldExpiredAt, v))
+}
+
+// ExpiredAtGTE applies the GTE predicate on the "expired_at" field.
+func ExpiredAtGTE(v time.Time) predicate.Member {
+	return predicate.Member(sql.FieldGTE(FieldExpiredAt, v))
+}
+
+// ExpiredAtLT applies the LT predicate on the "expired_at" field.
+func ExpiredAtLT(v time.Time) predicate.Member {
+	return predicate.Member(sql.FieldLT(FieldExpiredAt, v))
+}
+
+// ExpiredAtLTE applies the LTE predicate on the "expired_at" field.
+func ExpiredAtLTE(v time.Time) predicate.Member {
+	return predicate.Member(sql.FieldLTE(FieldExpiredAt, v))
+}
+
+// ExpiredAtIsNil applies the IsNil predicate on the "expired_at" field.
+func ExpiredAtIsNil() predicate.Member {
+	return predicate.Member(sql.FieldIsNull(FieldExpiredAt))
+}
+
+// ExpiredAtNotNil applies the NotNil predicate on the "expired_at" field.
+func ExpiredAtNotNil() predicate.Member {
+	return predicate.Member(sql.FieldNotNull(FieldExpiredAt))
 }
 
 // HasRanks applies the HasEdge predicate on the "ranks" edge.

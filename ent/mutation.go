@@ -51,6 +51,7 @@ type MemberMutation struct {
 	email          *string
 	avatar         *string
 	wechat_open_id *string
+	expired_at     *time.Time
 	clearedFields  map[string]struct{}
 	ranks          *uint64
 	clearedranks   bool
@@ -658,6 +659,55 @@ func (m *MemberMutation) ResetWechatOpenID() {
 	delete(m.clearedFields, member.FieldWechatOpenID)
 }
 
+// SetExpiredAt sets the "expired_at" field.
+func (m *MemberMutation) SetExpiredAt(t time.Time) {
+	m.expired_at = &t
+}
+
+// ExpiredAt returns the value of the "expired_at" field in the mutation.
+func (m *MemberMutation) ExpiredAt() (r time.Time, exists bool) {
+	v := m.expired_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExpiredAt returns the old "expired_at" field's value of the Member entity.
+// If the Member object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MemberMutation) OldExpiredAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExpiredAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExpiredAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExpiredAt: %w", err)
+	}
+	return oldValue.ExpiredAt, nil
+}
+
+// ClearExpiredAt clears the value of the "expired_at" field.
+func (m *MemberMutation) ClearExpiredAt() {
+	m.expired_at = nil
+	m.clearedFields[member.FieldExpiredAt] = struct{}{}
+}
+
+// ExpiredAtCleared returns if the "expired_at" field was cleared in this mutation.
+func (m *MemberMutation) ExpiredAtCleared() bool {
+	_, ok := m.clearedFields[member.FieldExpiredAt]
+	return ok
+}
+
+// ResetExpiredAt resets all changes to the "expired_at" field.
+func (m *MemberMutation) ResetExpiredAt() {
+	m.expired_at = nil
+	delete(m.clearedFields, member.FieldExpiredAt)
+}
+
 // SetRanksID sets the "ranks" edge to the MemberRank entity by id.
 func (m *MemberMutation) SetRanksID(id uint64) {
 	m.ranks = &id
@@ -732,7 +782,7 @@ func (m *MemberMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MemberMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 12)
 	if m.created_at != nil {
 		fields = append(fields, member.FieldCreatedAt)
 	}
@@ -766,6 +816,9 @@ func (m *MemberMutation) Fields() []string {
 	if m.wechat_open_id != nil {
 		fields = append(fields, member.FieldWechatOpenID)
 	}
+	if m.expired_at != nil {
+		fields = append(fields, member.FieldExpiredAt)
+	}
 	return fields
 }
 
@@ -796,6 +849,8 @@ func (m *MemberMutation) Field(name string) (ent.Value, bool) {
 		return m.Avatar()
 	case member.FieldWechatOpenID:
 		return m.WechatOpenID()
+	case member.FieldExpiredAt:
+		return m.ExpiredAt()
 	}
 	return nil, false
 }
@@ -827,6 +882,8 @@ func (m *MemberMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldAvatar(ctx)
 	case member.FieldWechatOpenID:
 		return m.OldWechatOpenID(ctx)
+	case member.FieldExpiredAt:
+		return m.OldExpiredAt(ctx)
 	}
 	return nil, fmt.Errorf("unknown Member field %s", name)
 }
@@ -913,6 +970,13 @@ func (m *MemberMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetWechatOpenID(v)
 		return nil
+	case member.FieldExpiredAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExpiredAt(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Member field %s", name)
 }
@@ -976,6 +1040,9 @@ func (m *MemberMutation) ClearedFields() []string {
 	if m.FieldCleared(member.FieldWechatOpenID) {
 		fields = append(fields, member.FieldWechatOpenID)
 	}
+	if m.FieldCleared(member.FieldExpiredAt) {
+		fields = append(fields, member.FieldExpiredAt)
+	}
 	return fields
 }
 
@@ -1007,6 +1074,9 @@ func (m *MemberMutation) ClearField(name string) error {
 		return nil
 	case member.FieldWechatOpenID:
 		m.ClearWechatOpenID()
+		return nil
+	case member.FieldExpiredAt:
+		m.ClearExpiredAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Member nullable field %s", name)
@@ -1048,6 +1118,9 @@ func (m *MemberMutation) ResetField(name string) error {
 		return nil
 	case member.FieldWechatOpenID:
 		m.ResetWechatOpenID()
+		return nil
+	case member.FieldExpiredAt:
+		m.ResetExpiredAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Member field %s", name)

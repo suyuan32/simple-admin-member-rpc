@@ -204,6 +204,26 @@ func (mu *MemberUpdate) ClearWechatOpenID() *MemberUpdate {
 	return mu
 }
 
+// SetExpiredAt sets the "expired_at" field.
+func (mu *MemberUpdate) SetExpiredAt(t time.Time) *MemberUpdate {
+	mu.mutation.SetExpiredAt(t)
+	return mu
+}
+
+// SetNillableExpiredAt sets the "expired_at" field if the given value is not nil.
+func (mu *MemberUpdate) SetNillableExpiredAt(t *time.Time) *MemberUpdate {
+	if t != nil {
+		mu.SetExpiredAt(*t)
+	}
+	return mu
+}
+
+// ClearExpiredAt clears the value of the "expired_at" field.
+func (mu *MemberUpdate) ClearExpiredAt() *MemberUpdate {
+	mu.mutation.ClearExpiredAt()
+	return mu
+}
+
 // SetRanksID sets the "ranks" edge to the MemberRank entity by ID.
 func (mu *MemberUpdate) SetRanksID(id uint64) *MemberUpdate {
 	mu.mutation.SetRanksID(id)
@@ -323,6 +343,12 @@ func (mu *MemberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mu.mutation.WechatOpenIDCleared() {
 		_spec.ClearField(member.FieldWechatOpenID, field.TypeString)
+	}
+	if value, ok := mu.mutation.ExpiredAt(); ok {
+		_spec.SetField(member.FieldExpiredAt, field.TypeTime, value)
+	}
+	if mu.mutation.ExpiredAtCleared() {
+		_spec.ClearField(member.FieldExpiredAt, field.TypeTime)
 	}
 	if mu.mutation.RanksCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -548,6 +574,26 @@ func (muo *MemberUpdateOne) ClearWechatOpenID() *MemberUpdateOne {
 	return muo
 }
 
+// SetExpiredAt sets the "expired_at" field.
+func (muo *MemberUpdateOne) SetExpiredAt(t time.Time) *MemberUpdateOne {
+	muo.mutation.SetExpiredAt(t)
+	return muo
+}
+
+// SetNillableExpiredAt sets the "expired_at" field if the given value is not nil.
+func (muo *MemberUpdateOne) SetNillableExpiredAt(t *time.Time) *MemberUpdateOne {
+	if t != nil {
+		muo.SetExpiredAt(*t)
+	}
+	return muo
+}
+
+// ClearExpiredAt clears the value of the "expired_at" field.
+func (muo *MemberUpdateOne) ClearExpiredAt() *MemberUpdateOne {
+	muo.mutation.ClearExpiredAt()
+	return muo
+}
+
 // SetRanksID sets the "ranks" edge to the MemberRank entity by ID.
 func (muo *MemberUpdateOne) SetRanksID(id uint64) *MemberUpdateOne {
 	muo.mutation.SetRanksID(id)
@@ -697,6 +743,12 @@ func (muo *MemberUpdateOne) sqlSave(ctx context.Context) (_node *Member, err err
 	}
 	if muo.mutation.WechatOpenIDCleared() {
 		_spec.ClearField(member.FieldWechatOpenID, field.TypeString)
+	}
+	if value, ok := muo.mutation.ExpiredAt(); ok {
+		_spec.SetField(member.FieldExpiredAt, field.TypeTime, value)
+	}
+	if muo.mutation.ExpiredAtCleared() {
+		_spec.ClearField(member.FieldExpiredAt, field.TypeTime)
 	}
 	if muo.mutation.RanksCleared() {
 		edge := &sqlgraph.EdgeSpec{
