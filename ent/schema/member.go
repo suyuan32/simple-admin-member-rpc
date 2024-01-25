@@ -49,6 +49,9 @@ func (Member) Fields() []ent.Field {
 		field.Time("expired_at").Optional().
 			Comment("Member expired time | 会员到期时间").
 			Default(time.Date(2099, 1, 1, 0, 0, 0, 0, time.Local)).
+			SchemaType(map[string]string{
+				dialect.MySQL: "datetime",
+			}).
 			Annotations(entsql.WithComments(true)),
 	}
 }
