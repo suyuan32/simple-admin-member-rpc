@@ -37,6 +37,8 @@ const (
 	FieldAvatar = "avatar"
 	// FieldWechatOpenID holds the string denoting the wechat_open_id field in the database.
 	FieldWechatOpenID = "wechat_open_id"
+	// FieldExpiredAt holds the string denoting the expired_at field in the database.
+	FieldExpiredAt = "expired_at"
 	// EdgeRanks holds the string denoting the ranks edge name in mutations.
 	EdgeRanks = "ranks"
 	// Table holds the table name of the member in the database.
@@ -64,6 +66,7 @@ var Columns = []string{
 	FieldEmail,
 	FieldAvatar,
 	FieldWechatOpenID,
+	FieldExpiredAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -89,6 +92,8 @@ var (
 	DefaultRankID uint64
 	// DefaultAvatar holds the default value on creation for the "avatar" field.
 	DefaultAvatar string
+	// DefaultExpiredAt holds the default value on creation for the "expired_at" field.
+	DefaultExpiredAt time.Time
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -154,6 +159,11 @@ func ByAvatar(opts ...sql.OrderTermOption) OrderOption {
 // ByWechatOpenID orders the results by the wechat_open_id field.
 func ByWechatOpenID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWechatOpenID, opts...).ToFunc()
+}
+
+// ByExpiredAt orders the results by the expired_at field.
+func ByExpiredAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExpiredAt, opts...).ToFunc()
 }
 
 // ByRanksField orders the results by ranks field.

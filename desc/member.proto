@@ -16,6 +16,7 @@ message MemberInfo {
   optional string avatar = 11;
   optional string wechat_id = 12;
   optional string rank_code = 13;
+  optional int64 expired_at = 14;
 }
 
 message MemberListResp {

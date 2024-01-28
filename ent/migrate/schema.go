@@ -22,6 +22,7 @@ var (
 		{Name: "email", Type: field.TypeString, Nullable: true, Comment: "Email | 邮箱号"},
 		{Name: "avatar", Type: field.TypeString, Nullable: true, Comment: "Avatar | 头像路径", Default: "", SchemaType: map[string]string{"mysql": "varchar(512)"}},
 		{Name: "wechat_open_id", Type: field.TypeString, Nullable: true, Comment: "Wechat Open ID | 微信 Open ID"},
+		{Name: "expired_at", Type: field.TypeTime, Nullable: true, Comment: "Member expired time | 会员到期时间", SchemaType: map[string]string{"mysql": "datetime"}},
 		{Name: "rank_id", Type: field.TypeUint64, Nullable: true, Comment: "Member Rank ID | 会员等级ID", Default: 2},
 	}
 	// MmsMembersTable holds the schema information for the "mms_members" table.
@@ -32,7 +33,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "mms_members_mms_ranks_ranks",
-				Columns:    []*schema.Column{MmsMembersColumns[11]},
+				Columns:    []*schema.Column{MmsMembersColumns[12]},
 				RefColumns: []*schema.Column{MmsRanksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

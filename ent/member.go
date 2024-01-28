@@ -42,6 +42,8 @@ type Member struct {
 	Avatar string `json:"avatar,omitempty"`
 	// Wechat Open ID | 微信 Open ID
 	WechatOpenID string `json:"wechat_open_id,omitempty"`
+	// Member expired time | 会员到期时间
+	ExpiredAt time.Time `json:"expired_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MemberQuery when eager-loading is set.
 	Edges        MemberEdges `json:"edges"`
@@ -79,7 +81,7 @@ func (*Member) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case member.FieldUsername, member.FieldPassword, member.FieldNickname, member.FieldMobile, member.FieldEmail, member.FieldAvatar, member.FieldWechatOpenID:
 			values[i] = new(sql.NullString)
-		case member.FieldCreatedAt, member.FieldUpdatedAt:
+		case member.FieldCreatedAt, member.FieldUpdatedAt, member.FieldExpiredAt:
 			values[i] = new(sql.NullTime)
 		case member.FieldID:
 			values[i] = new(uuid.UUID)
@@ -170,6 +172,12 @@ func (m *Member) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.WechatOpenID = value.String
 			}
+		case member.FieldExpiredAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field expired_at", values[i])
+			} else if value.Valid {
+				m.ExpiredAt = value.Time
+			}
 		default:
 			m.selectValues.Set(columns[i], values[i])
 		}
@@ -243,6 +251,9 @@ func (m *Member) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("wechat_open_id=")
 	builder.WriteString(m.WechatOpenID)
+	builder.WriteString(", ")
+	builder.WriteString("expired_at=")
+	builder.WriteString(m.ExpiredAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

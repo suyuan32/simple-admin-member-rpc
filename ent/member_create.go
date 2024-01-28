@@ -152,6 +152,20 @@ func (mc *MemberCreate) SetNillableWechatOpenID(s *string) *MemberCreate {
 	return mc
 }
 
+// SetExpiredAt sets the "expired_at" field.
+func (mc *MemberCreate) SetExpiredAt(t time.Time) *MemberCreate {
+	mc.mutation.SetExpiredAt(t)
+	return mc
+}
+
+// SetNillableExpiredAt sets the "expired_at" field if the given value is not nil.
+func (mc *MemberCreate) SetNillableExpiredAt(t *time.Time) *MemberCreate {
+	if t != nil {
+		mc.SetExpiredAt(*t)
+	}
+	return mc
+}
+
 // SetID sets the "id" field.
 func (mc *MemberCreate) SetID(u uuid.UUID) *MemberCreate {
 	mc.mutation.SetID(u)
@@ -239,6 +253,10 @@ func (mc *MemberCreate) defaults() {
 	if _, ok := mc.mutation.Avatar(); !ok {
 		v := member.DefaultAvatar
 		mc.mutation.SetAvatar(v)
+	}
+	if _, ok := mc.mutation.ExpiredAt(); !ok {
+		v := member.DefaultExpiredAt
+		mc.mutation.SetExpiredAt(v)
 	}
 	if _, ok := mc.mutation.ID(); !ok {
 		v := member.DefaultID()
@@ -337,6 +355,10 @@ func (mc *MemberCreate) createSpec() (*Member, *sqlgraph.CreateSpec) {
 	if value, ok := mc.mutation.WechatOpenID(); ok {
 		_spec.SetField(member.FieldWechatOpenID, field.TypeString, value)
 		_node.WechatOpenID = value
+	}
+	if value, ok := mc.mutation.ExpiredAt(); ok {
+		_spec.SetField(member.FieldExpiredAt, field.TypeTime, value)
+		_node.ExpiredAt = value
 	}
 	if nodes := mc.mutation.RanksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
