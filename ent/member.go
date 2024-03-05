@@ -62,12 +62,10 @@ type MemberEdges struct {
 // RanksOrErr returns the Ranks value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e MemberEdges) RanksOrErr() (*MemberRank, error) {
-	if e.loadedTypes[0] {
-		if e.Ranks == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: memberrank.Label}
-		}
+	if e.Ranks != nil {
 		return e.Ranks, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: memberrank.Label}
 	}
 	return nil, &NotLoadedError{edge: "ranks"}
 }
