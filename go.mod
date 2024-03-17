@@ -1,6 +1,6 @@
 module github.com/suyuan32/simple-admin-member-rpc
 
-go 1.21.0
+go 1.22.0
 
 replace github.com/zeromicro/go-zero v1.6.3 => github.com/suyuan32/simple-admin-tools v1.6.8
 
