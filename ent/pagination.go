@@ -113,7 +113,9 @@ func (m *MemberQuery) Page(
 		Size: pageSize,
 	}
 
-	count, err := m.Clone().Count(ctx)
+	query := m.Clone()
+	query.ctx.Fields = nil
+	count, err := query.Count(ctx)
 
 	if err != nil {
 		return nil, err
@@ -192,7 +194,9 @@ func (mr *MemberRankQuery) Page(
 		Size: pageSize,
 	}
 
-	count, err := mr.Clone().Count(ctx)
+	query := mr.Clone()
+	query.ctx.Fields = nil
+	count, err := query.Count(ctx)
 
 	if err != nil {
 		return nil, err
@@ -271,7 +275,9 @@ func (op *OauthProviderQuery) Page(
 		Size: pageSize,
 	}
 
-	count, err := op.Clone().Count(ctx)
+	query := op.Clone()
+	query.ctx.Fields = nil
+	count, err := query.Count(ctx)
 
 	if err != nil {
 		return nil, err
@@ -350,7 +356,9 @@ func (t *TokenQuery) Page(
 		Size: pageSize,
 	}
 
-	count, err := t.Clone().Count(ctx)
+	query := t.Clone()
+	query.ctx.Fields = nil
+	count, err := query.Count(ctx)
 
 	if err != nil {
 		return nil, err
