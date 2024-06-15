@@ -1,7 +1,37 @@
 syntax = "proto3";
 
 package mms;
-option go_package="./mms";
+option go_package = "./mms";
+
+message BaseIDResp {
+  uint64 id = 1;
+  string msg = 2;
+}
+
+message BaseResp {
+  string msg = 1;
+}
+
+message BaseUUIDResp {
+  string id = 1;
+  string msg = 2;
+}
+
+message CallbackReq {
+  string state = 1;
+  string code = 2;
+}
+
+//  base message
+message Empty {}
+
+message IDReq {
+  uint64 id = 1;
+}
+
+message IDsReq {
+  repeated uint64 ids = 1;
+}
 
 message MemberInfo {
   optional string id = 1;
@@ -20,11 +50,6 @@ message MemberInfo {
   optional int64 expired_at = 14;
 }
 
-message MemberListResp {
-  uint64 total = 1;
-  repeated MemberInfo data = 2;
-}
-
 message MemberListReq {
   uint64 page = 1;
   uint64 page_size = 2;
@@ -36,37 +61,9 @@ message MemberListReq {
   optional string wechat_id = 8;
 }
 
-message MemberRegisterReq {
-  string username = 1;
-  string email = 2;
-  string password = 3;
-}
-
-message CallbackReq {
-  string state = 1;
-  string code = 2;
-}
-
-message OauthLoginReq {
-  string state = 1;
-  string provider = 2;
-}
-
-message TokenListReq {
-  uint64 page = 1;
-  uint64 page_size = 2;
-  optional string username = 3;
-  optional string nickname = 4;
-  optional string email = 5;
-  optional string uuid = 6;
-}
-
-message IDReq {
-  uint64 id = 1;
-}
-
-message BaseResp {
-  string msg = 1;
+message MemberListResp {
+  uint64 total = 1;
+  repeated MemberInfo data = 2;
 }
 
 message MemberLoginResp {
@@ -74,43 +71,6 @@ message MemberLoginResp {
   string nickname = 2;
   string avatar = 3;
   uint64 rank_id = 4;
-}
-
-message UsernameReq {
-  string username = 1;
-}
-
-message MemberRankListReq {
-  uint64 page = 1;
-  uint64 page_size = 2;
-  optional string name = 3;
-  optional string description = 4;
-  optional string remark = 5;
-}
-
-message TokenListResp {
-  uint64 total = 1;
-  repeated TokenInfo data = 2;
-}
-
-message PageInfoReq {
-  uint64 page = 1;
-  uint64 page_size = 2;
-}
-
-message OauthProviderListReq {
-  uint64 page = 1;
-  uint64 page_size = 2;
-  optional string name = 3;
-}
-
-message UUIDsReq {
-  repeated string ids = 1;
-}
-
-message BaseIDResp {
-  uint64 id = 1;
-  string msg = 2;
 }
 
 message MemberRankInfo {
@@ -123,46 +83,28 @@ message MemberRankInfo {
   optional string code = 7;
 }
 
-message OauthProviderListResp {
-  uint64 total = 1;
-  repeated OauthProviderInfo data = 2;
-}
-
-message OauthRedirectResp {
-  string url = 1;
-}
-
-message IDsReq {
-  repeated uint64 ids = 1;
-}
-
-message UUIDReq {
-  string id = 1;
-}
-
-message TokenInfo {
-  optional string id = 1;
-  optional int64 created_at = 2;
-  optional int64 updated_at = 3;
-  optional uint32 status = 4;
-  optional string uuid = 5;
-  optional string token = 6;
-  optional string source = 7;
-  optional int64 expired_at = 8;
-  optional string username = 9;
-}
-
-//  base message
-message Empty {}
-
-message BaseUUIDResp {
-  string id = 1;
-  string msg = 2;
+message MemberRankListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+  optional string name = 3;
+  optional string description = 4;
+  optional string remark = 5;
 }
 
 message MemberRankListResp {
   uint64 total = 1;
   repeated MemberRankInfo data = 2;
+}
+
+message MemberRegisterReq {
+  string username = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message OauthLoginReq {
+  string state = 1;
+  string provider = 2;
 }
 
 message OauthProviderInfo {
@@ -178,6 +120,64 @@ message OauthProviderInfo {
   optional string token_url = 10;
   optional uint64 auth_style = 11;
   optional string info_url = 12;
+}
+
+message OauthProviderListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+  optional string name = 3;
+}
+
+message OauthProviderListResp {
+  uint64 total = 1;
+  repeated OauthProviderInfo data = 2;
+}
+
+message OauthRedirectResp {
+  string url = 1;
+}
+
+message PageInfoReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+}
+
+message TokenInfo {
+  optional string id = 1;
+  optional int64 created_at = 2;
+  optional int64 updated_at = 3;
+  optional uint32 status = 4;
+  optional string uuid = 5;
+  optional string token = 6;
+  optional string source = 7;
+  optional int64 expired_at = 8;
+  optional string username = 9;
+}
+
+message TokenListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+  optional string username = 3;
+  optional string nickname = 4;
+  optional string email = 5;
+  optional string uuid = 6;
+}
+
+message TokenListResp {
+  uint64 total = 1;
+  repeated TokenInfo data = 2;
+}
+
+message UUIDReq {
+  string id = 1;
+}
+
+message UUIDsReq {
+  repeated string ids = 1;
+}
+
+message UsernameReq {
+  string username = 1;
 }
 
 service Mms {
