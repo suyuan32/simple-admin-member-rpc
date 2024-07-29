@@ -11,7 +11,7 @@ import (
 var (
 	// MmsMembersColumns holds the columns for the "mms_members" table.
 	MmsMembersColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUUID},
+		{Name: "id", Type: field.TypeUUID, Comment: "UUID"},
 		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
 		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "Status 1: normal 2: ban | 状态 1 正常 2 禁用", Default: 1},
@@ -56,10 +56,10 @@ var (
 		{Name: "id", Type: field.TypeUint64, Increment: true},
 		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
-		{Name: "name", Type: field.TypeString},
-		{Name: "code", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString},
-		{Name: "remark", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString, Comment: "Rank name | 等级名称"},
+		{Name: "code", Type: field.TypeString, Comment: "Rank code | 等级码"},
+		{Name: "description", Type: field.TypeString, Comment: "Rank description | 等级描述"},
+		{Name: "remark", Type: field.TypeString, Comment: "Remark | 备注"},
 	}
 	// MmsRanksTable holds the schema information for the "mms_ranks" table.
 	MmsRanksTable = &schema.Table{
@@ -97,7 +97,7 @@ var (
 	}
 	// MmsTokensColumns holds the columns for the "mms_tokens" table.
 	MmsTokensColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUUID},
+		{Name: "id", Type: field.TypeUUID, Comment: "UUID"},
 		{Name: "created_at", Type: field.TypeTime, Comment: "Create Time | 创建日期"},
 		{Name: "updated_at", Type: field.TypeTime, Comment: "Update Time | 修改日期"},
 		{Name: "status", Type: field.TypeUint8, Nullable: true, Comment: "Status 1: normal 2: ban | 状态 1 正常 2 禁用", Default: 1},
