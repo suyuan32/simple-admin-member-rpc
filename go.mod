@@ -7,6 +7,7 @@ replace github.com/zeromicro/go-zero v1.7.0 => github.com/suyuan32/simple-admin-
 require (
 	entgo.io/ent v0.13.1
 	github.com/gofrs/uuid/v5 v5.2.0
+	github.com/larksuite/oapi-sdk-go/v3 v3.3.0
 	github.com/redis/go-redis/v9 v9.6.1
 	github.com/suyuan32/simple-admin-common v1.5.2
 	github.com/zeromicro/go-zero v1.7.0

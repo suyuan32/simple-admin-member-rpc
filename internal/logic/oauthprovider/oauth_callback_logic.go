@@ -4,12 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/suyuan32/simple-admin-member-rpc/ent/member"
-	"github.com/suyuan32/simple-admin-member-rpc/internal/utils/dberrorhandler"
-	"github.com/suyuan32/simple-admin-member-rpc/types/mms"
 	"io"
 	"net/http"
 	"strings"
+
+	"github.com/suyuan32/simple-admin-member-rpc/ent/member"
+	"github.com/suyuan32/simple-admin-member-rpc/internal/utils/dberrorhandler"
+	"github.com/suyuan32/simple-admin-member-rpc/types/mms"
 
 	"github.com/suyuan32/simple-admin-common/msg/logmsg"
 	"github.com/suyuan32/simple-admin-common/utils/pointy"
@@ -36,6 +37,7 @@ type userInfo struct {
 	Email    string `json:"email"`
 	NickName string `json:"nickName"`
 	Picture  string `json:"picture"`
+	Mobile   string `json:"mobile"`
 }
 
 func NewOauthCallbackLogic(ctx context.Context, svcCtx *svc.ServiceContext) *OauthCallbackLogic {
@@ -114,7 +116,14 @@ func (l *OauthCallbackLogic) OauthCallback(in *mms.CallbackReq) (*mms.MemberInfo
 }
 
 func getUserInfo(c oauth2.Config, infoURL string, code string) ([]byte, error) {
-	token, err := c.Exchange(context.Background(), code)
+	var token *oauth2.Token
+	var err error
+
+	if strings.Contains(c.Endpoint.AuthURL, "feishu") {
+		return GetFeishuUserInfo(c, code)
+	} else {
+		token, err = c.Exchange(context.Background(), code)
+	}
 	if err != nil {
 		return nil, fmt.Errorf("code exchange failed: %s", err.Error())
 	}

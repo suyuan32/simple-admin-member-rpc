@@ -4,14 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
+	"strings"
+
 	"github.com/suyuan32/simple-admin-common/i18n"
 	"github.com/suyuan32/simple-admin-member-rpc/ent/oauthprovider"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/utils/dberrorhandler"
 	"github.com/zeromicro/go-zero/core/errorx"
 	"golang.org/x/oauth2"
-	"io"
-	"net/http"
-	"strings"
 
 	"github.com/suyuan32/simple-admin-member-rpc/internal/svc"
 	"github.com/suyuan32/simple-admin-member-rpc/types/mms"
@@ -79,6 +80,9 @@ func (l *WechatMiniProgramLoginLogic) WechatMiniProgramLogin(in *mms.OauthLoginR
 	}
 
 	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
 	defer resp.Body.Close()
 
 	var wechatResp WechatMiniProgramLoginResp
