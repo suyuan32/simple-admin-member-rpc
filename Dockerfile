@@ -1,4 +1,4 @@
-FROM alpine:3.19
+FROM alpine:3.21
 
 # Define the project name | 定义项目名称
 ARG PROJECT=mms
@@ -22,4 +22,4 @@ COPY ./etc/${CONFIG_FILE} ./etc/
 
 EXPOSE 9104
 
-ENTRYPOINT ./${PROJECT}_rpc -f etc/${CONFIG_FILE}
+ENTRYPOINT ["./mms_rpc", "-f", "etc/mms.yaml"]
