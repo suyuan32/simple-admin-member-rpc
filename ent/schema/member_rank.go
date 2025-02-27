@@ -44,6 +44,7 @@ func (MemberRank) Indexes() []ent.Index {
 
 func (MemberRank) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entsql.WithComments(true),
 		entsql.Annotation{Table: "mms_ranks"},
 	}
 }

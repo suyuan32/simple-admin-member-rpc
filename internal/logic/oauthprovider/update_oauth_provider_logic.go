@@ -2,6 +2,7 @@ package oauthprovider
 
 import (
 	"context"
+
 	"github.com/suyuan32/simple-admin-member-rpc/internal/utils/dberrorhandler"
 	"github.com/suyuan32/simple-admin-member-rpc/types/mms"
 
@@ -41,9 +42,7 @@ func (l *UpdateOauthProviderLogic) UpdateOauthProvider(in *mms.OauthProviderInfo
 		return nil, dberrorhandler.DefaultEntError(l.Logger, err, in)
 	}
 
-	if _, ok := providerConfig[*in.Name]; ok {
-		delete(providerConfig, *in.Name)
-	}
+	delete(providerConfig, *in.Name)
 
 	return &mms.BaseResp{Msg: i18n.UpdateSuccess}, nil
 }
