@@ -20,6 +20,6 @@ RUN apk update --no-cache && apk add --no-cache tzdata
 COPY ./${PROJECT}_rpc ./
 COPY ./etc/${CONFIG_FILE} ./etc/
 
-EXPOSE 9104
+EXPOSE 9103
 
 ENTRYPOINT ["./mms_rpc", "-f", "etc/mms.yaml"]
