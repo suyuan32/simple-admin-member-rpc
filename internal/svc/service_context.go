@@ -2,8 +2,11 @@ package svc
 
 import (
 	"github.com/redis/go-redis/v9"
+
 	"github.com/suyuan32/simple-admin-member-rpc/ent"
 	"github.com/suyuan32/simple-admin-member-rpc/internal/config"
+
+	_ "github.com/suyuan32/simple-admin-member-rpc/ent/runtime"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
